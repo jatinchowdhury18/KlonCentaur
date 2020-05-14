@@ -7,3 +7,6 @@
 [submodule "modules/JUCE"]
 	path = modules/JUCE
 	url = https://github.com/juce-framework/JUCE.git
+[submodule "modules/WaveDigitalFilters"]
+	path = modules/WaveDigitalFilters
+	url = https://github.com/jatinchowdhury18/WaveDigitalFilters.git
