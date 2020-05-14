@@ -1,0 +1,9 @@
+[submodule "modules/FRUT"]
+	path = modules/FRUT
+	url = https://github.com/McMartin/FRUT.git
+[submodule "modules/foleys_gui_magic"]
+	path = modules/foleys_gui_magic
+	url = https://github.com/ffAudio/foleys_gui_magic.git
+[submodule "modules/JUCE"]
+	path = modules/JUCE
+	url = https://github.com/juce-framework/JUCE.git
