@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.4)
 
-project("SharedCode")
+project("ToneFilter")
 
 # FRUT stuff
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/../modules/FRUT/prefix/FRUT/cmake")
@@ -8,27 +8,45 @@ include(Reprojucer)
 
 jucer_project_begin(
     JUCER_VERSION "5.4.7"
-    PROJECT_FILE "${SharedCode_jucer_FILE}"
-    PROJECT_ID "aSweT"
+    PROJECT_FILE "${ToneFilter_jucer_FILE}"
+    PROJECT_ID "gSweL"
 )
 
 jucer_project_settings(
-    PROJECT_NAME "SharedCode"
+    PROJECT_NAME "ToneFilter"
     PROJECT_VERSION "1.0.0"
     COMPANY_NAME "chowdsp"
     COMPANY_COPYRIGHT "Jatin Chowdhury"
     REPORT_JUCE_APP_USAGE OFF
     DISPLAY_THE_JUCE_SPLASH_SCREEN OFF
-    PROJECT_TYPE "Static Library"
-    BUNDLE_IDENTIFIER "com.chowdsp.SharedCode"
+    PROJECT_TYPE "Audio Plug-in"
+    BUNDLE_IDENTIFIER "com.chowdsp.ToneFilter"
     CXX_LANGUAGE_STANDARD "C++17"
+    HEADER_SEARCH_PATHS
+        ${CMAKE_CURRENT_LIST_DIR}/../SharedCode/
 )
+
+jucer_audio_plugin_settings(
+    PLUGIN_FORMATS
+        VST3
+        AU
+        Standalone
+    PLUGIN_NAME "ToneFilter"
+    PLUGIN_DESCRIPTION "ToneFilter"
+    PLUGIN_MANUFACTURER "chowdsp"
+    PLUGIN_MANUFACTURER_CODE "JAC"
+    PLUGIN_CODE "PEYR"
+    PLUGIN_AU_EXPORT_PREFIX "ToneFilterAU"
+)
+
+add_subdirectory(../SharedCode shared_build)
 
 jucer_project_files("shared"
 # Compile   Xcode     Binary    File
 #           Resource  Resource
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/PluginBase.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/IIRFilter.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/ToneFilterPlugin.h"
+  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/ToneFilterPlugin.cpp"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/ToneFilterProcessor.h"
 )
 
 # JUCE modules
@@ -40,6 +58,12 @@ jucer_project_module(
 jucer_project_module(
     juce_audio_devices
     PATH "${CMAKE_CURRENT_LIST_DIR}/../modules/JUCE/modules"
+)
+
+jucer_project_module(
+    juce_audio_plugin_client
+    PATH "${CMAKE_CURRENT_LIST_DIR}/../modules/JUCE/modules"
+    JUCE_VST3_CAN_REPLACE_VST2 OFF
 )
 
 jucer_project_module(
@@ -100,58 +124,61 @@ jucer_project_module(
 
 jucer_export_target(
     "Xcode (MacOSX)"
+    EXTERNAL_LIBRARIES_TO_LINK SharedCode
 )
 
 jucer_export_target_configuration(
     "Xcode (MacOSX)"
     NAME "Debug"
     DEBUG_MODE ON
-    BINARY_NAME "SharedCode"
+    BINARY_NAME "ToneFilter"
 )
 
 jucer_export_target_configuration(
     "Xcode (MacOSX)"
     NAME "Release"
     DEBUG_MODE OFF
-    BINARY_NAME "SharedCode"
+    BINARY_NAME "ToneFilter"
 )
 
 jucer_export_target(
     "Visual Studio 2017"
     EXTRA_PREPROCESSOR_DEFINITIONS
         _CRT_SECURE_NO_WARNINGS
+    EXTERNAL_LIBRARIES_TO_LINK SharedCode
 )
 
 jucer_export_target_configuration(
     "Visual Studio 2017"
     NAME "Debug"
     DEBUG_MODE ON
-    BINARY_NAME "SharedCode"
+    BINARY_NAME "ToneFilter"
 )
 
 jucer_export_target_configuration(
     "Visual Studio 2017"
     NAME "Release"
     DEBUG_MODE OFF
-    BINARY_NAME "SharedCode"
+    BINARY_NAME "ToneFilter"
 )
 
 jucer_export_target(
     "Linux Makefile"
+    EXTERNAL_LIBRARIES_TO_LINK SharedCode
 )
 
 jucer_export_target_configuration(
     "Linux Makefile"
     NAME "Debug"
     DEBUG_MODE ON
-    BINARY_NAME "SharedCode"
+    BINARY_NAME "ToneFilter"
 )
 
 jucer_export_target_configuration(
     "Linux Makefile"
     NAME "Release"
     DEBUG_MODE OFF
-    BINARY_NAME "SharedCode"
+    BINARY_NAME "ToneFilter"
 )
 
 jucer_project_end()

@@ -15,12 +15,12 @@ jucer_project_begin(
 jucer_project_settings(
     PROJECT_NAME "InputBuffer"
     PROJECT_VERSION "1.0.0"
-    COMPANY_NAME "Jatin Chowdhury"
+    COMPANY_NAME "chowdsp"
     COMPANY_COPYRIGHT "Jatin Chowdhury"
     REPORT_JUCE_APP_USAGE OFF
     DISPLAY_THE_JUCE_SPLASH_SCREEN OFF
     PROJECT_TYPE "Audio Plug-in"
-    BUNDLE_IDENTIFIER "com.jatinchowdhury.FDNShared"
+    BUNDLE_IDENTIFIER "com.chowdsp.InputBuffer"
     CXX_LANGUAGE_STANDARD "C++17"
     HEADER_SEARCH_PATHS
         ${CMAKE_CURRENT_LIST_DIR}/../SharedCode/
@@ -34,7 +34,7 @@ jucer_audio_plugin_settings(
         Standalone
     PLUGIN_NAME "InputBuffer"
     PLUGIN_DESCRIPTION "InputBuffer"
-    PLUGIN_MANUFACTURER "Jatin Chowdhury"
+    PLUGIN_MANUFACTURER "chowdsp"
     PLUGIN_MANUFACTURER_CODE "JAC"
     PLUGIN_CODE "PEYT"
     PLUGIN_AU_EXPORT_PREFIX "InputBufferAU"
