@@ -11,7 +11,7 @@ ToneFilter::~ToneFilter()
     
 void ToneFilter::addParameters (Parameters& params)
 {
-    params.push_back (std::make_unique<AudioParameterFloat> ("treble", "Treble", -8.0f, 18.25f, 0.0f));
+    params.push_back (std::make_unique<AudioParameterFloat> ("treble", "Treble", 0.0f, 1.0f, 0.287394f));
 }
 
 void ToneFilter::prepareToPlay (double sampleRate, int samplesPerBlock)
@@ -35,9 +35,9 @@ void ToneFilter::processBlock (AudioBuffer<float>& buffer)
         filter[ch].setTreble (*trebleParam);
         filter[ch].processBlock (x, numSamples);
 
-        FloatVectorOperations::add (x, 2.25f, numSamples); // add bias offset
-        // FloatVectorOperations::multiply (x, -1.0f, numSamples); // maybe invert?
-        FloatVectorOperations::clip (x, x, -8.6f, 16.2f, numSamples); // op-amp clipping
+        // FloatVectorOperations::multiply (x, -1.0f, numSamples); // inverting amplifier
+        // FloatVectorOperations::add (x, -2.25f, numSamples); // add bias offset
+        // FloatVectorOperations::clip (x, x, -8.6f, 16.2f, numSamples); // op-amp clipping
     }
 }
 
