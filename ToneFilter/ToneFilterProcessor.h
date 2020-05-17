@@ -3,7 +3,7 @@
 
 #include "IIRFilter.h"
 
-class ToneFilterProcessor  : public IIRFilterN<1>
+class ToneFilterProcessor : public IIRFilterN<1>
 {
 public:
     ToneFilterProcessor()
@@ -52,7 +52,7 @@ public:
         const float aU0 = 1.0f;
         const float aU1 = (-a0s * K + a1s) / a0;
 
-        // adjust poles to ensure stability
+        // flip pole inside unit circle to ensure stability
         a[0] = 1.0f;
         a[1] = 1.0f / aU1;
         b[0] = bU0 / aU1;

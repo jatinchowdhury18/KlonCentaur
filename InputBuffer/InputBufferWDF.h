@@ -16,7 +16,7 @@ public:
         I1 = std::make_unique<WaveDigitalFilter::PolarityInverter> (&Vin);
         S1 = std::make_unique<WaveDigitalFilter::WDFSeries> (I1.get(), C1.get());
         S2 = std::make_unique<WaveDigitalFilter::WDFSeries> (S1.get(), &R2);
-        S2->connectToNode (&Vbias);
+        Vbias.connectToNode (S2.get());
     }
 
     inline float processSample (float x)

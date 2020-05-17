@@ -26,6 +26,7 @@ void ToneFilter::releaseResources()
 
 void ToneFilter::processBlock (AudioBuffer<float>& buffer)
 {
+    ScopedNoDenormals noDenormals;
     const auto numSamples = buffer.getNumSamples();
 
     for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
@@ -35,9 +36,9 @@ void ToneFilter::processBlock (AudioBuffer<float>& buffer)
         filter[ch].setTreble (*trebleParam);
         filter[ch].processBlock (x, numSamples);
 
-        // FloatVectorOperations::multiply (x, -1.0f, numSamples); // inverting amplifier
-        // FloatVectorOperations::add (x, -2.25f, numSamples); // add bias offset
-        // FloatVectorOperations::clip (x, x, -8.6f, 16.2f, numSamples); // op-amp clipping
+        FloatVectorOperations::multiply (x, -1.0f, numSamples); // inverting amplifier
+        FloatVectorOperations::add (x, -2.25f, numSamples); // add bias offset
+        FloatVectorOperations::clip (x, x, -8.6f, 16.2f, numSamples); // op-amp clipping
     }
 }
 
