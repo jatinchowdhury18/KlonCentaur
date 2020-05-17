@@ -19,7 +19,10 @@ void InputBuffer::prepareToPlay (double sampleRate, int samplesPerBlock)
     os.initProcessing (samplesPerBlock);
 
     for (int ch = 0; ch < 2; ++ch)
-        ibWDF[ch].reset (sampleRate* os.getOversamplingFactor());
+    {
+        ibWDF[ch].reset (sampleRate * os.getOversamplingFactor());
+        inProc[ch].reset (sampleRate * os.getOversamplingFactor());
+    }
 }
 
 void InputBuffer::releaseResources()
@@ -41,8 +44,10 @@ void InputBuffer::processBlock (AudioBuffer<float>& buffer)
         auto* x = osBlock.getChannelPointer (ch);
 
         // process with WDF
-        for (int n = 0; n < osBlock.getNumSamples(); ++n)
-            x[n] = ibWDF[ch].processSample (x[n]);
+        // for (int n = 0; n < osBlock.getNumSamples(); ++n)
+        //     x[n] = ibWDF[ch].processSample (x[n]);
+
+        inProc[ch].processBlock (x, osBlock.getNumSamples());
 
         // op amp clip
         FloatVectorOperations::clip (x, x, 0.0f, 9.0f, (int) osBlock.getNumSamples());

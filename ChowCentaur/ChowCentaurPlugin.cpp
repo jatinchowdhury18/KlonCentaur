@@ -34,18 +34,18 @@ void ChowCentaur::prepareToPlay (double sampleRate, int samplesPerBlock)
     const auto osFactor = (int) os.getOversamplingFactor();
     for (int ch = 0; ch < 2; ++ch)
     {
-        inWDF[ch].reset (sampleRate * osFactor);
+        inProc[ch].reset ((float) sampleRate * osFactor);
         preAmp[ch].reset (sampleRate * osFactor);
         amp[ch].reset ((float) sampleRate * osFactor);
         clip[ch].reset (sampleRate * osFactor);
         ff2[ch].reset (sampleRate * osFactor);
         sumAmp[ch].reset ((float) sampleRate * osFactor);
         tone[ch].reset ((float) sampleRate * osFactor);
-        outWDF[ch].reset (sampleRate* osFactor);
+        outProc[ch].reset ((float) sampleRate* osFactor);
     }
 
-    ff1Buff.setSize (2, samplesPerBlock * (int) osFactor);
-    ff2Buff.setSize (2, samplesPerBlock * (int) osFactor);
+    ff1Buff.setSize (2, samplesPerBlock * osFactor);
+    ff2Buff.setSize (2, samplesPerBlock * osFactor);
     scope->prepareToPlay (sampleRate, samplesPerBlock);
 }
 
@@ -72,13 +72,12 @@ void ChowCentaur::processBlock (AudioBuffer<float>& buffer)
 
         // Input buffer
         FloatVectorOperations::multiply (x, 0.5f, numSamples);
-        for (int n = 0; n < osBlock.getNumSamples(); ++n)
-            x[n] = inWDF[ch].processSample (x[n]);
+        inProc[ch].processBlock (x, numSamples);
 
-        FloatVectorOperations::clip (x, x, 0.0f, 9.0f, (int) osBlock.getNumSamples());
+        FloatVectorOperations::clip (x, x, 0.0f, 9.0f, numSamples);
 
         // side chain buffers
-        FloatVectorOperations::copy (x2, x, (int) numSamples);
+        FloatVectorOperations::copy (x2, x, numSamples);
 
         // Gain stage
         preAmp[ch].setGain (*gainParam);
@@ -89,7 +88,7 @@ void ChowCentaur::processBlock (AudioBuffer<float>& buffer)
         }
 
         amp[ch].setGain (*gainParam);
-        amp[ch].processBlock (x, (int) numSamples);
+        amp[ch].processBlock (x, numSamples);
         FloatVectorOperations::clip (x, x, 0.0f, 9.0f, numSamples);
 
         // clipping stage
@@ -102,9 +101,9 @@ void ChowCentaur::processBlock (AudioBuffer<float>& buffer)
             x2[n] = ff2[ch].processSample (x2[n]);
 
         // summing amp
-        FloatVectorOperations::add (x, x1, (int) numSamples);
-        FloatVectorOperations::add (x, x2, (int) numSamples);
-        sumAmp[ch].processBlock (x, (int) numSamples);
+        FloatVectorOperations::add (x, x1, numSamples);
+        FloatVectorOperations::add (x, x2, numSamples);
+        sumAmp[ch].processBlock (x, numSamples);
         FloatVectorOperations::clip (x, x, -8.6f, 16.2f, numSamples);
 
         // tone stage
@@ -115,10 +114,8 @@ void ChowCentaur::processBlock (AudioBuffer<float>& buffer)
         FloatVectorOperations::add (x, -2.25f, numSamples); // add bias offset
         FloatVectorOperations::clip (x, x, -8.6f, 16.2f, numSamples); // op-amp clipping
 
-        // output stage
-        outWDF[ch].setLevel (*levelParam);
-        for (int n = 0; n < osBlock.getNumSamples(); ++n)
-            x[n] = outWDF[ch].processSample (x[n]);
+        outProc[ch].setLevel (*levelParam);
+        outProc[ch].processBlock (x, numSamples);
     }
 
     // downsample

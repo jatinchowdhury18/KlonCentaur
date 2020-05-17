@@ -48,6 +48,7 @@ jucer_project_files("shared"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/InputBufferPlugin.h"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/InputBufferPlugin.cpp"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/InputBufferWDF.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/InputBufferProcessor.h"
 )
 
 # JUCE modules

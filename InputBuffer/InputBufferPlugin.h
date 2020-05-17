@@ -3,6 +3,7 @@
 #include "JuceHeader.h"
 #include "PluginBase.h"
 #include "InputBufferWDF.h"
+#include "InputBufferProcessor.h"
 
 class InputBuffer : public PluginBase<InputBuffer>
 {
@@ -17,6 +18,7 @@ public:
 
 private:
     InputBufferWDF ibWDF[2];
+    InputBufferProcessor inProc[2];
 
     dsp::Oversampling<float> os { 2, 1, dsp::Oversampling<float>::FilterType::filterHalfBandPolyphaseIIR };
 

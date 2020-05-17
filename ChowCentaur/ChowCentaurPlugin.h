@@ -3,14 +3,14 @@
 #include "JuceHeader.h"
 #include "PluginBase.h"
 
-#include "InputBuffer/InputBufferWDF.h"
+#include "InputBuffer/InputBufferProcessor.h"
 #include "GainStage/PreAmpStage.h"
 #include "GainStage/AmpStage.h"
 #include "GainStage/ClippingStage.h"
 #include "GainStage/FeedForward2.h"
 #include "GainStage/SummingAmp.h"
 #include "ToneFilter/ToneFilterProcessor.h"
-#include "OutputStage/OutputStageWDF.h"
+#include "OutputStage/OutputStageProcessor.h"
 
 class ChowCentaur : public PluginBase<ChowCentaur>
 {
@@ -30,14 +30,14 @@ private:
     std::atomic<float>* trebleParam;
     std::atomic<float>* levelParam;
 
-    InputBufferWDF inWDF[2];
+    InputBufferProcessor inProc[2];
     GainStageSpace::PreAmpWDF preAmp[2];
     GainStageSpace::AmpStage amp[2];
     GainStageSpace::ClippingWDF clip[2];
     GainStageSpace::FeedForward2WDF ff2[2];
     GainStageSpace::SummingAmp sumAmp[2];
     ToneFilterProcessor tone[2];
-    OutputStageWDF outWDF[2];
+    OutputStageProc outProc[2];
 
     AudioBuffer<float> ff1Buff;
     AudioBuffer<float> ff2Buff;

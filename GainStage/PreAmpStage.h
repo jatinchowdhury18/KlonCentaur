@@ -40,8 +40,7 @@ public:
 
         P3 = std::make_unique<WaveDigitalFilter::WDFParallel> (S1.get(), S2.get());
         S3 = std::make_unique<WaveDigitalFilter::WDFSeries> (P3.get(), C3.get());
-        I1 = std::make_unique<WaveDigitalFilter::PolarityInverter> (S3.get());
-        Vin.connectToNode (I1.get());
+        Vin.connectToNode (S3.get());
     }
 
     inline float getFF1() noexcept
@@ -51,11 +50,11 @@ public:
 
     inline float processSample (float x)
     {
-        Vin.setVoltage ((double) x);
+        Vin.setVoltage ((double) -x);
 
-        Vin.incident (I1->reflected());
+        Vin.incident (S3->reflected());
         auto y = Vbias.voltage() + R6.voltage();
-        I1->incident (Vin.reflected());
+        S3->incident (Vin.reflected());
 
         return (float) y;
     }
@@ -71,7 +70,6 @@ private:
     std::unique_ptr<WaveDigitalFilter::Capacitor> C16;
     WaveDigitalFilter::ResistiveVoltageSource Vbias2 { 15000.0 };
 
-    std::unique_ptr<WaveDigitalFilter::PolarityInverter> I1;
     std::unique_ptr<WaveDigitalFilter::WDFSeries> S1;
     std::unique_ptr<WaveDigitalFilter::WDFSeries> S2;
     std::unique_ptr<WaveDigitalFilter::WDFSeries> S3;
