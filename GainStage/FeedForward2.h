@@ -16,11 +16,7 @@ public:
         C6 = std::make_unique<WaveDigitalFilter::Capacitor> (390e-9, sampleRate);
         C11 = std::make_unique<WaveDigitalFilter::Capacitor> (2.2e-9, sampleRate);
         C12 = std::make_unique<WaveDigitalFilter::Capacitor> (27e-9, sampleRate);
-#ifndef NO_BIAS
-        Vbias.setVoltage (0.0f);
-#else
-        Vbias.setVoltage (4.5f);
-#endif
+        Vbias.setVoltage (0.0);
 
         S1 = std::make_unique<WaveDigitalFilter::WDFSeries> (C12.get(), &R18);
         P1 = std::make_unique<WaveDigitalFilter::WDFParallel> (S1.get(), &R17);
@@ -37,8 +33,9 @@ public:
 
         P6 = std::make_unique<WaveDigitalFilter::WDFParallel> (&R5, C4.get());
         S7 = std::make_unique<WaveDigitalFilter::WDFSeries> (P6.get(), S6.get());
+        I1 = std::make_unique<WaveDigitalFilter::PolarityInverter> (S7.get());
         
-        Vin.connectToNode (S7.get());
+        Vin.connectToNode (I1.get());
     }
 
     void setGain (float gain)
@@ -49,10 +46,10 @@ public:
 
     inline float processSample (float x)
     {
-        Vin.setVoltage ((double) -x);
+        Vin.setVoltage ((double) x);
 
-        Vin.incident (S7->reflected());
-        S7->incident (Vin.reflected());
+        Vin.incident (I1->reflected());
+        I1->incident (Vin.reflected());
         auto y = R16.current();
 
         return (float) y;
@@ -85,6 +82,7 @@ private:
     std::unique_ptr<WaveDigitalFilter::WDFSeries> S6;
     std::unique_ptr<WaveDigitalFilter::WDFSeries> S7;
     
+    std::unique_ptr<WaveDigitalFilter::PolarityInverter> I1;
     std::unique_ptr<WaveDigitalFilter::WDFParallel> P1;
     std::unique_ptr<WaveDigitalFilter::WDFParallel> P2;
     std::unique_ptr<WaveDigitalFilter::WDFParallel> P3;

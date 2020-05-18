@@ -78,18 +78,13 @@ public:
                 calcCoefs (curR10b);
                 block[n] = processSample (block[n]);
 
-#ifndef NO_BIAS
-                block[n] += 4.5f * R12 / (R12 + R11 + curR10b); // bias
-#endif
+                // block[n] += 4.5f * R12 / (R12 + R11 + curR10b); // bias
             }
         }
         else
         {
             IIRFilterN::processBlock (block, numSamples);
-#ifndef NO_BIAS
-            FloatVectorOperations::add (block,
-                4.5f * R12 / (R12 + R11 + r10bSmooth.getCurrentValue()), numSamples); // bias
-#endif
+            // FloatVectorOperations::add (block, 4.5f * R12 / (R12 + R11 + r10bSmooth.getCurrentValue()), numSamples); // bias
         }
     }
 

@@ -19,18 +19,10 @@ public:
     {
         C3 = std::make_unique<WaveDigitalFilter::Capacitor> (0.1e-6, sampleRate);
         C5 = std::make_unique<WaveDigitalFilter::Capacitor> (68.0e-9, sampleRate);
-#ifndef NO_BIAS
-        Vbias.setVoltage (0.0f);
-#else
-        Vbias.setVoltage (4.5f);
-#endif
+        Vbias.setVoltage (0.0);
 
         C16 = std::make_unique<WaveDigitalFilter::Capacitor> (1.0e-6, sampleRate);
-#ifndef NO_BIAS
-        Vbias2.setVoltage (0.0f);
-#else
-        Vbias2.setVoltage (4.5f);
-#endif
+        Vbias2.setVoltage (0.0);
         
         P1 = std::make_unique<WaveDigitalFilter::WDFParallel> (C5.get(), &R6);
         S1 = std::make_unique<WaveDigitalFilter::WDFSeries> (P1.get(), &Vbias);
@@ -40,7 +32,8 @@ public:
 
         P3 = std::make_unique<WaveDigitalFilter::WDFParallel> (S1.get(), S2.get());
         S3 = std::make_unique<WaveDigitalFilter::WDFSeries> (P3.get(), C3.get());
-        Vin.connectToNode (S3.get());
+        I1 = std::make_unique<WaveDigitalFilter::PolarityInverter> (S3.get());
+        Vin.connectToNode (I1.get());
     }
 
     inline float getFF1() noexcept
@@ -50,11 +43,11 @@ public:
 
     inline float processSample (float x)
     {
-        Vin.setVoltage ((double) -x);
+        Vin.setVoltage ((double) x);
 
-        Vin.incident (S3->reflected());
+        Vin.incident (I1->reflected());
         auto y = Vbias.voltage() + R6.voltage();
-        S3->incident (Vin.reflected());
+        I1->incident (Vin.reflected());
 
         return (float) y;
     }
@@ -70,6 +63,7 @@ private:
     std::unique_ptr<WaveDigitalFilter::Capacitor> C16;
     WaveDigitalFilter::ResistiveVoltageSource Vbias2 { 15000.0 };
 
+    std::unique_ptr<WaveDigitalFilter::PolarityInverter> I1;
     std::unique_ptr<WaveDigitalFilter::WDFSeries> S1;
     std::unique_ptr<WaveDigitalFilter::WDFSeries> S2;
     std::unique_ptr<WaveDigitalFilter::WDFSeries> S3;

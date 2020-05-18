@@ -73,8 +73,7 @@ void ChowCentaur::processBlock (AudioBuffer<float>& buffer)
         // Input buffer
         FloatVectorOperations::multiply (x, 0.5f, numSamples);
         inProc[ch].processBlock (x, numSamples);
-
-        FloatVectorOperations::clip (x, x, 0.0f, 9.0f, numSamples);
+        FloatVectorOperations::clip (x, x, -4.5f, 4.5f, numSamples); // op amp clipping
 
         // side chain buffers
         FloatVectorOperations::copy (x2, x, numSamples);
@@ -89,7 +88,7 @@ void ChowCentaur::processBlock (AudioBuffer<float>& buffer)
 
         amp[ch].setGain (*gainParam);
         amp[ch].processBlock (x, numSamples);
-        FloatVectorOperations::clip (x, x, 0.0f, 9.0f, numSamples);
+        FloatVectorOperations::clip (x, x, -4.5f, 4.5f, numSamples);
 
         // clipping stage
         for (int n = 0; n < numSamples; ++n)
@@ -104,15 +103,14 @@ void ChowCentaur::processBlock (AudioBuffer<float>& buffer)
         FloatVectorOperations::add (x, x1, numSamples);
         FloatVectorOperations::add (x, x2, numSamples);
         sumAmp[ch].processBlock (x, numSamples);
-        FloatVectorOperations::clip (x, x, -8.6f, 16.2f, numSamples);
+        FloatVectorOperations::clip (x, x, -13.1f, 11.7f, numSamples);
 
         // tone stage
         tone[ch].setTreble (*trebleParam);
         tone[ch].processBlock (x, numSamples);
 
         FloatVectorOperations::multiply (x, -1.0f, numSamples); // inverting amplifier
-        FloatVectorOperations::add (x, -2.25f, numSamples); // add bias offset
-        FloatVectorOperations::clip (x, x, -8.6f, 16.2f, numSamples); // op-amp clipping
+        FloatVectorOperations::clip (x, x, -13.1f, 11.7f, numSamples); // op-amp clipping
 
         outProc[ch].setLevel (*levelParam);
         outProc[ch].processBlock (x, numSamples);

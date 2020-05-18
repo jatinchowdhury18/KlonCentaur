@@ -51,6 +51,7 @@ void InputBuffer::processBlock (AudioBuffer<float>& buffer)
 
         // op amp clip
         FloatVectorOperations::clip (x, x, 0.0f, 9.0f, (int) osBlock.getNumSamples());
+        FloatVectorOperations::add (x, -4.5f, osBlock.getNumSamples()); // undo bias for testing...
     }
 
     // downsample

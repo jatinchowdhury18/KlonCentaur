@@ -23,7 +23,7 @@ public:
         constexpr float C1 = (float) 0.1e-6;
 
         // analog coefficients
-        const auto b0s = -C1 * R2;
+        const auto b0s = C1 * R2;
         const auto b1s = 0.0f;
         const auto a0s = C1 * (R1 + R2);
         const auto a1s = 1.0f;
@@ -40,7 +40,7 @@ public:
     void processBlock (float* buffer, const int numSamples) noexcept override
     {
         IIRFilterN::processBlock (buffer, numSamples);
-        FloatVectorOperations::add (buffer, 4.5f, numSamples);
+        // FloatVectorOperations::add (buffer, 4.5, numSamples); // bias
     }
 
 private:
