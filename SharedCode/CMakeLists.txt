@@ -29,6 +29,14 @@ jucer_project_files("shared"
 #           Resource  Resource
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/PluginBase.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/IIRFilter.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/InputBufferProcessor.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/PreAmpStage.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/AmpStage.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/ClippingStage.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/FeedForward2.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/SummingAmp.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/ToneFilterProcessor.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/OutputStageProcessor.h"
 )
 
 # JUCE modules

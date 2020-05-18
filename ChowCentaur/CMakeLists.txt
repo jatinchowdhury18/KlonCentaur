@@ -23,7 +23,6 @@ jucer_project_settings(
     BUNDLE_IDENTIFIER "com.chowdsp.ChowCentaur"
     CXX_LANGUAGE_STANDARD "C++17"
     HEADER_SEARCH_PATHS
-        ${CMAKE_CURRENT_LIST_DIR}/../
         ${CMAKE_CURRENT_LIST_DIR}/../SharedCode/
         ${CMAKE_CURRENT_LIST_DIR}/../modules/WaveDigitalFilters/shared/
 )
@@ -49,19 +48,6 @@ jucer_project_files("shared"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/ChowCentaurPlugin.h"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/ChowCentaurPlugin.cpp"
   .         .         x         "${CMAKE_CURRENT_LIST_DIR}/gui.xml"
-)
-
-jucer_project_files("SubCircuits"
-# Compile   Xcode     Binary    File
-#           Resource  Resource
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../InputBuffer/InputBufferProcessor.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../GainStage/PreAmpStage.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../GainStage/AmpStage.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../GainStage/ClippingStage.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../GainStage/FeedForward2.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../GainStage/SummingAmp.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ToneFilter/ToneFilterProcessor.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../OutputStage/OutputStageProcessor.h"
 )
 
 # JUCE modules

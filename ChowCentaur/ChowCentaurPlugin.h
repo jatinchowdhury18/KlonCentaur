@@ -3,14 +3,14 @@
 #include "JuceHeader.h"
 #include "PluginBase.h"
 
-#include "InputBuffer/InputBufferProcessor.h"
-#include "GainStage/PreAmpStage.h"
-#include "GainStage/AmpStage.h"
-#include "GainStage/ClippingStage.h"
-#include "GainStage/FeedForward2.h"
-#include "GainStage/SummingAmp.h"
-#include "ToneFilter/ToneFilterProcessor.h"
-#include "OutputStage/OutputStageProcessor.h"
+#include "InputBufferProcessor.h"
+#include "PreAmpStage.h"
+#include "AmpStage.h"
+#include "ClippingStage.h"
+#include "FeedForward2.h"
+#include "SummingAmp.h"
+#include "ToneFilterProcessor.h"
+#include "OutputStageProcessor.h"
 
 class ChowCentaur : public PluginBase<ChowCentaur>
 {
