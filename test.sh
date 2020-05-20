@@ -1,3 +1,6 @@
+#!/bin/bash
+
+# exit if a command fails
 set -e
 
 for dir in $(find {*,SubCircuits/*} -maxdepth 0 -type d); do
