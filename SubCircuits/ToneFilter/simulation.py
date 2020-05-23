@@ -65,7 +65,7 @@ def plot_shelf_freqz(treble, fs):
     plt.semilogx(w, 20 * np.log10(abs(h)), '--')
 
 # float = 0.287394
-treb = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+treb = [0.0, 0.3, 0.6, 1.0]
 
 # hf_gain = [-8, -4, 0, 4, 8, 12, 16]
 
@@ -84,8 +84,10 @@ for t in treb:
     # adsp.plot_magnitude_response(b, a, fs=FS)
 
 
-plt.xlabel('Frequency')
+plt.title('Tone Control Frequency Response')
+plt.xlabel('Frequency [Hz]')
 plt.ylabel('Amplitude response [dB]')
+plt.legend(['0 analog', '0 digital', '0.3 analog', '0.3 digital', '0.6 analog', '0.6 digital', '1.0 analog', '1.0 digital'])
 plt.xlim(20, 20000)
 plt.grid()
 plt.show()

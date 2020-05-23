@@ -106,8 +106,11 @@ jucer_project_module(
     FOLEYS_SHOW_GUI_EDITOR_PALLETTE OFF # Turn on to edit your GUI!
 )
 
+add_subdirectory(MLUtils)
+
 jucer_export_target(
     "Xcode (MacOSX)"
+    EXTERNAL_LIBRARIES_TO_LINK MLUtils
 )
 
 jucer_export_target_configuration(
@@ -126,6 +129,7 @@ jucer_export_target_configuration(
 
 jucer_export_target(
     "Visual Studio 2017"
+    EXTERNAL_LIBRARIES_TO_LINK MLUtils
     EXTRA_PREPROCESSOR_DEFINITIONS
         _CRT_SECURE_NO_WARNINGS
 )
@@ -146,6 +150,7 @@ jucer_export_target_configuration(
 
 jucer_export_target(
     "Linux Makefile"
+    EXTERNAL_LIBRARIES_TO_LINK MLUtils
 )
 
 jucer_export_target_configuration(

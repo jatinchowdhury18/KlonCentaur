@@ -12,6 +12,8 @@
 #include "ToneFilterProcessor.h"
 #include "OutputStageProcessor.h"
 
+#include "GainStageML.h"
+
 class ChowCentaur : public PluginBase<ChowCentaur>
 {
 public:
@@ -26,9 +28,10 @@ public:
     AudioProcessorEditor* createEditor();
 
 private:
-    std::atomic<float>* gainParam;
-    std::atomic<float>* trebleParam;
-    std::atomic<float>* levelParam;
+    std::atomic<float>* gainParam   = nullptr;
+    std::atomic<float>* trebleParam = nullptr;
+    std::atomic<float>* levelParam  = nullptr;
+    std::atomic<float>* mlParam     = nullptr;
 
     InputBufferProcessor inProc[2];
     GainStageSpace::PreAmpWDF preAmp[2];
@@ -42,6 +45,8 @@ private:
     AudioBuffer<float> ff1Buff;
     AudioBuffer<float> ff2Buff;
     dsp::Oversampling<float> os { 2, 1, dsp::Oversampling<float>::FilterType::filterHalfBandPolyphaseIIR };
+
+    GainStageML gainStageML[2];
 
     foleys::MagicPlotSource* scope = nullptr;
 
