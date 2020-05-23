@@ -55,7 +55,7 @@ def createSample(freq, amp, gainVal, N):
     g = np.ones_like(x) * gainVal
 
     samples = [np.array([x, g, y])]
-    savemat(f'Samples\\sample{N}.mat', { 'samples': np.asarray(samples) })
+    savemat(f'Samples2\\sample{N}.mat', { 'samples': np.asarray(samples) })
 
     clean_up_SPICE(f'{meAbsPath}\\SPICE\\GainStage_samp{N}')
 
@@ -63,15 +63,19 @@ def createSample(freq, amp, gainVal, N):
 # get script absolute path
 meAbsPath = os.path.dirname(os.path.realpath(__file__))
 
-N = 0
+N = 338
 freqs = [50, 100, 200, 400, 800, 1000, 2000, 4000, 8000]
 gains = [0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0]
+paramVals = [0.99] #[0.01, 0.25, 0.5, 0.75, 0.99]
 
 for freq in freqs:
     for G in gains:
-        paramVals = np.random.uniform(size=3)
         for p in paramVals:
-            createSample(freq, G, p, N)
+            print(f'{freq}, {G}, {p}')
+            try:
+                createSample(freq, G, p, N)
+            except:
+                pass
             N += 1
 
 # mat_dict = loadmat('Samples\\sample0.mat')
