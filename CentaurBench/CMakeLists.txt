@@ -79,6 +79,11 @@ jucer_project_module(
     PATH "${CMAKE_CURRENT_LIST_DIR}/../modules/JUCE/modules"
 )
 
+jucer_project_module(
+    juce_gui_extra
+    PATH "${CMAKE_CURRENT_LIST_DIR}/../modules/JUCE/modules"
+)
+
 jucer_export_target(
     "Xcode (MacOSX)"
 )
