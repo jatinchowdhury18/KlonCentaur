@@ -1,12 +1,12 @@
 #include "gru.h"
 
-template <int in_size, int out_size, typename T = double>
+template <int in_size, int out_size, typename T>
 void GRULayer<in_size, out_size, T>::reset()
 {
     std::fill(ht1, ht1 + out_size, (T) 0);
 }
 
-template <int in_size, int out_size, typename T = double>
+template <int in_size, int out_size, typename T>
 void GRULayer<in_size, out_size, T>::setWVals(const T wVals [in_size][3*out_size])
 {
     for(int i = 0; i < in_size; ++i)
@@ -20,7 +20,7 @@ void GRULayer<in_size, out_size, T>::setWVals(const T wVals [in_size][3*out_size
     }
 }
 
-template <int in_size, int out_size, typename T = double>
+template <int in_size, int out_size, typename T>
 void GRULayer<in_size, out_size, T>::setUVals(const T uVals [out_size][3*out_size])
 {
     for(int i = 0; i < out_size; ++i)
@@ -34,7 +34,7 @@ void GRULayer<in_size, out_size, T>::setUVals(const T uVals [out_size][3*out_siz
     }
 }
 
-template <int in_size, int out_size, typename T = double>
+template <int in_size, int out_size, typename T>
 void GRULayer<in_size, out_size, T>::setBVals(const T bVals [2][3*out_size])
 {
     for(int i = 0; i < 2; ++i)

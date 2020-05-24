@@ -30,13 +30,11 @@ public:
     void setUVals(const T uVals [out_size][3*out_size]);
     void setBVals(const T bVals [2][3*out_size]);
 
-    template <typename T>
     inline T vMult(const T* arg1, const T* arg2, int dim)
     {
         return std::inner_product(arg1, arg1 + dim, arg2, (T) 0);
     }
 
-    template <typename T>
     inline T sigmoid(T value)
     {
         return (T) 1 / ((T) 1 + std::exp(-value));
