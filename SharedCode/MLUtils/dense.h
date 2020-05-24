@@ -2,6 +2,7 @@
 #define DENSE_H_INCLUDED
 
 #include <algorithm>
+#include <numeric>
 
 template<int in_size, typename T = double>
 class Dense1
