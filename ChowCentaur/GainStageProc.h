@@ -1,6 +1,7 @@
 #ifndef GAINSTAGEPROC_H_INCLUDED
 #define GAINSTAGEPROC_H_INCLUDED
 
+#include "JuceHeader.h"
 #include "PreAmpStage.h"
 #include "AmpStage.h"
 #include "ClippingStage.h"
