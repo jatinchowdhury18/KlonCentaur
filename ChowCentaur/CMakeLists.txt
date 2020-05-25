@@ -47,7 +47,22 @@ jucer_project_files("shared"
 #           Resource  Resource
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/ChowCentaurPlugin.h"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/ChowCentaurPlugin.cpp"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/GainStageProc.h"
+  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/GainStageProc.cpp"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/GainStageMLProc.h"
+  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/GainStageMLProc.cpp"
   .         .         x         "${CMAKE_CURRENT_LIST_DIR}/gui.xml"
+)
+
+jucer_project_files("Models"
+# Compile   Xcode     Binary    File
+#           Resource  Resource
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/Models/RoughModel.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/Models/Model_gain0.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/Models/Model_gain25.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/Models/Model_gain50.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/Models/Model_gain75.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/Models/Model_gain100.h"
 )
 
 # JUCE modules
