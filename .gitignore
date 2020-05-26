@@ -6,7 +6,7 @@ build/
 *.op.raw
 *.raw
 *.masterlog
-*.log
+*.log*
 
 # VSCode config
 .vscode/
