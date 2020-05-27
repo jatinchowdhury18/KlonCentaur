@@ -8,6 +8,13 @@ build/
 *.masterlog
 *.log*
 
+# TEX artifacts
+*.synctex.gz
+*.out
+*.blg
+*.bbl
+*.aux
+
 # VSCode config
 .vscode/
 
