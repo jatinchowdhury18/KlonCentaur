@@ -13,9 +13,9 @@ void GRULayer<in_size, out_size, T>::setWVals(const T wVals [in_size][3*out_size
     {
         for(int k = 0; k < out_size; ++k)
         {
-            zWeights.W[k][i] = wVals[i][k+0];
-            rWeights.W[k][i] = wVals[i][k+3];
-            cWeights.W[k][i] = wVals[i][k+6];
+            zWeights.W[k][i] = wVals[i][k];
+            rWeights.W[k][i] = wVals[i][k+out_size];
+            cWeights.W[k][i] = wVals[i][k+out_size*2];
         }
     }
 }
@@ -27,9 +27,9 @@ void GRULayer<in_size, out_size, T>::setUVals(const T uVals [out_size][3*out_siz
     {
         for(int k = 0; k < out_size; ++k)
         {
-            zWeights.U[k][i] = uVals[i][k+0];
-            rWeights.U[k][i] = uVals[i][k+3];
-            cWeights.U[k][i] = uVals[i][k+6];
+            zWeights.U[k][i] = uVals[i][k];
+            rWeights.U[k][i] = uVals[i][k+out_size];
+            cWeights.U[k][i] = uVals[i][k+out_size*2];
         }
     }
 }
@@ -42,8 +42,8 @@ void GRULayer<in_size, out_size, T>::setBVals(const T bVals [2][3*out_size])
         for(int k = 0; k < out_size; ++k)
         {
             zWeights.b[i][k] = bVals[i][k];
-            rWeights.b[i][k] = bVals[i][k+3];
-            cWeights.b[i][k] = bVals[i][k+6];
+            rWeights.b[i][k] = bVals[i][k+out_size];
+            cWeights.b[i][k] = bVals[i][k+out_size*2];
         }
     }
 }

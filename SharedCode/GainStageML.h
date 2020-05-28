@@ -15,10 +15,11 @@ struct GainStageModel
     const T DenseBias;
 };
 
+template<int size=16>
 class GainStageML
 {
 public:
-    GainStageML (const GainStageModel<16,float>& gsm)
+    GainStageML (const GainStageModel<size,float>& gsm)
     {
         gruLayer.setWVals(gsm.GRUKernelWeights);
         gruLayer.setUVals(gsm.GRURecurrentWeights);
@@ -47,10 +48,10 @@ public:
     }
 
 private:
-    float hidden[16] = {0};
+    float hidden[size] = {0};
 
-    GRULayer<1, 16, float> gruLayer;
-    Dense1<16, float> denseLayer;
+    GRULayer<1, size, float> gruLayer;
+    Dense1<size, float> denseLayer;
 
     // const float GRUKernelWeights[1][48] = {{
     //     -0.3793975f,  -0.3267108f,  -0.31897095f,  0.40224496f,  0.0669373f,   0.2080555,

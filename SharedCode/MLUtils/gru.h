@@ -19,7 +19,7 @@ public:
         {
             zVec[i] = sigmoid(vMult(zWeights.W[i], input, in_size) + vMult(zWeights.U[i], ht1, out_size) + zWeights.b[0][i] + zWeights.b[1][i]);
             rVec[i] = sigmoid(vMult(rWeights.W[i], input, in_size) + vMult(rWeights.U[i], ht1, out_size) + rWeights.b[0][i] + rWeights.b[1][i]);
-            cVec[i] = std::tanh(vMult(cWeights.W[i], input, in_size) + rVec[i] * vMult(cWeights.U[i], ht1, out_size) + cWeights.b[0][i] + cWeights.b[1][i]);
+            cVec[i] = std::tanh(vMult(cWeights.W[i], input, in_size) + rVec[i] * (vMult(cWeights.U[i], ht1, out_size) + cWeights.b[1][i]) + cWeights.b[0][i]);
             h[i] = ((T) 1 - zVec[i]) * cVec[i] + zVec[i] * ht1[i];
         }
     
