@@ -1,0 +1,5 @@
+# builds
+.vsteensy/
+
+# Teensy Libraries
+lib/
