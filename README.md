@@ -4,14 +4,13 @@ This repository contains a digital model of the Klon Centaur
 guitar pedal. The goal is to use this circuit as a test
 bench for comparing/combining nodal analysis, wave 
 digital filters, and neural network circuit modelling
-approaches.
+approaches. The model is implemented as an audio plugin 
+(Standalone/VST/AU), and as a guitar pedal-style effect
+embedded on a Teensy microcontroller.
 
-The model is implemented as an audio plugin (Standalone/VST/AU),
-and as a guitar pedal-style effect embedded on a Teensy microcontroller.
-
-Original circuit schematic and analysis on
+For a full technical paper summarizing this project see [here](TODO). Original circuit schematic and analysis on
 [ElectroSmash](https://www.electrosmash.com/klon-centaur-analysis).
-For a full technical paper summarizing thi project see [here](TODO).
+
 
 This work began as part of a class project for
 [EE 292D](https://ee292d.github.io/) at Stanford University.
@@ -20,7 +19,7 @@ This work began as part of a class project for
 
 The audio plugin version can be downloaded from... @TODO
 
-@TODO; picture of plugin
+![Pic](./Paper/Figures/Plugin.png)
 
 ### Building from Source
 
@@ -29,7 +28,7 @@ The audio plugin is built using
 [FRUT](https://github.com/McMartin/FRUT), CMake, and
 [PluginGUIMagic](https://github.com/ffAudio/PluginGUIMagic).
 These dependencies are primarily managed by the `setup.sh` script,
-exceot for CMake, which the user must install on their own.
+except for CMake, which the user must install on their own.
 
 To build from source, use the following steps:
 ```bash
@@ -58,8 +57,8 @@ found here (@TODO).
 The circuit model is constructed using nodal analysis and wave digital
 filters. For more information see:
 
-- Julius Smith, [Physical Audio Signal Processing}(https://ccrma.stanford.edu/~jos/pasp/pasp.html)
-- Kurt Werner, [Virtual Analog Modelling of Audio Circuitry Using Wave Digital Filters]([file:///D:/Documents/CCRMA/Research/KurtDissertation.pdf](https://www.semanticscholar.org/paper/Virtual-Analog-Modeling-of-Audio-Circuitry-Using-Werner/4df7106aa5581a607ac88e559a05c71efc73497b))
+- Julius Smith, [Physical Audio Signal Processing](https://ccrma.stanford.edu/~jos/pasp/pasp.html)
+- Kurt Werner, [Virtual Analog Modelling of Audio Circuitry Using Wave Digital Filters](https://www.semanticscholar.org/paper/Virtual-Analog-Modeling-of-Audio-Circuitry-Using-Werner/4df7106aa5581a607ac88e559a05c71efc73497b)
 
 The wave digital filters are implemented using a WDF library, available
 [here](https://github.com/jatinchowdhury18/WaveDigitalFilters).

@@ -68,7 +68,6 @@
 \usepackage[american]{circuitikz}
 % \usetikzlibrary{dsp,chains}
 \usepackage{tkz-euclide}
-\usetkzobj{all}
 \usepackage{cleveref}
 \usepackage{siunitx}
 
@@ -146,10 +145,10 @@ adding to its cult following.
 Circuit modelling is typically broken down into ``white-box'' and
 ``black-box'' approaches \cite{Germain}. A ``white-box'' approach
 uses knowledge of the internal mechanisms of the circuit, often
-modelling the physical interactions of the electrical components of
-the circuits. Popular white-box methods include nodal analysis
-\cite{Yeh}, Port-Hamiltonian analysis \cite{PortHamiltonian}, Wave
-Digital Filters \cite{Fettweis,KurtThesis}, and nonlinear state space
+modelling the physical interactions of the electrical components.
+Popular white-box methods include nodal analysis \cite{Yeh},
+Port-Hamiltonian analysis \cite{PortHamiltonian}, Wave Digital
+Filters \cite{Fettweis,KurtThesis}, and nonlinear state space
 analysis \cite{StateSpace}.
 \newline\newline
 ``Black-box'' circuit modelling methods generally use measurements
@@ -162,7 +161,7 @@ have begun using machine learning methods for black-box modelling.
 In \cite{WaveNetVA}, the authors use a WaveNet style architecture
 to generate an output signal sample-by-sample. In \cite{NLML} the
 authors use a deep fully-connected networks to approximate nonlinear
-state-space solution to a circuit, effectively a ``grey-box'' approach.
+state-space solutions for a circuit, effectively a ``grey-box'' approach.
 Finally, in \cite{VArnn} the authors use a recurrent neural network
 to model the behavior of audio circuits with control parameters.
 
@@ -215,8 +214,8 @@ circuit component: resistors ($Z_R$), capacitors ($Z_C$), and inductors
 From there, using linear circuit theory, one can construct a Laplace
 Domain transfer function for the circuit. Note that this assumes an
 ideal operational amplifier operating in its linear region. For more
-information on this process, see \cite{Maby}. For this circuit, the
-Laplace domain transfer function can be written as:
+information on this process, see \cite{Maby}. For the tone control
+circuit, the Laplace domain transfer function can be written as:
 \begin{equation}
     \frac{V_{out}(s)}{V_{in}(s)} = {\scriptscriptstyle \frac{C_{14}\left(\frac{1}{R_{22}} + \frac{1}{R_{21} + R_{v2b}}\right)s
     + \frac{1}{R_{22}}\left(\frac{1}{R_{21} + R_{v2b}} + \frac{1}{R_{23} + R_{v2a}}\right)}{
@@ -225,7 +224,7 @@ Laplace domain transfer function can be written as:
 \end{equation}
 %
 Note that we refer to the the section of potentiometer $R_{v2}$ that is
-above the wiper as $R_{v2a}$, and the section below as $R_{vrb}$, and that
+above the wiper as $R_{v2a}$, and the section below as $R_{v2b}$, and that
 we ignore the DC offset created by the $4.5$V voltage source at the positive
 terminal of the op-amp.
 \newline\newline
@@ -326,8 +325,8 @@ component to be discretized separately, even using different conformal
 maps, which can improve model behavior for certain classes of circuits
 (see \cite{Germain}). Finally, the separability of components means than
 when a component is changed (e.g. a potentiometer), the component change
-is propagated so only components that depend on the impedance of the
-changed component need to be recomputed.
+is propagated so that only components with behavior that depends on the
+impedance of the changed component need to be recomputed.
 \newline\newline
 The main disdvantage of WDFs is its difficulty in handling circuits with
 complex topologies, or multiple nonlinearities. While the recent addition
@@ -342,7 +341,7 @@ modelling analog audio circuitry \cite{WaveNetVA,NLML,MartinezReissDNN},
 we choose the recurrent neural network approach developed in \cite{VArnn}
 as our starting point. Using a recurrent neural network (RNN) allows the for a
 significantly smaller neural network than would be possible with a traditional
-deep neural network, or convolutional neural network, meaning that the network
+deep neural network or convolutional neural network, meaning that the network
 can be evaluated much faster for real-time use, while maintaining a smaller
 memory footprint (an important advantage on embedded platforms). Additionally,
 recurrent neural networks are a sensible candidate for modelling distortion
@@ -408,12 +407,11 @@ recurrent units: Long Short-Term Memory units (LSTMs) or Gated
 Recurrent Units (GRUs). For this application, we choose to use
 GRUs \cite{gru_original} since they require fewer operations,
 allowing for faster computation, and since they requre fewer weights,
-thereby allowing the model to have a smaller memory footprint which
-can often be important for embedded implementations. The GRU consists
-of three ``gates'': the update gate $z[n]$, reset gate $r[n]$, and the
-new gate $c[n]$. These gates are used to compute the cell's current
-output $h[n]$ from its current input $x[n]$ and previous output
-$h[n-1]$ as follows:
+thereby allowing the model to have a smaller memory footprint. The
+GRU consists of three ``gates'': the update gate $z[n]$, reset gate
+$r[n]$, and the new gate $c[n]$. These gates are used to compute the
+cell's current output $h[n]$ from its current input $x[n]$ and previous
+output $h[n-1]$ as follows:
 \begin{equation}
     z[n] = \sigma(W_z x[n] + U_z h[n-1] + b_z)
 \end{equation}
