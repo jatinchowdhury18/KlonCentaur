@@ -19,7 +19,7 @@ This work began as part of a class project for
 
 The audio plugin version can be downloaded from... @TODO
 
-![Pic](./Paper/Figures/Plugin.png)
+<img src="./Paper/Figures/Plugin.png" width=50%>
 
 ### Building from Source
 
