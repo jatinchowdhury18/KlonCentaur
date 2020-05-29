@@ -15,7 +15,7 @@ public:
 
 private:
     std::atomic<float>* gainParam = nullptr;
-    std::unique_ptr<GainStageML> gainStageML[5][2];
+    std::unique_ptr<GainStageML<8>> gainStageML[5][2];
 
     AudioBuffer<float> fadeBuffer;
     int lastModelIdx = 0;

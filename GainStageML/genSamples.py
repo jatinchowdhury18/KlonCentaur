@@ -19,21 +19,23 @@ def set_SPICE_params(file, freq, amp, N_cycles, gainVal=0.5):
         file_object.seek(0)
         data = file_object.read(100)
         # Append text at the end of file
-        file_object.write(f'TEXT -296 344 Left 2 !.tran 0.2\\n.param fr={freq} N={N_cycles} G={amp} RVaTop={rTop} RVaBot={rBot} RVbTop={rTop} RVbBot={rBot}\\n.probe v(Vi) v(Vout)')
+        file_object.write(f'TEXT -928 552 Left 2 !.tran 0.2\\n.param fr={freq} N={N_cycles} G={amp} RVaTop={rTop} RVaBot={rBot} RVbTop={rTop} RVbBot={rBot}\\n.probe v(Vi) v(Vout)')
         file_object.write("\n")
 
 def createSample(freq, amp, gainVal, N):
     filename = f'{meAbsPath}\\SPICE\\GainStage_samp{N}.asc'
-    os.system(f'cp {meAbsPath}\\SPICE\\GainStage2_zzz.asc {filename}')
-    set_SPICE_params(filename, freq, amp, int(freq/10), gainVal)
+    # os.system(f'cp {meAbsPath}\\SPICE\\GainStage2_zzz3.asc {filename}')
+    # set_SPICE_params(filename, freq, amp, int(freq/10), gainVal)
 
-    LTC = LTCommander(filename)
-    raw, log = LTC.run()
+    # LTC = LTCommander(filename)
+    # raw, log = LTC.run()
+    raw = 'D:/Documents/CCRMA/Research/Klon_Centaur/GainStageML/SPICE/GainStage2_zzz2.raw'
+    LTR = LTSpiceRawRead(raw)
 
-    try:
-        LTR = LTSpiceRawRead(raw)
-    except:
-        LTR = LTSpiceRawRead(f'{meAbsPath}\\SPICE\\GainStage_samp{N}_run.raw')
+    # try:
+    #     LTR = LTSpiceRawRead(raw)
+    # except:
+    #     LTR = LTSpiceRawRead(f'{meAbsPath}\\SPICE\\GainStage_samp{N}_run.raw')
 
     Vo = LTR.get_trace("V(vout)")
     Vi = LTR.get_trace("V(vi)")
@@ -55,28 +57,31 @@ def createSample(freq, amp, gainVal, N):
     g = np.ones_like(x) * gainVal
 
     samples = [np.array([x, g, y])]
-    savemat(f'Samples2\\sample{N}.mat', { 'samples': np.asarray(samples) })
+    savemat(f'Samples\\sample{N}.mat', { 'samples': np.asarray(samples) })
 
-    clean_up_SPICE(f'{meAbsPath}\\SPICE\\GainStage_samp{N}')
+    # clean_up_SPICE(f'{meAbsPath}\\SPICE\\GainStage_samp{N}')
 
 
 # get script absolute path
 meAbsPath = os.path.dirname(os.path.realpath(__file__))
 
 N = 338
-freqs = [50, 100, 200, 400, 800, 1000, 2000, 4000, 8000]
-gains = [0.1, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0]
+freqs = [50, 75, 100, 150, 200, 250, 300, 400, 600, 800, 1000, 2000, 4000]
+gains = [0.1, 0.25, 0.5, 0.75, 0.9, 1.0]
 paramVals = [0.99] #[0.01, 0.25, 0.5, 0.75, 0.99]
 
-for freq in freqs:
-    for G in gains:
-        for p in paramVals:
-            print(f'{freq}, {G}, {p}')
-            try:
-                createSample(freq, G, p, N)
-            except:
-                pass
-            N += 1
+# for freq in freqs:
+#     for G in gains:
+#         for p in paramVals:
+#             print(f'{freq}, {G}, {p}')
+#             try:
+#                 createSample(freq, G, p, N)
+#             except:
+#                 pass
+#             N += 1
+
+N = 76
+createSample(100, 1.0, 0.99, N)
 
 # mat_dict = loadmat('Samples\\sample0.mat')
 # samples = mat_dict['samples']

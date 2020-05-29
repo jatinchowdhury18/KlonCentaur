@@ -1,6 +1,6 @@
 #include "GainStageMLProc.h"
-#include "Models/Model_gain0.h"
-#include "Models/Model_gain25.h"
+// #include "Models/Model_gain0.h"
+// #include "Models/Model_gain25.h"
 #include "Models/Model_gain50.h"
 #include "Models/Model_gain75.h"
 #include "Models/Model_gain100.h"
@@ -9,11 +9,11 @@ GainStageMLProc::GainStageMLProc (AudioProcessorValueTreeState& vts)
 {
     for (int ch = 0; ch < 2; ++ch)
     {
-        gainStageML[0][ch] = std::make_unique<GainStageML> (ModelGain0);
-        gainStageML[1][ch] = std::make_unique<GainStageML> (ModelGain25);
-        gainStageML[2][ch] = std::make_unique<GainStageML> (ModelGain50);
-        gainStageML[3][ch] = std::make_unique<GainStageML> (ModelGain75);
-        gainStageML[4][ch] = std::make_unique<GainStageML> (ModelGain100);
+        gainStageML[0][ch] = std::make_unique<GainStageML<8>> (ModelGain100);
+        gainStageML[1][ch] = std::make_unique<GainStageML<8>> (ModelGain100);
+        gainStageML[2][ch] = std::make_unique<GainStageML<8>> (ModelGain50);
+        gainStageML[3][ch] = std::make_unique<GainStageML<8>> (ModelGain75);
+        gainStageML[4][ch] = std::make_unique<GainStageML<8>> (ModelGain100);
     }
 
     gainParam = vts.getRawParameterValue ("gain");
@@ -36,7 +36,7 @@ void GainStageMLProc::processModel (AudioBuffer<float>& buffer, int modelIdx)
     for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
     {
         auto* x = buffer.getWritePointer (ch);
-        FloatVectorOperations::multiply (x, 8.0f, buffer.getNumSamples());
+        FloatVectorOperations::multiply (x, 2.0f, buffer.getNumSamples());
         gainStageML[modelIdx][ch]->processBlock (x, buffer.getNumSamples());
     }
 }
