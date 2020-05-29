@@ -4,7 +4,7 @@
 #include "CommonProcessors/ToneControl.h"
 #include "CommonProcessors/OutputBuffer.h"
 
-// #define USE_ML
+#define USE_ML
 
 #ifndef USE_ML
 #include "GainStageProcessors/PreAmpStage.h"
@@ -13,6 +13,8 @@
 #include "GainStageProcessors/ClippingStage.h"
 #include "GainStageProcessors/FF1Current.h"
 #include "GainStageProcessors/FeedForward2.h"
+#else
+#include "GainStageML/GainStageMLProc.h"
 #endif
 
 // Basic Audio objects
@@ -34,6 +36,8 @@ FF1Current ff1 (preAmpStage);
 FeedForward2 ff2;
 AudioMixer4 mixer;
 SummingAmp summingAmp;
+#else
+GainStageMLProc gainStageRNN;
 #endif
 
 // output amp?
@@ -54,7 +58,8 @@ AudioConnection sum2 (ff2, 0, mixer, 2);
 AudioConnection patchSummingAmp (mixer, 0, summingAmp, 0);
 AudioConnection patchTone (summingAmp, 0, toneControl, 0);
 #else
-AudioConnection patchTone (inputBuffer, 0, toneControl, 0);
+AudioConnection patchRNN (inputBuffer, 0, gainStageRNN, 0);
+AudioConnection patchTone (gainStageRNN, 0, toneControl, 0);
 #endif
 
 AudioConnection patchToneOut (toneControl, 0, outputBuffer, 0);
@@ -82,6 +87,8 @@ void setup()
     preAmpStage.setGain (gainVal);
     ampStage.setGain (gainVal);
     ff2.setGain (gainVal);
+#else
+    gainStageRNN.setGain (gainVal);
 #endif
 }
 

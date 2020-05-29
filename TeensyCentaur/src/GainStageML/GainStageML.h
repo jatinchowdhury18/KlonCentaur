@@ -1,9 +1,9 @@
 #ifndef GAINSTAGEML_H_INCLUDED
 #define GAINSTAGEML_H_INCLUDED
 
-#include "MLUtils/dense.h"
-#include "MLUtils/gru.h"
-#include "MLUtils/gru.cpp"
+#include "dense.h"
+#include "gru.h"
+#include "gru.cpp"
 
 template<int size, typename T>
 struct GainStageModel
