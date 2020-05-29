@@ -70,6 +70,7 @@
 \usepackage{tkz-euclide}
 \usetkzobj{all}
 \usepackage{cleveref}
+\usepackage{siunitx}
 
 \usepackage{listings}
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -245,9 +246,9 @@ validated against the response of the analog circuit is shown in
 \cref{fig:ToneFreq}.
 \begin{figure}
     \includegraphics[width=0.5\textwidth]{ToneFreq.png}
-    \caption{\label{fig:ToneFreq} Tone control frequency response
+    \caption{\label{fig:ToneFreq} {\it Tone control frequency response
     at various values of the Treble parameter, comparing the responses
-    of the analog filter with the digital model.}
+    of the analog filter with the digital model.}}
 \end{figure}
 
 \subsubsection{Advantages and Limitations}
@@ -339,7 +340,7 @@ compromise the modularity of the system.
 While several styles of machine-learning based models are available for
 modelling analog audio circuitry \cite{WaveNetVA,NLML,MartinezReissDNN},
 we choose the recurrent neural network approach developed in \cite{VArnn}
-as our starting point. Using a recurrent neural network allows the for a
+as our starting point. Using a recurrent neural network (RNN) allows the for a
 significantly smaller neural network than would be possible with a traditional
 deep neural network, or convolutional neural network, meaning that the network
 can be evaluated much faster for real-time use, while maintaining a smaller
@@ -352,10 +353,24 @@ resemble audio distortion effects, and can directly be used as such
 allows for the inclusion of control parameters into the model, such as
 potentiometer positions, helping to solve a persistent limitation of
 black-box style circuit models.
+\newline\newline
+In the following paragraphs, we outline the use of an RNN for modelling
+the gain stage circuit from the Klon Centaur pedal. While our model
+is similar to the model used in \cite{VArnn}, it differs in some
+notable ways. For instance, the model described in \cite{VArnn} accepts
+the values of control parameters to the circuit as inputs to the RNN,
+however we were unable to successfully train a network in this fashion.
+Instead, we construct separate networks for five different values of the
+``Gain'' parameter, and fade between the outputs of the networks in
+real-time in the final implementation of the model. Other differences are
+outlined further below.
 
 \subsection{Model Architecture}
 The model architecture described in \cite{VArnn} consists of a single recurrent
-layer followed by a fully connected layer consisting of a single ``neuron''.
+layer followed by a fully connected layer consisting of a single ``neuron''
+(see \cref{fig:rnn_arch}). In our models, we use a recurrent layer made up
+of 8 Gated Recurrent Units. For training, all models are implemented in
+\texttt{Python} using the \texttt{Keras} framework \cite{chollet2015keras}.
 %
 \begin{figure}
     \centering
@@ -387,6 +402,75 @@ layer followed by a fully connected layer consisting of a single ``neuron''.
     \caption{\label{fig:rnn_arch}{\it RNN Architecture.}}
 \end{figure}
 %
+\subsubsection{Recurrent Layer}
+Recurrent layers are typically comprised of one of two types of
+recurrent units: Long Short-Term Memory units (LSTMs) or Gated
+Recurrent Units (GRUs). For this application, we choose to use
+GRUs \cite{gru_original} since they require fewer operations,
+allowing for faster computation, and since they requre fewer weights,
+thereby allowing the model to have a smaller memory footprint which
+can often be important for embedded implementations. The GRU consists
+of three ``gates'': the update gate $z[n]$, reset gate $r[n]$, and the
+new gate $c[n]$. These gates are used to compute the cell's current
+output $h[n]$ from its current input $x[n]$ and previous output
+$h[n-1]$ as follows:
+\begin{equation}
+    z[n] = \sigma(W_z x[n] + U_z h[n-1] + b_z)
+\end{equation}
+\begin{equation}
+    r[n] = \sigma(W_r x[n] + U_r h[n-1] + b_r)
+\end{equation}
+\begin{equation}
+    c[n] = \tanh(W_c x[n] + r[n] \circ U_c h[n-1] + b_c)
+\end{equation}
+\begin{equation}
+    h[n] = z[n] \circ h[n-1] + (1 - z[n]) \circ c[n]
+\end{equation}
+%
+Where $W_z,W_r,W_c$ are the kernel weights for each gate,
+$U_z,U_r,U_c$ are the recurrent weights for each gate, and
+$b_z,b_r,b_c$ are the biases for each gate. Note that as the
+inputs and outputs to the GRU layer may be vectors, all products
+in the above equations are assumed to be standard matrix-vector
+products, except those Hadamard products denoted $\circ$.
+%
+\subsubsection{Fully Connected Layer}
+A fully connected layer computes an output vector $y[n]$ from
+input vector $x[n]$ as follows:
+\begin{equation}
+    y[n] = \alpha(W x[n] + b)
+\end{equation}
+%
+Where $W$ is the kernel weights, $b$ is the layer bias, and $\alpha(x)$
+is the layer activation. In our model, we use no activation, i.e.,
+$\alpha(x) = x$.
+
+\subsection{Training Data}
+Our dataset consists of ~4 minutes of electric guitar recordings,
+from a variety of electric guitars including a Fender Stratocaster
+and a Gibson Les Paul. The guitars are recorded ``direct'' meaning
+that the recorded signal is equivalent to the signal received by the
+pedal coming directly from the guitar. Recordings were made using a
+Focusrite Scarlett audio interface at 44.1 kHz. Note that this
+sample rate is very low compared to that used for other neural network
+models of nonlinear audio effects \cite{WaveNetVA,VArnn}, however,
+this sample rate was chosen because the embedded hardware on which
+the final model was implemented processes audio at this sample rate.
+The recordings were then separated into segments of 0.5 seconds each,
+resulting in a total of 425 segments.
+\newline\newline
+Since the original Klon Centaur is quite expensive, we used a SPICE
+simulation of the Centaur circuit in order to obtain a ``ground truth''
+reference dataset. The reference dataset measures the output voltage
+of the summing amplifier from the circuit at five different values
+for the ``Gain'' potentiometer.
+
+\subsection{Training}
+We trained our models on 400 of the 425 audio samples, saving 25
+samples for validation. Training was performed using the Adam
+optimizer \cite{Kingma2015AdamAM}, with an initial learning rate
+of \num{2e-3}.
+
 \section{Implementation}
 In order to compare the virtual analog methods described above,
 we construct two emulations of the Klon Centaur circuit: one emulation
@@ -446,6 +530,15 @@ for the WDF models. While the current model uses custom implementations
 of the GRU and fully connected layers needed for the RNN model, in the
 future, we plan to upgrade this model to use the implementations provided
 by the Tensorflow Lite library\footnote{\url{https://www.tensorflow.org/lite/}}.
+%
+\begin{figure}
+    \includegraphics[width=0.5\textwidth]{Plugin.png}
+    \caption{\label{fig:Plugin} {\it Audio plugin implementation
+    of the Klon Centaur circuit model. Note controls for ``Gain'',
+    ``Treble'', and ``Level'' analogous to the original circuit,
+    as well as the ``neural'' parameter to control whether the
+    emulation uses the traiditional circuit model, or the RNN model.}}
+\end{figure}
 
 \subsection{Embedded Implementation}
 Digital audio effects are sometimes implemented on embedded devices
