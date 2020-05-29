@@ -1,5 +1,7 @@
 # Klon Centaur Model
 
+[![Build Status](https://travis-ci.com/jatinchowdhury18/KlonCentaur.svg?token=Ub9niJrqG1Br1qaaxp7E&branch=master)](https://travis-ci.com/jatinchowdhury18/KlonCentaur)
+
 This repository contains a digital model of the Klon Centaur 
 guitar pedal. The goal is to use this circuit as a test
 bench for comparing/combining nodal analysis, wave 
