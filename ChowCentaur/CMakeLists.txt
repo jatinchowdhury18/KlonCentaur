@@ -25,7 +25,6 @@ jucer_project_settings(
     HEADER_SEARCH_PATHS
         ${CMAKE_CURRENT_LIST_DIR}/../SharedCode/
         ${CMAKE_CURRENT_LIST_DIR}/../modules/WaveDigitalFilters/shared/
-        ${CMAKE_CURRENT_LIST_DIR}/../../CrossroadsEffects/modules/JUCE/ASIOSDK2.3.2/common/
 )
 
 jucer_audio_plugin_settings(
@@ -75,7 +74,6 @@ jucer_project_module(
 jucer_project_module(
     juce_audio_devices
     PATH "${CMAKE_CURRENT_LIST_DIR}/../modules/JUCE/modules"
-    JUCE_ASIO ON
 )
 
 jucer_project_module(

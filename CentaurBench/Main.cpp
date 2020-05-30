@@ -1,16 +1,16 @@
 #include "JuceHeader.h"
 #include <iostream>
 
-namespace
+namespace 
 {
-    constexpr double sampleRate = 44100.0;
-    constexpr int blockSize = 256;
+    constexpr double pluginSampleRate = 44100.0;
+    constexpr int blockSizes[] = {8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096};
     constexpr int numChannels = 2;
 }
 
 std::unique_ptr<AudioPluginInstance> getPlugin (String file);
 void createRandomAudioInput (AudioBuffer<float>& buffer, double lengthSeconds);
-double timeAudioProcess (AudioPluginInstance* plugin, AudioBuffer<float>& audio);
+double timeAudioProcess (AudioPluginInstance* plugin, AudioBuffer<float>& audio, const int blockSize);
 
 int main (int argc, char* argv[])
 {
@@ -31,27 +31,32 @@ int main (int argc, char* argv[])
 
     AudioBuffer<float> audio;
     auto neuralParam = plugin->getParameters()[3];
-    constexpr double audioLength = 10.0; // seconds
+    constexpr double audioLength = 100.0; // seconds
     
-    std::cout << "Processing non-ML plugin..." << std::endl;
-    createRandomAudioInput (audio, audioLength);
-    neuralParam->setValue (0.0f);
+    for (auto blockSize : blockSizes)
+    {
+        std::cout << "Block size: " << blockSize << std::endl;
 
-    plugin->prepareToPlay (sampleRate, blockSize);
-    auto nonMlTime = timeAudioProcess (plugin.get(), audio);
-    plugin->releaseResources();
+        std::cout << "Processing non-ML plugin..." << std::endl;
+        createRandomAudioInput (audio, audioLength);
+        neuralParam->setValue (0.0f);
 
-    std::cout << "Processing ML plugin..." << std::endl;
-    createRandomAudioInput (audio, audioLength);
-    neuralParam->setValue (1.0f);
+        plugin->prepareToPlay (pluginSampleRate, blockSize);
+        auto nonMlTime = timeAudioProcess (plugin.get(), audio, blockSize);
+        plugin->releaseResources();
 
-    plugin->prepareToPlay (sampleRate, blockSize);
-    auto mlTime = timeAudioProcess (plugin.get(), audio);
-    plugin->releaseResources();
-    
-    std::cout << "Results:" << std::endl;
-    std::cout << "NonML: processes 1 second of audio in " << nonMlTime / audioLength << " seconds" << std::endl;;
-    std::cout << "ML: processes 1 second of audio in " << mlTime / audioLength << " seconds" << std::endl;;
+        std::cout << "Processing ML plugin..." << std::endl;
+        createRandomAudioInput (audio, audioLength);
+        neuralParam->setValue (1.0f);
+
+        plugin->prepareToPlay (pluginSampleRate, blockSize);
+        auto mlTime = timeAudioProcess (plugin.get(), audio, blockSize);
+        plugin->releaseResources();
+
+        std::cout << "Results:" << std::endl;
+        std::cout << "NonML: processes 1 second of audio in " << nonMlTime / audioLength << " seconds" << std::endl;;
+        std::cout << "ML: processes 1 second of audio in " << mlTime / audioLength << " seconds" << std::endl;;
+    }
 
     return 0;
 }
@@ -87,7 +92,7 @@ std::unique_ptr<AudioPluginInstance> getPlugin (String file)
 
 void createRandomAudioInput (AudioBuffer<float>& buffer, double lengthSeconds)
 {
-    const int numSamples = int (lengthSeconds * sampleRate);
+    const int numSamples = int (lengthSeconds * pluginSampleRate);
     buffer.setSize (numChannels, numSamples);
 
     Random rand;
@@ -101,7 +106,7 @@ void createRandomAudioInput (AudioBuffer<float>& buffer, double lengthSeconds)
     }
 }
 
-double timeAudioProcess (AudioPluginInstance* plugin, AudioBuffer<float>& audio)
+double timeAudioProcess (AudioPluginInstance* plugin, AudioBuffer<float>& audio, const int blockSize)
 {
     Time time;
 
