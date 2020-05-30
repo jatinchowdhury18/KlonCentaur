@@ -78,13 +78,12 @@ for training the networks can be found in the
 [`GainStageML/`](./GainStageML/) subfolder.
 
 # TODO
-- License
 - Add new gain 100 model to plugin and teensy
 - Add gain 100 ESRs to paper
 - Make video for plugin and teensy
-- Re-read paper
 - Publish repo
 
 ## License
 
-TODO
+This repository is licensed under the 
+BSD-3-Clause license. Enjoy!
