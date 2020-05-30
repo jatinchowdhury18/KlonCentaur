@@ -5,6 +5,10 @@
 #include <memory>
 #include "GainStageML.h"
 
+#include "Models/Model_gain0.h"
+#include "Models/Model_gain25.h"
+#include "Models/Model_gain50.h"
+#include "Models/Model_gain75.h"
 #include "Models/Model_gain100_8.h"
 
 class GainStageMLProc : public AudioStream
@@ -12,10 +16,10 @@ class GainStageMLProc : public AudioStream
 public:
     GainStageMLProc() : AudioStream (1, inputQueueArray)
     {
-        gainStageML[0] = std::make_unique<GainStageML<8>> (ModelGain1008);
-        gainStageML[1] = std::make_unique<GainStageML<8>> (ModelGain1008);
-        gainStageML[2] = std::make_unique<GainStageML<8>> (ModelGain1008);
-        gainStageML[3] = std::make_unique<GainStageML<8>> (ModelGain1008);
+        gainStageML[0] = std::make_unique<GainStageML<8>> (ModelGain0);
+        gainStageML[1] = std::make_unique<GainStageML<8>> (ModelGain25);
+        gainStageML[2] = std::make_unique<GainStageML<8>> (ModelGain50);
+        gainStageML[3] = std::make_unique<GainStageML<8>> (ModelGain75);
         gainStageML[4] = std::make_unique<GainStageML<8>> (ModelGain1008);
 
         for (int i = 0; i < 5; ++i)

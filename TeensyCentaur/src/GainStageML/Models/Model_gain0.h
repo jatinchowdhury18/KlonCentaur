@@ -1,7 +1,7 @@
 #ifndef MODELGAIN0_H_INCLUDED
 #define MODELGAIN0_H_INCLUDED
 
-#include "GainStageML.h"
+#include "../GainStageML.h"
 
 GainStageModel<8, float> ModelGain0 = {
     {{ // GRUKernelWeights

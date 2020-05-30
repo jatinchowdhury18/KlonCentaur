@@ -4,7 +4,7 @@
 #include "CommonProcessors/ToneControl.h"
 #include "CommonProcessors/OutputBuffer.h"
 
-#define USE_ML
+// #define USE_ML
 
 #ifndef USE_ML
 #include "GainStageProcessors/PreAmpStage.h"
@@ -67,6 +67,20 @@ AudioConnection patchOut (outputBuffer, 0, amp, 0);
 AudioConnection patchCord1 (amp, 0, out, 0);
 AudioConnection patchCord2 (amp, 0, out, 1);
 
+// button stuff
+#define GAIN_PIN   PIN_A2
+#define TREBLE_PIN PIN_A3
+#define TREBLE_LIGHT 0
+
+double gainVal = 1.0;
+
+int trebleOn = 0;
+int gainOn = 0;
+
+int gainButtonVal = 0;
+int trebleButtonVal = 0;
+
+// ARDUINO functions
 void setup()
 {
     AudioMemory(6);
@@ -76,13 +90,12 @@ void setup()
 #ifndef USE_ML
     amp.gain(4.0);
 #else
-    amp.gain(1.0);
+    amp.gain(0.5);
 #endif
 
     toneControl.setTreble (0.4);
     outputBuffer.setLevel (0.5);
 
-    double gainVal = 1.0;
 #ifndef USE_ML
     preAmpStage.setGain (gainVal);
     ampStage.setGain (gainVal);
@@ -90,8 +103,58 @@ void setup()
 #else
     gainStageRNN.setGain (gainVal);
 #endif
+
+    pinMode (LED_BUILTIN, OUTPUT);
+    pinMode (TREBLE_LIGHT, OUTPUT);
+    pinMode (GAIN_PIN,   INPUT_PULLUP);
+    pinMode (TREBLE_PIN, INPUT_PULLUP);
 }
 
 void loop()
 {
+    // update gain state
+    int curGainButtonVal = analogRead (GAIN_PIN);
+    if (gainButtonVal - curGainButtonVal > 300)
+        gainOn = 1 - gainOn;
+
+    gainButtonVal = curGainButtonVal;
+
+    // update treble state
+    int curTrebleButtonVal = analogRead (TREBLE_PIN);
+    if (trebleButtonVal - curTrebleButtonVal > 300)
+        trebleOn = 1 - trebleOn;
+
+    trebleButtonVal = curTrebleButtonVal;
+
+    // apply treble param
+    if (trebleOn)
+    {
+        digitalWrite (TREBLE_LIGHT, HIGH);
+        toneControl.setTreble (0.7);
+    }
+    else
+    {
+        digitalWrite (TREBLE_LIGHT, LOW);
+        toneControl.setTreble (0.2);
+    }
+
+    // apply gain param
+    if (gainOn)
+    {
+        digitalWrite (LED_BUILTIN, HIGH);
+        gainVal = 1.0;
+    }
+    else
+    {
+        digitalWrite (LED_BUILTIN, LOW);
+        gainVal = 0.0;
+    }
+
+#ifndef USE_ML
+    preAmpStage.setGain (gainVal);
+    ampStage.setGain (gainVal);
+    ff2.setGain (gainVal);
+#else
+    gainStageRNN.setGain (gainVal);
+#endif
 }
