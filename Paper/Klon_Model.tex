@@ -65,6 +65,7 @@
 
 % My packages
 \usepackage{tikz}
+\usetikzlibrary{positioning}
 \usepackage[american]{circuitikz}
 % \usetikzlibrary{dsp,chains}
 \usepackage{tkz-euclide}
@@ -122,13 +123,13 @@
 In this writing, we develop a virtual analog model of the Klon Centaur
 guitar pedal circuit, comparing various circuit modelling techniques.
 The techniques analyzed include traditional modelling techniques such
-as nodal analysis and Wave Digital Filters, as well a machine-learning
+as nodal analysis and Wave Digital Filters, as well as a machine-learning
 technique using recurrent neural networks. We examine these techniques
 in the contexts of two use cases: an audio ``plug-in'' designed to be
 run on a consumer-grade desktop computer, and a guitar pedal-style effect
 running on an embedded device. Finally, we discuss the advantages and
 disdvantages of each technique for modelling different circuits, and
-targetting different platforms.
+targeting different platforms.
 \end{abstract}
 
 \section{Introduction}
@@ -164,7 +165,15 @@ authors use a deep fully-connected networks to approximate nonlinear
 state-space solutions for a circuit, effectively a ``grey-box'' approach.
 Finally, in \cite{VArnn} the authors use a recurrent neural network
 to model the behavior of audio circuits with control parameters.
-
+\newline\newline
+The structure of the paper will be as follows: in \S2 we give
+background information on circuit modelling using nodal analysis
+and Wave Digital Filters. \S3 describes the use of recurrent neural
+networks for circuit modelling, and outlines the model and training
+process used for emulating the Centaur circuit. In \S4 we discuss
+the real-time implementation of the circuit models. \S5 shares
+the results of these implementations as well as recommendations
+for circuit modelling using the methods discussed here.
 
 \section{Traditional Circuit Modelling Techniques}
 First, we examine the use of traditional circuit modelling techniques,
@@ -244,6 +253,7 @@ the signal. The resulting frequency response of the digital model,
 validated against the response of the analog circuit is shown in
 \cref{fig:ToneFreq}.
 \begin{figure}
+    \centering
     \includegraphics[width=0.5\textwidth]{ToneFreq.png}
     \caption{\label{fig:ToneFreq} {\it Tone control frequency response
     at various values of the Treble parameter, comparing the responses
@@ -286,11 +296,7 @@ by series and parallel adaptors also defined in the wave domain. The
 full derivation of these WDF elements is given in \cite{Fettweis} and
 \cite{KurtThesis}. 
 \newline\newline
-Once each circuit element and adaptor has been defined, they are connected
-together in a strcuture often referred to as a WDF tree. As an example,
-we examine the ``feed-forward network 1'' from the Klon Centaur circuit
-(see \cref{fig:ff1}).
-
+%
 \begin{figure}
     \centering
     \begin{circuitikz} \draw
@@ -307,14 +313,51 @@ we examine the ``feed-forward network 1'' from the Klon Centaur circuit
     \caption{\label{fig:ff1}{\it Klon Centaur Feed-Forward Network 1 Circuit}}
 \end{figure}
 %
-The corresponding WDF tree is given below. @TODO\dots
-Also shwo simulation results. @TODO\dots
-\newline\newline
 \begin{figure}
     \centering
-    \caption{\label{fig:wdftree}{\it WDF tree for the Klon Centaur Feed-Forward Network 1 Circuit.}}
+    \begin{tikzpicture}[node distance=1.25cm]
+        \tikzset{
+            arrow/.style = {thick,->,>=stealth}
+        }
+        \node (Vin) {$V_{in}$};
+        \node (S1)  [right of=Vin] {$\mathcal{S}_1$};
+        \node (C3)  [right of=S1, below of=S1, yshift= 0.5cm] {$C_3$};
+        \node (S2)  [right of=S1, above of=S1, yshift=-0.5cm] {$\mathcal{S}_2$};
+        \node (R7)  [right of=S2, above of=S2, yshift=-0.5cm] {$R_7$};
+        \node (P1)  [right of=S2, below of=S2, yshift= 0.5cm] {$\mathcal{P}_1$};
+        \node (C16) [right of=P1, below of=P1, yshift= 0.5cm] {$C_{16}$};
+        \node (S3)  [right of=P1, above of=P1, yshift=-0.5cm] {$\mathcal{S}_3$};
+        \node (R19) [right of=S3, above of=S3, yshift=-0.5cm] {$R_{19}$};
+        \node (V45) [right of=S3, below of=S3, yshift= 0.5cm] {$V_{4.5}$};
+
+        \draw [arrow] (Vin) -- (S1);
+        \draw [arrow] (S1) -- (C3);
+        \draw [arrow] (S1) -- (S2);
+        \draw [arrow] (S2) -- (R7);
+        \draw [arrow] (S2) -- (P1);
+        \draw [arrow] (P1) -- (C16);
+        \draw [arrow] (P1) -- (S3);
+        \draw [arrow] (S3) -- (R19);
+        \draw [arrow] (S3) -- (V45);
+    \end{tikzpicture}
+    \caption{\label{fig:wdftree}{\it WDF tree for the Klon Centaur Feed-Forward Network 1 Circuit.
+    $\mathcal{S}$ and $\mathcal{P}$ nodes refer to series and parallel
+    adaptors respectively.}}
 \end{figure}
 %
+Once each circuit element and adaptor has been defined, they are connected
+together in a strcuture often referred to as a WDF tree. As an example,
+we examine the ``feed-forward network 1'' from the Klon Centaur circuit
+(see \cref{fig:ff1}). The corresponding WDF tree is shown in \cref{fig:wdftree}.
+Simulation results compared to the analog reference are shown
+in \cref{fig:wdfresults}.
+%
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{WDFval.png}
+    \caption{\label{fig:wdfresults}{\it WDF simulation results compared to the analog reference.}}
+\end{figure}
+
 \subsubsection{Advantages and Limitations}
 The primary advantage of the Wave Digital approach is its modularity.
 The ability to construct a circuit model with each circuit component
@@ -347,11 +390,8 @@ memory footprint (an important advantage on embedded platforms). Additionally,
 recurrent neural networks are a sensible candidate for modelling distortion
 circuits, particularly circuits with stateful behavior, given the fact that
 recurrent network building blocks, such as gated recurrent units, themselves
-resemble audio distortion effects, and can directly be used as such
-\cite{chowdhury:complexNL:2020}. Finally, the model proposed in \cite{VArnn}
-allows for the inclusion of control parameters into the model, such as
-potentiometer positions, helping to solve a persistent limitation of
-black-box style circuit models.
+resemble audio distortion effects and can directly be used as such
+\cite{chowdhury:complexNL:2020}.
 \newline\newline
 In the following paragraphs, we outline the use of an RNN for modelling
 the gain stage circuit from the Klon Centaur pedal. While our model
@@ -431,6 +471,8 @@ $b_z,b_r,b_c$ are the biases for each gate. Note that as the
 inputs and outputs to the GRU layer may be vectors, all products
 in the above equations are assumed to be standard matrix-vector
 products, except those Hadamard products denoted $\circ$.
+$\sigma(x)$ refers to the sigmoid function
+$\sigma(x) = \frac{1}{1 + e^{-x}}$.
 %
 \subsubsection{Fully Connected Layer}
 A fully connected layer computes an output vector $y[n]$ from
@@ -444,20 +486,20 @@ is the layer activation. In our model, we use no activation, i.e.,
 $\alpha(x) = x$.
 
 \subsection{Training Data}
-Our dataset consists of ~4 minutes of electric guitar recordings,
+Our dataset consists of $\sim 4$ minutes of electric guitar recordings,
 from a variety of electric guitars including a Fender Stratocaster
 and a Gibson Les Paul. The guitars are recorded ``direct'' meaning
 that the recorded signal is equivalent to the signal received by the
 pedal coming directly from the guitar. Recordings were made using a
 Focusrite Scarlett audio interface at 44.1 kHz. Note that this
 sample rate is very low compared to that used for other neural network
-models of nonlinear audio effects \cite{WaveNetVA,VArnn}, however,
-this sample rate was chosen because the embedded hardware on which
-the final model was implemented processes audio at this sample rate.
-The recordings were then separated into segments of 0.5 seconds each,
-resulting in a total of 425 segments.
+models of nonlinear audio effects \cite{WaveNetVA,VArnn}. This sample
+rate was chosen because the embedded hardware on which the final model
+was implemented processes audio at this sample rate. The recordings
+were then separated into segments of 0.5 seconds each, resulting in a
+total of 425 segments.
 \newline\newline
-Since the original Klon Centaur is quite expensive, we used a SPICE
+Since the original Klon Centaur pedal is quite expensive, we used a SPICE
 simulation of the Centaur circuit in order to obtain a ``ground truth''
 reference dataset. The reference dataset measures the output voltage
 of the summing amplifier from the circuit at five different values
@@ -467,14 +509,80 @@ for the ``Gain'' potentiometer.
 We trained our models on 400 of the 425 audio samples, saving 25
 samples for validation. Training was performed using the Adam
 optimizer \cite{Kingma2015AdamAM}, with an initial learning rate
-of \num{2e-3}.
+of \num{2e-3}. Each model was trained for 500 epochs; each training
+session ran for $\sim 8$ hours.
+
+\subsubsection{Loss Function}
+Similar to \cite{VArnn}, we use an error-to-signal ratio (ESR) as the
+loss function for our models. For a signal of lenght $N$, ESR is defined as:
+\begin{equation}
+    \mathcal{E}_{ESR} = \frac{\sum_{n=0}^{N-1} |y[n] - \hat{y}[n]|^2}{\sum_{n=0}^{N-1} |y[n]|^2}
+\end{equation}
+%
+where $y[n]$ is the reference output, and $\hat{y}[n]$ is the predicted
+output of the network.
+
+\subsubsection{Training Results}
+For each model, the trained network achieved a validation ESR of less than
+$1\%$. Training and validation accuracies are shown in \cref{table:train}.
+The training accuracy over epochs is shown in \cref{fig:training}. Results
+comparing the output of the network to the reference output are shown in
+\cref{fig:freqandtime}. Note that the high frequency response of the RNN
+output is slightly damped compared to the reference.
+%
+\begin{table}[h!]
+    \centering
+     \begin{tabular}{||c | c | c||} 
+     \hline
+     Gain Parameter & Training ESR & Validation ESR \\
+     \hline\hline
+     0.0  & 0.50 & 0.70 \\
+     0.25 & 0.51 & 0.57 \\
+     0.5  & 0.57 & 0.50 \\
+     0.75 & 0.70 & 0.67 \\
+     1.0  & 0.00 & 0.00 \\
+     \hline
+     \end{tabular}
+    \caption{\label{table:train} {\it Training and validation
+        accuracies given in error-to-signal ratio percentages
+        for each trained RNN model.}}
+\end{table}
+%
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{Training.png}
+    \caption{\label{fig:training} {\it Training accuracy
+        shown over epochs.}}
+\end{figure}
+%
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{TimeDomain.png}
+    \centering
+    \includegraphics[width=0.5\textwidth]{FreqDomain.png}
+    \caption{\label{fig:freqandtime} {\it Comparison of
+        predicted output against reference output shown in
+        the time domain (above) and frequency domain (below).
+        The frequency domain plot uses frequency band smoothing
+        using $1/24$ octave bands for improved clarity.}}
+\end{figure}
+
+\subsection{Advantages and Limitations}
+The recurrent neural network is a flexible and powerful
+black-box modelling tool for stateful nonlinear systems.
+The main limitation of the RNN model is its computational
+complexity, mostly due to the fact that the $\tanh$ and
+sigmoid functions required by the recurrent layer can be
+costly to compute. Further, it can be difficult to include
+control parameters in the model, a persistent challenge with
+black-box approaches.
 
 \section{Implementation}
 In order to compare the virtual analog methods described above,
 we construct two emulations of the Klon Centaur circuit: one emulation
-using traditional circuit modelling methods, and a second using a
-recurrent neural network. The Centaur circuit can be broken down
-into four separable parts:
+using traditional circuit modelling methods (non-ML implementation), and
+a second using a recurrent neural network (ML implementation). The Centaur
+circuit can be broken down into four separable parts (see \cref{fig:fullcircuit}):
 \begin{enumerate}
     \item Input Buffer
     \item Gain Stage
@@ -485,7 +593,7 @@ into four separable parts:
 Due to their simplicity and linearity, in both emulations the input
 buffer, output buffer, and tone control circuits were modelled using
 nodal analysis. The ``Gain Stage'' circuit can be further broken down
-into six (mostly) separable parts:
+into six (mostly) separable parts (see \cref{fig:gaincircuit}):
 \begin{enumerate}
     \item Feed-Forward Network 1 (FF-1)
     \item Feed-Forward Network 2 (FF-2)
@@ -495,12 +603,10 @@ into six (mostly) separable parts:
     \item Summing Amplifier
 \end{enumerate}
 %
-@TODO, circuit schematic of gain stage with parts highlighted
-%
-In the RNN circuit model, we treat the Gain Stage as a black box
+In the ML implementation, we treat the Gain Stage as a black box
 with a single user-facing control (the ``Gain'' control). The RNN
-is designed to completely replace the Gain Stage in the circuit
-model. In the traditional circuit model, we use nodal analysis to
+model is designed to completely replace the Gain Stage in the circuit
+model. In the non-ML implementation, we use nodal analysis to
 model the amplifier stage, and summing amplifier circuits.
 For FF-2 and the clipping stage, we use a wave digital filter.
 Since FF-1 and the pre-amp circuit share a capacitor, we construct
@@ -508,6 +614,16 @@ a joint WDF model of these two circuits, using the voltage output
 from the pre-amp circuit as the input to the amplifier stage, and
 the current output from FF-1 (summed with the current outputs of
 FF-2 and the clipping stage) as the input to the summing amplifier.
+%
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{Plugin.png}
+    \caption{\label{fig:Plugin} {\it Audio plugin implementation
+    of the Klon Centaur circuit model. Note controls for ``Gain'',
+    ``Treble'', and ``Level'' analogous to the original circuit,
+    as well as the ``neural'' parameter to control whether the
+    emulation uses the traiditional circuit model, or the RNN model.}}
+\end{figure}
 
 \subsection{Audio Plugin}
 Digital audio effects are often implemented as audio plugins that
@@ -529,13 +645,20 @@ of the GRU and fully connected layers needed for the RNN model, in the
 future, we plan to upgrade this model to use the implementations provided
 by the Tensorflow Lite library\footnote{\url{https://www.tensorflow.org/lite/}}.
 %
+\begin{figure*}
+    \centering
+    \includegraphics[width=1.0\textwidth]{FullCircuit.png}
+    \caption{\label{fig:fullcircuit} {\it Full circuit schematic
+    for the Klon Centaur guitar pedal with different circuit
+    sections outlined. Adapted from \cite{electrosmash}.}}
+\end{figure*}
+%
 \begin{figure}
-    \includegraphics[width=0.5\textwidth]{Plugin.png}
-    \caption{\label{fig:Plugin} {\it Audio plugin implementation
-    of the Klon Centaur circuit model. Note controls for ``Gain'',
-    ``Treble'', and ``Level'' analogous to the original circuit,
-    as well as the ``neural'' parameter to control whether the
-    emulation uses the traiditional circuit model, or the RNN model.}}
+    \centering
+    \includegraphics[width=0.5\textwidth]{GainStageCircuit.png}
+    \caption{\label{fig:gaincircuit} {\it Circuit schematic for the
+    gain stage from the Klon Centaur pedal, with the two Feed-Forward
+    networks highlighted. Adapted from \cite{electrosmash}.}}
 \end{figure}
 
 \subsection{Embedded Implementation}
@@ -557,23 +680,116 @@ the Teensy Audio Library\footnote{\url{https://www.pjrc.com/teensy/td_libs_Audio
 that contains useful audio DSP functionality, as well as the Faust
 programming language which allows audio effects and synthesizers made in
 Faust to be exported for use on the Teensy \cite{Michon2019RealTA}.
-
+The Teensy 4.0 with the audio shield can be purchased for 35 USD.
+\newline\newline
+The Teensy implementation is writteen in C++ using the Teensy Audio Library,
+along with the same WDF library as the audio plugin, as well as the same
+implementations for the GRU and fully connected layers. The emulation
+can be compiled to use either the ML or non-ML implementation. Variables
+in the code can be connected to potentiometers or push-buttons to
+control model parameters in real-time.
+%
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{Teensy.jpg}
+    \caption{\label{fig:Teensy} {\it Teensy microcontroller implementation.}}
+\end{figure}
 
 \section{Results}
-asdjfahlsk
+The results of the real-time implementations described above can best
+be seen through audio performance examples. To that end, we provide
+video examples of both implementations being used in real-time on a
+guitar input being performed live. These examples can be seen here @TODO.
+From subjective listening, the ML and non-ML implementations sound
+very similar, although the ML implementation has slightly damped
+high frequencies, as seen predicted by the results of model training
+(see \cref{fig:freqandtime}). The high frequency damping is slightly
+worse for non-guitar inputs. These issues could likely be alleviated
+by training on a more diverse set of audio, and possibly by adjusting
+the loss function to weight high frequencies more.
 
+\subsection{Performance}
+We also evaluate the computational performance of the emulations.
+For real-time performance it is important to have fast computational
+performance in order to reduce audio latency. In \cref{table:bench},
+we show the speeds of the various models at different input block
+sizes. Note that at all block sizes, the ML implementation outperforms
+the non-ML implementation.
+%
+\begin{table}[h!]
+    \centering
+     \begin{tabular}{||c | c | c||} 
+     \hline
+     Block Size & NonML Speed & ML Speed \\
+     \hline\hline
+     8    & 0.0723437 & 0.0528792 \\
+     16   & 0.0703079 & 0.0510437 \\
+     32   & 0.0652856 & 0.0511147 \\
+     64   & 0.0662835 & 0.0502434 \\
+     128  & 0.0666593 & 0.0495194 \\
+     256  & 0.0696844 & 0.0480298 \\
+     512  & 0.0669037 & 0.0477946 \\
+     1024 & 0.060816  & 0.0488841 \\
+     2048 & 0.0695175 & 0.0488309 \\
+     4096 & 0.0623839 & 0.0472191 \\
+     \hline
+     \end{tabular}
+    \caption{\label{table:bench} {\it Benchmark results
+        comparing processing speed of the audio plugin
+        implementation using ML processing vs. non-ML
+        processing. Speed is measured in compute time per
+        second of audio processed.}}
+\end{table}
+
+\subsection{Recommendations}
+From the process of implementing the circuit emulations described
+above, we provide the following recommendations for circuit modellers:
+\begin{itemize}
+    \item For simple, linear circuits nodal analysis is the easiest
+          and best performing circuit modelling method.
+    \item When modularity is important, prefer Wave Digital Filters.
+          This modularity can refer to the components in the circuit
+          themselves, or the way in which they are discretized.
+    \item For complex nonlinear systems, particularly systems with
+          multiple nonlinear elements, or stateful nonlinear topologies,
+          consider using recurrent neural networks.
+    \item Small RNNs can outperform more complex circuit modelling methods
+          while still maintaining model accuracy.
+    \item While handling control parameters with RNNs can be difficult,
+          this can be acceptably solved by training multiple models for
+          different values of the control parameter and fading between them
+          in real time.
+\end{itemize}
 
 \section{Conclusion}
-In this writing\dots
-
-
+In this writing we have constructed an two emulations of Klon
+Centaur guitar pedal circuit, using circuit modelling techniques
+including nodal analysis, wave digital filters, and recurrent
+neural networks. We describe and compare the advantages and
+limitations of each method, and show how they can be used together
+to achieve good results. We implement the circuit emulations in the
+form of an audio plugin and guitar-pedal style effect embedded on
+a Teensy microcontroller. Finally, we provide recommendations for
+utilising different circuit modelling methods for different types
+of circuits, and for different platforms.
+\newline\newline
+In future works, we would like to extend the RNN framework to be able
+to implement larger networks in real-time. Specifically, the Differentiable
+Digital Signal Processingg (DDSP) library from Google's Magenta project
+\cite{engel2020ddsp} implements complex audio effects including timbral
+transfer, dereverberation, and more using an auto-encoder that contains
+two 512-unit GRUs, along with several other complex operations. Being
+able to implement the DDSP auto-encoder for use on real-time signals
+would be a powerful tool for musicians and audio engineers.
 
 \section{Acknowledgments}
 %
 The author would like to thank Pete Warden and the EE292 class at
 Stanford University for inspiring this project, as well as Julius
 Smith, Kurt Werner, and Jingjie Zhang for assistance with Wave
-Digital Filter modelling.
+Digital Filter modelling. Thanks as well to the Center for Computer
+Research in Music and Acoustics (CCRMA) for providing computing
+resources.
 
 %\newpage
 \nocite{*}
