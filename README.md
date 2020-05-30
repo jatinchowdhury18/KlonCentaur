@@ -19,7 +19,7 @@ This work began as part of a class project for
 
 ## Audio Plugin
 
-The audio plugin version can be downloaded from... @TODO
+Download links for the audio plugin will be available soon...
 
 <img src="./Paper/Figures/Plugin.png" width=50%>
 
@@ -51,8 +51,7 @@ $ cmake --build . --config Release
 ## Teensy Pedal
 
 For information on the Teensy pedal-style implementation, see the
-[`TeensyCentaur/`](./TeensyCentaur/) subfolder. A video demo can be
-found here (@TODO).
+[`TeensyCentaur/`](./TeensyCentaur/) subfolder.
 
 ## Circuit Modelling
 
@@ -77,6 +76,14 @@ processed through a SPICE model to create a "ground truth" version of the
 effect to train against. The training data, SPICE model, and `Python` code
 for training the networks can be found in the
 [`GainStageML/`](./GainStageML/) subfolder.
+
+# TODO
+- License
+- Add new gain 100 model to plugin and teensy
+- Add gain 100 ESRs to paper
+- Make video for plugin and teensy
+- Re-read paper
+- Publish repo
 
 ## License
 
