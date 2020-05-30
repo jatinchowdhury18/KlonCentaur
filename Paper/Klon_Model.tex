@@ -263,7 +263,7 @@ validated against the response of the analog circuit is shown in
 \subsubsection{Advantages and Limitations}
 The advantages of nodal analysis are that the circuit model
 is simple and computationally efficient. The model can be constructed
-with minimal knowledge of simple circuit theory, and basic understanding
+with minimal knowledge of circuit theory, and a basic understanding
 of digitial signal processing. The main disdvantage is that nodal analysis
 cannot be used for nonlinear circuits, though it can be extended
 to model this class of circuits through modified nodal analysis (MNA)
@@ -346,7 +346,7 @@ full derivation of these WDF elements is given in \cite{Fettweis} and
 \end{figure}
 %
 Once each circuit element and adaptor has been defined, they are connected
-together in a strcuture often referred to as a WDF tree. As an example,
+together in a structure often referred to as a WDF tree. As an example,
 we examine the ``feed-forward network 1'' from the Klon Centaur circuit
 (see \cref{fig:ff1}). The corresponding WDF tree is shown in \cref{fig:wdftree}.
 Simulation results compared to the analog reference are shown
@@ -372,7 +372,7 @@ is propagated so that only components with behavior that depends on the
 impedance of the changed component need to be recomputed.
 \newline\newline
 The main disdvantage of WDFs is its difficulty in handling circuits with
-complex topologies, or multiple nonlinearities. While the recent addition
+complex topologies or multiple nonlinearities. While the recent addition
 of $\mathcal{R}$-type adaptors to the Wave Digital formalism \cite{KurtThesis}
 has begun to make these circuits tractable, the WDF models of these types of
 circuits are significantly more computationally complex, and somewhat
@@ -524,7 +524,7 @@ output of the network.
 
 \subsubsection{Training Results}
 For each model, the trained network achieved a validation ESR of less than
-$1\%$. Training and validation accuracies are shown in \cref{table:train}.
+$1.5\%$. Training and validation accuracies are shown in \cref{table:train}.
 The training accuracy over epochs is shown in \cref{fig:training}. Results
 comparing the output of the network to the reference output are shown in
 \cref{fig:freqandtime}. Note that the high frequency response of the RNN
@@ -540,7 +540,7 @@ output is slightly damped compared to the reference.
      0.25 & 0.51 & 0.57 \\
      0.5  & 0.57 & 0.50 \\
      0.75 & 0.70 & 0.67 \\
-     1.0  & 0.00 & 0.00 \\
+     1.0  & 1.20 & 1.20 \\
      \hline
      \end{tabular}
     \caption{\label{table:train} {\it Training and validation
@@ -571,9 +571,9 @@ output is slightly damped compared to the reference.
 The recurrent neural network is a flexible and powerful
 black-box modelling tool for stateful nonlinear systems.
 The main limitation of the RNN model is its computational
-complexity, mostly due to the fact that the $\tanh$ and
-sigmoid functions required by the recurrent layer can be
-costly to compute. Further, it can be difficult to include
+complexity for large models, mostly due to the fact that the
+$\tanh$ and sigmoid functions required by the recurrent layer
+can be costly to compute. Further, it can be difficult to include
 control parameters in the model, a persistent challenge with
 black-box approaches.
 
@@ -643,7 +643,7 @@ library\footnote{\url{https://github.com/jatinchowdhury18/WaveDigitalFilters}}
 for the WDF models. While the current model uses custom implementations
 of the GRU and fully connected layers needed for the RNN model, in the
 future, we plan to upgrade this model to use the implementations provided
-by the Tensorflow Lite library\footnote{\url{https://www.tensorflow.org/lite/}}.
+by the Tensorflow Lite library.\footnote{\url{https://www.tensorflow.org/lite/}}
 %
 \begin{figure*}
     \centering
@@ -672,7 +672,7 @@ meaning that the embedded implementation must be able to run with a
 very small buffer size.
 \newline\newline
 We chose the Teensy 4.0 microcontroller as our embedded platform, since
-it contains a reasonbly powerful floating point processor, at a relatively
+it contains a reasonbly powerful floating point processor at a relatively
 low price point. The Teensy can be purchased along with an Audio Shield,
 which provides 16-bit stereo audio input/output at 44.1 kHz sampling rate.
 The Teensy has gained popularity in the audio community due to
@@ -702,9 +702,10 @@ video examples of both implementations being used in real-time on a
 guitar input being performed live. These examples can be seen here @TODO.
 From subjective listening, the ML and non-ML implementations sound
 very similar, although the ML implementation has slightly damped
-high frequencies, as seen predicted by the results of model training
+high frequencies, as predicted by the results of model training
 (see \cref{fig:freqandtime}). The high frequency damping is slightly
-worse for non-guitar inputs. These issues could likely be alleviated
+more noticeable when the audio input is something other than a
+guitar, e.g. drums. These issues could likely be alleviated
 by training on a more diverse set of audio, and possibly by adjusting
 the loss function to weight high frequencies more.
 
@@ -745,7 +746,7 @@ the non-ML implementation.
 From the process of implementing the circuit emulations described
 above, we provide the following recommendations for circuit modellers:
 \begin{itemize}
-    \item For simple, linear circuits nodal analysis is the easiest
+    \item For simple, linear circuits, nodal analysis is the easiest
           and best performing circuit modelling method.
     \item When modularity is important, prefer Wave Digital Filters.
           This modularity can refer to the components in the circuit
@@ -762,7 +763,7 @@ above, we provide the following recommendations for circuit modellers:
 \end{itemize}
 
 \section{Conclusion}
-In this writing we have constructed an two emulations of Klon
+In this writing we have constructed two emulations of Klon
 Centaur guitar pedal circuit, using circuit modelling techniques
 including nodal analysis, wave digital filters, and recurrent
 neural networks. We describe and compare the advantages and
@@ -771,7 +772,9 @@ to achieve good results. We implement the circuit emulations in the
 form of an audio plugin and guitar-pedal style effect embedded on
 a Teensy microcontroller. Finally, we provide recommendations for
 utilising different circuit modelling methods for different types
-of circuits, and for different platforms.
+of circuits, and for different platforms. The code for both
+implementations, as well as the model training is open source,
+and can be found on GitHub.\footnote{\url{https://github.com/jatinchowdhury18/KlonCentaur}}
 \newline\newline
 In future works, we would like to extend the RNN framework to be able
 to implement larger networks in real-time. Specifically, the Differentiable

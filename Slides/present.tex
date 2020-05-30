@@ -1,0 +1,54 @@
+% !TeX program = lualatex
+% !BIB program = bibtex
+% Auriga theme
+% https://github.com/anishathalye/auriga
+
+\documentclass[14pt,aspectratio=169]{beamer}
+\usepackage{pgfpages}
+\usepackage{fancyvrb}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\usepackage[style=authortitle,backend=bibtex]{biblatex}
+\addbibresource{../Paper/references.bib}
+
+% \ifnotes
+% \setbeamertemplate{note page}[plain]
+% \setbeameroption{show notes on second screen=right}
+% \fi
+
+\usetheme{auriga}
+\usecolortheme{auriga}
+
+\usepackage{hyperref}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage[american]{circuitikz}
+\usepackage{tkz-euclide}
+
+% define some colors for a consistent theme across slides
+\definecolor{red}{RGB}{181, 23, 0}
+\definecolor{blue}{RGB}{0, 118, 186}
+\definecolor{gray}{RGB}{146, 146, 146}
+
+\title{Embedded Virtual Analog Modelling with Recurrent Neural Networks}
+
+\author{Jatin Chowdhury}
+
+\institute[shortinst]{Center for Computer Research in Music and Acoustics (CCRMA)}
+
+\begin{document}
+
+{
+  % rather than use the frame options [noframenumbering,plain], we make the
+  % color match, so that the indicated page numbers match PDF page numbers
+  \setbeamercolor{page number in head/foot}{fg=background canvas.bg}
+  \begin{frame}
+    \titlepage
+  \end{frame}
+}
+
+\input{slides.tex}
+
+\end{document}

@@ -14,6 +14,10 @@ build/
 *.blg
 *.bbl
 *.aux
+*.nav
+*.run.xml
+*.snm
+*.toc
 
 # VSCode config
 .vscode/
