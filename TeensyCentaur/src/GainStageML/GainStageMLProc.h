@@ -9,7 +9,7 @@
 #include "Models/Model_gain25.h"
 #include "Models/Model_gain50.h"
 #include "Models/Model_gain75.h"
-#include "Models/Model_gain100_8.h"
+#include "Models/Model_gain100.h"
 
 class GainStageMLProc : public AudioStream
 {
@@ -20,7 +20,7 @@ public:
         gainStageML[1] = std::make_unique<GainStageML<8>> (ModelGain25);
         gainStageML[2] = std::make_unique<GainStageML<8>> (ModelGain50);
         gainStageML[3] = std::make_unique<GainStageML<8>> (ModelGain75);
-        gainStageML[4] = std::make_unique<GainStageML<8>> (ModelGain1008);
+        gainStageML[4] = std::make_unique<GainStageML<8>> (ModelGain100);
 
         for (int i = 0; i < 5; ++i)
             gainStageML[i]->reset();

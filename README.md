@@ -10,7 +10,9 @@ approaches. The model is implemented as an audio plugin
 (Standalone/VST/AU), and as a guitar pedal-style effect
 embedded on a Teensy microcontroller.
 
-For a full technical paper summarizing this project see [here](TODO). Original circuit schematic and analysis on
+For a full technical paper summarizing this project see
+[here](https://ccrma.stanford.edu/~jatin/papers/Klon_Model.pdf).
+Original circuit schematic and analysis on
 [ElectroSmash](https://www.electrosmash.com/klon-centaur-analysis).
 
 
@@ -76,12 +78,6 @@ processed through a SPICE model to create a "ground truth" version of the
 effect to train against. The training data, SPICE model, and `Python` code
 for training the networks can be found in the
 [`GainStageML/`](./GainStageML/) subfolder.
-
-# TODO
-- Add new gain 100 model to plugin and teensy
-- Add gain 100 ESRs to paper
-- Make video for plugin and teensy
-- Publish repo
 
 ## License
 
