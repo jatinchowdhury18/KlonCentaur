@@ -21,7 +21,8 @@ This work began as part of a class project for
 
 ## Audio Plugin
 
-Download links for the audio plugin will be available soon...
+Plugin builds can be downloaded from the
+[releases page](https://github.com/jatinchowdhury18/KlonCentaur/releases).
 
 <img src="./Paper/Figures/Plugin.png" width=50%>
 
