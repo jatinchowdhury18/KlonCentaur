@@ -120,7 +120,7 @@
 \maketitle
 %
 \begin{abstract}
-In this writing, we develop a virtual analog model of the Klon Centaur
+We develop a virtual analog model of the Klon Centaur
 guitar pedal circuit, comparing various circuit modelling techniques.
 The techniques analyzed include traditional modelling techniques such
 as nodal analysis and Wave Digital Filters, as well as a machine-learning
@@ -499,11 +499,11 @@ was implemented processes audio at this sample rate. The recordings
 were then separated into segments of 0.5 seconds each, resulting in a
 total of 425 segments.
 \newline\newline
-Since the original Klon Centaur pedal is quite expensive, we used a SPICE
-simulation of the Centaur circuit in order to obtain a ``ground truth''
-reference dataset. The reference dataset measures the output voltage
-of the summing amplifier from the circuit at five different values
-for the ``Gain'' potentiometer.
+Since the original Klon Centaur pedal is quite expensive ($> 1500$ USD),
+we used a SPICE simulation of the Centaur circuit in order to obtain a
+``ground truth'' reference dataset. The reference dataset measures the
+output voltage of the summing amplifier from the circuit at five
+different values for the ``Gain'' potentiometer.
 
 \subsection{Training}
 We trained our models on 400 of the 425 audio samples, saving 25
