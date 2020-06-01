@@ -59,6 +59,8 @@ Check out the video demo on [YouTube](https://youtu.be/c8CoRClYGIY)!
 For more information on the Teensy pedal-style implementation, see the
 [`TeensyCentaur/`](./TeensyCentaur/) subfolder.
 
+<img src="./Paper/Figures/Teensy.jpg" width=50%>
+
 ## Circuit Modelling
 
 The circuit model is constructed using nodal analysis and wave digital
