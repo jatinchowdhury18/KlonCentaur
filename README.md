@@ -26,6 +26,8 @@ Plugin builds can be downloaded from the
 
 <img src="./Paper/Figures/Plugin.png" width=50%>
 
+Check out the video demo on [YouTube](https://youtu.be/yo4JrceDQ2w).
+
 ### Building from Source
 
 The audio plugin is built using
@@ -53,7 +55,8 @@ $ cmake --build . --config Release
 
 ## Teensy Pedal
 
-For information on the Teensy pedal-style implementation, see the
+Check out the video demo on [YouTube](https://youtu.be/c8CoRClYGIY)!
+For more information on the Teensy pedal-style implementation, see the
 [`TeensyCentaur/`](./TeensyCentaur/) subfolder.
 
 ## Circuit Modelling
