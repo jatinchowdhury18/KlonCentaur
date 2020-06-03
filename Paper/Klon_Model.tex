@@ -493,7 +493,7 @@ that the recorded signal is equivalent to the signal received by the
 pedal coming directly from the guitar. Recordings were made using a
 Focusrite Scarlett audio interface at 44.1 kHz. Note that this
 sample rate is very low compared to that used for other neural network
-models of nonlinear audio effects \cite{WaveNetVA,VArnn}. This sample
+models of nonlinear audio effects (e.g. \cite{WaveNetVA,VArnn}). This sample
 rate was chosen because the embedded hardware on which the final model
 was implemented processes audio at this sample rate. The recordings
 were then separated into segments of 0.5 seconds each, resulting in a
@@ -575,7 +575,9 @@ complexity for large models, mostly due to the fact that the
 $\tanh$ and sigmoid functions required by the recurrent layer
 can be costly to compute. Further, it can be difficult to include
 control parameters in the model, a persistent challenge with
-black-box approaches.
+black-box approaches. Finally, the recurrent neural network
+cannot be used at arbirtary sample rates, and must be trained
+at the same sample rate that is used for processing.
 
 \section{Implementation}
 In order to compare the virtual analog methods described above,
@@ -750,8 +752,9 @@ above, we provide the following recommendations for circuit modellers:
     \item For simple, linear circuits, nodal analysis is the easiest
           and best performing circuit modelling method.
     \item When modularity is important, prefer Wave Digital Filters.
-          This modularity can refer to the components in the circuit
-          themselves, or the way in which they are discretized.
+          This modularity can refer to the circuit topology, the
+          components in the circuit, or the way in which the components
+          are discretized.
     \item For complex nonlinear systems, particularly systems with
           multiple nonlinear elements, or stateful nonlinear topologies,
           consider using recurrent neural networks.
@@ -764,7 +767,7 @@ above, we provide the following recommendations for circuit modellers:
 \end{itemize}
 
 \section{Conclusion}
-In this writing we have constructed two emulations of Klon
+In this writing we have constructed two emulations of the Klon
 Centaur guitar pedal circuit, using circuit modelling techniques
 including nodal analysis, wave digital filters, and recurrent
 neural networks. We describe and compare the advantages and
@@ -774,7 +777,7 @@ form of an audio plugin and guitar-pedal style effect embedded on
 a Teensy microcontroller. Finally, we provide recommendations for
 utilising different circuit modelling methods for different types
 of circuits, and for different platforms. The code for both
-implementations, as well as the model training is open source,
+implementations, as well as the model training, is open source
 and can be found on GitHub.\footnote{\url{https://github.com/jatinchowdhury18/KlonCentaur}}
 \newline\newline
 In future works, we would like to extend the RNN framework to be able

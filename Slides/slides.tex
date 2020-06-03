@@ -155,6 +155,14 @@
 \end{frame}
 
 \begin{frame}{Recurrent Neural Network}
+    Training Data:
+    \begin{itemize}
+        \itemsep0em
+        \item $\sim 4$ minutes of guitar recordings (direct)
+        \item Split into 0.5 second segments
+        \item 400 training samples, 25 validation samples
+    \end{itemize}
+    \vspace{2ex}
     Loss Function: Error-to-Signal Ratio
     \begin{equation}
         \mathcal{E}_{ESR} = \frac{\sum_{n=0}^{N-1} |y[n] - \hat{y}[n]|^2}{\sum_{n=0}^{N-1} |y[n]|^2}
@@ -195,22 +203,35 @@
 
 \begin{frame}{Implementation}
     \begin{columns}
-        \begin{column}{0.5\linewidth}
+        \begin{column}{0.45\linewidth}
             Non-ML Implementation
             \begin{itemize}
                 \item Use a combination nodal analysis, WDFs
                 \item Control parameters for Treble, Gain, Level
             \end{itemize}
         \end{column}
-        \begin{column}{0.5\linewidth}
+        \begin{column}{0.55\linewidth}
             ML Implementation
             \begin{itemize}
                 \item RNN model for Gain Stage, nodal analysis elsewhere
                 \item Fade between models for variable Gain control
-                \item Custom GRU and Fully Connected implementations in C++
+                \item Custom GRU and Dense layer implementations in C++
             \end{itemize}
         \end{column}
     \end{columns}
+\end{frame}
+
+\begin{frame}{Implementation}
+    Inference Engine
+    \begin{itemize}
+        \item Why use a custom implentation?
+        \begin{itemize}
+            \item GRU support in TFLite is still experimental
+            \item Real-time audio thread: no locking, no memory allocation
+        \end{itemize}
+        \item Currently using STL functions (\texttt{std::inner\_product})
+        \item Eventually upgrade to Eigen or TFLite
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Implementation}
