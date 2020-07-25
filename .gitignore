@@ -1,6 +1,10 @@
 # CMake Build artifacts
 build/
 
+# Python artifacts
+__pycache__/
+*.npy
+
 # SPICE artifacts
 *.net
 *.op.raw
