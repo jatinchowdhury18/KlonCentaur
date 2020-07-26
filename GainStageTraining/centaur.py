@@ -133,7 +133,7 @@ model.train(100, IN_train, OUT_train, IN_val, OUT_val, save_model=model_file, sa
 # plot metrics
 plt.figure()
 model.plot_loss()
-# plt.ylim(0, 0.05)
+plt.ylim(0, 0.5)
 
 plt.figure()
 model.plot_error()
