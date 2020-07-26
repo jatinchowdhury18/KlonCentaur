@@ -16,7 +16,7 @@ ChowCentaur::ChowCentaur() :
     levelParam  = vts.getRawParameterValue (levelTag);
     mlParam     = vts.getRawParameterValue (neuralTag);
 
-    scope = magicState.addPlotSource ("scope", std::make_unique<foleys::MagicOscilloscope>());
+    scope = magicState.createAndAddObject<foleys::MagicOscilloscope> ("scope");
 }
 
 ChowCentaur::~ChowCentaur()

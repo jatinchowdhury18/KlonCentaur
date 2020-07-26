@@ -9,26 +9,20 @@ if: (type != push) OR (type = push AND branch = master)
 
 matrix:
   include:
-    - os: linux
-      dist: bionic
-      addons:
-        apt:
-          packages:
-            - libasound2-dev
-            - libxcursor-dev
-            - libxinerama-dev
-            - libxrandr-dev
-            - webkit2gtk-4.0
-      env: run=bash
+    # - os: linux
+    #   dist: bionic
+    #   addons:
+    #     apt:
+    #       packages:
+    #         - libasound2-dev
+    #         - libxcursor-dev
+    #         - libxinerama-dev
+    #         - libxrandr-dev
+    #   env: run=bash
     - os: osx
       osx_image: xcode9.4
-      env: run=sh
     - os: windows
-      env: run=sh
 
-cache:
-  directories:
-    - $TRAVIS_BUILD_DIR/modules/FRUT/prefix
-
-install: $run setup.sh
-script: $run test.sh || exit 1
+script:
+  - cmake -Bbuild -DBUILD_SUBCIRCUITS=ON -DBUILD_CENTAUR_BENCH=ON
+  - cmake --build build --config Release

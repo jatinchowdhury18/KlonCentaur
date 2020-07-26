@@ -1,1 +1,6 @@
-add_library(MLUtils STATIC gru.h gru.cpp dense.h)
+add_library(MLUtils STATIC)
+target_sources(MLUtils PRIVATE
+    gru.h
+    gru.cpp
+    dense.h
+)
