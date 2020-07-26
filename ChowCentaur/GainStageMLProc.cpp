@@ -1,64 +1,40 @@
 #include "GainStageMLProc.h"
-#include "Models/Model_gain0.h"
-#include "Models/Model_gain25.h"
-#include "Models/Model_gain50.h"
-#include "Models/Model_gain75.h"
-#include "Models/Model_gain100.h"
 
 GainStageMLProc::GainStageMLProc (AudioProcessorValueTreeState& vts)
 {
-    for (int ch = 0; ch < 2; ++ch)
-    {
-        gainStageML[0][ch] = std::make_unique<GainStageML<8>> (ModelGain0);
-        gainStageML[1][ch] = std::make_unique<GainStageML<8>> (ModelGain25);
-        gainStageML[2][ch] = std::make_unique<GainStageML<8>> (ModelGain50);
-        gainStageML[3][ch] = std::make_unique<GainStageML<8>> (ModelGain75);
-        gainStageML[4][ch] = std::make_unique<GainStageML<8>> (ModelGain100);
-    }
+    MemoryInputStream jsonInput0 (BinaryData::centaur_json, BinaryData::centaur_jsonSize, false);
+    MemoryInputStream jsonInput1 (BinaryData::centaur_json, BinaryData::centaur_jsonSize, false);
+
+    Json2RnnParser parser;
+    gainStageML[0] = parser.parseJson (jsonInput0);
+    gainStageML[1] = parser.parseJson (jsonInput1);
+
+    jassert (gainStageML[0].get() != nullptr);
+    jassert (gainStageML[1].get() != nullptr);
 
     gainParam = vts.getRawParameterValue ("gain");
 }
 
 void GainStageMLProc::reset (double sampleRate, int samplesPerBlock)
 {
-    ignoreUnused (sampleRate);
-
-    lastModelIdx = jlimit (0, 4, int (5 * *gainParam));
-    fadeBuffer.setSize (2, samplesPerBlock);
+    ignoreUnused (samplesPerBlock);
 
     for (int ch = 0; ch < 2; ++ch)
-        for (int i = 0; i < 5; ++i)
-            gainStageML[i][ch]->reset();
-}
+        gainStageML[ch]->reset();
 
-void GainStageMLProc::processModel (AudioBuffer<float>& buffer, int modelIdx)
-{
-    for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
-    {
-        auto* x = buffer.getWritePointer (ch);
-        // FloatVectorOperations::multiply (x, 2.0f, buffer.getNumSamples());
-        gainStageML[modelIdx][ch]->processBlock (x, buffer.getNumSamples());
-    }
+    T = 1.0f / (float) sampleRate;
 }
 
 void GainStageMLProc::processBlock (AudioBuffer<float>& buffer)
 {
-    const auto modelIdx = jlimit (0, 4, int (5 * *gainParam));
-
-    if (modelIdx == lastModelIdx)
+    for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
     {
-        processModel (buffer, modelIdx);
-    }
-    else // need to fade between models
-    {
-        fadeBuffer.makeCopyOf (buffer, true);
-        processModel (buffer, lastModelIdx); // previous model
-        processModel (fadeBuffer, modelIdx); // next model
+        auto* x = buffer.getWritePointer (ch);
 
-        buffer.applyGainRamp (0, buffer.getNumSamples(), 1.0f, 0.0f);
-        for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
-            buffer.addFromWithRamp (ch, 0, fadeBuffer.getReadPointer (ch), buffer.getNumSamples(), 0.0f, 1.0f);
+        for (int n = 0; n < buffer.getNumSamples(); ++n)
+        {
+            float input[] = { x[n], *gainParam, T };
+            x[n] = gainStageML[ch]->forward (input);
+        }
     }
-
-    lastModelIdx = modelIdx;
 }
