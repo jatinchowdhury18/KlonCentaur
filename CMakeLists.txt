@@ -6,6 +6,10 @@ add_subdirectory(modules)
 include_directories(modules/JUCE/modules)
 include_directories(modules/foleys_gui_magic)
 include_directories(modules/WaveDigitalFilters/shared)
+include_directories(modules/Eigen)
+
+# comment to use STL implementation instead of Eigen
+add_definitions(-DUSE_EIGEN)
 
 # juce_set_vst2_sdk_path(C:/SDKs/VST_SDK/VST2_SDK/)
 
