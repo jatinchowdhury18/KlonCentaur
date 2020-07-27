@@ -177,7 +177,7 @@ plt.plot(clean_data[idx][start:end], dist_data[idx][start:end])
 plt.plot(clean_data[idx][start:end], predictions[start:end], '--')
 
 # %%
-print(losses.esr_loss(OUT_train, model.model.predict(IN_train)))
+print(losses.esr_loss(OUT_val, model.model.predict(IN_val)))
 
 # %%
 model.save_model(model_file)
