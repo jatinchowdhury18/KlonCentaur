@@ -18,7 +18,6 @@ from utils import plot_fft
 from model import Model
 import losses as losses
 
-
 # %%
 # load files
 # filepath = '../../KlonCentaur/GainStageML/'
@@ -108,8 +107,8 @@ NUM_SAMPLES = 10000
 NUM_INPUTS = 3
 
 # %%
-model_file = 'models/centaur.json'
-model_hist = 'models/centaur_history.txt'
+model_file = 'models/centaur_large.json'
+model_hist = 'models/centaur_large_history.txt'
 
 # %%
 def model_loss(target_y, predicted_y):
@@ -118,8 +117,8 @@ def model_loss(target_y, predicted_y):
 # construct model
 model = Model(model_loss, optimizer=keras.optimizers.Adam(learning_rate=5.0e-4))
 # model.model.add(keras.layers.InputLayer(input_shape=(None, NUM_INPUTS)))
-# model.model.add(keras.layers.TimeDistributed(keras.layers.Dense(8, activation='tanh')))
-# model.model.add(keras.layers.GRU(units=16, return_sequences=True))
+# model.model.add(keras.layers.TimeDistributed(keras.layers.Dense(4, activation='tanh')))
+# model.model.add(keras.layers.GRU(units=24, return_sequences=True))
 # model.model.add(keras.layers.Dense(1))
 model.load_model(model_file)
 model.load_history(model_hist)
@@ -127,7 +126,7 @@ model.load_history(model_hist)
 model.model.summary()
 
 # %%
-model.train(100, IN_train, OUT_train, IN_val, OUT_val, save_model=model_file, save_hist=model_hist)
+model.train(500, IN_train, OUT_train, IN_val, OUT_val, save_model=model_file, save_hist=model_hist)
 
 # %%
 # plot metrics
