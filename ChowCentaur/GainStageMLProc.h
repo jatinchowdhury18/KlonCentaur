@@ -13,9 +13,15 @@ public:
     void processBlock (AudioBuffer<float>& buffer);
 
 private:
-    std::atomic<float>* gainParam = nullptr;
+    using ModelPtr = std::unique_ptr<Model<float>>;
+    void loadModel (ModelPtr model[2], const char* data, int size);
 
-    std::unique_ptr<Model<float>> gainStageML[2];
+    std::atomic<float>* gainParam = nullptr;
+    std::atomic<float>* mlParam = nullptr;
+
+    ModelPtr gainStageML[2];
+    ModelPtr gainStageMLLarge[2];
+
     float T = 1.0f / 44100.0f;
 };
 
