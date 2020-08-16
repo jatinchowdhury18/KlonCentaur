@@ -3,6 +3,7 @@
 
 #include "SharedJuceHeader.h"
 #include "IIRFilter.h"
+#include "BilinearTools.h"
 
 namespace GainStageSpace
 {
@@ -25,17 +26,14 @@ public:
         constexpr float C13 = (float) 820e-12;
 
         // analog coefficients
-        const auto b0s = 0.0f;
-        const auto b1s = R20;
-        const auto a0s = C13 * R20;
-        const auto a1s = 1.0f;
+        float as[2], bs[2];
+        bs[0] = 0.0f;
+        bs[1] = R20;
+        as[0] = C13 * R20;
+        as[1] = 1.0f;
 
         const auto K = 2.0f * fs;
-        const auto a0 = a0s * K + a1s;
-        b[0] = ( b0s * K + b1s) / a0;
-        b[1] = (-b0s * K + b1s) / a0;
-        a[0] = 1.0f;
-        a[1] = (-a0s * K + a1s) / a0;
+        Bilinear::BilinearTransform<float, 2>::call (b, a, bs, as, K);
     }
 
 private:

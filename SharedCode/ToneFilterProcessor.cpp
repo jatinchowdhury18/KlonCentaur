@@ -1,4 +1,5 @@
 #include "ToneFilterProcessor.h"
+#include "BilinearTools.h"
 
 void ToneFilterProcessor::reset (float sampleRate)
 {
@@ -24,23 +25,21 @@ void ToneFilterProcessor::calcCoefs (float curTreble)
     const auto K = wc / std::tan (wc / (2.0f * fs)); // frequency warp to match transition freq
 
     // analog coefficients
-    const auto b0s = C * (G1 + G2);
-    const auto b1s = G1 * (G2 + G3);
-    const auto a0s = C * (G3 - G4);
-    const auto a1s = -G4 * (G2 + G3);
+    float as[2], bs[2];
+    bs[0] = C * (G1 + G2);
+    bs[1] = G1 * (G2 + G3);
+    as[0] = C * (G3 - G4);
+    as[1] = -G4 * (G2 + G3);
         
     // bilinear transform
-    const auto a0 = a0s * K + a1s;
-    const float bU0 = ( b0s * K + b1s) / a0;
-    const float bU1 = (-b0s * K + b1s) / a0;
-    const float aU0 = 1.0f;
-    const float aU1 = (-a0s * K + a1s) / a0;
+    float aU[2], bU[2];
+    Bilinear::BilinearTransform<float, 2>::call (bU, aU, bs, as, K);
 
     // flip pole inside unit circle to ensure stability
     a[0] = 1.0f;
-    a[1] = 1.0f / aU1;
-    b[0] = bU0 / aU1;
-    b[1] = bU1 / aU1;
+    a[1] = 1.0f / aU[1];
+    b[0] = bU[0] / aU[1];
+    b[1] = bU[1] / aU[1];
 }
 
 void ToneFilterProcessor::processBlock (float* block, const int numSamples) noexcept

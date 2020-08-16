@@ -5,6 +5,7 @@ add_library(SharedCode STATIC)
 target_sources(SharedCode PRIVATE
     PluginBase.h
     IIRFilter.h
+    BilinearTools.h
     InputBufferProcessor.h
     InputBufferProcessor.cpp
     PreAmpStage.h
