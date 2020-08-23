@@ -107,8 +107,8 @@ NUM_SAMPLES = 10000
 NUM_INPUTS = 3
 
 # %%
-model_file = 'models/centaur_large.json'
-model_hist = 'models/centaur_large_history.txt'
+model_file = 'models/centaur_small.json'
+model_hist = 'models/centaur_small_history.txt'
 
 # %%
 def model_loss(target_y, predicted_y):
@@ -118,7 +118,7 @@ def model_loss(target_y, predicted_y):
 model = Model(model_loss, optimizer=keras.optimizers.Adam(learning_rate=5.0e-4))
 # model.model.add(keras.layers.InputLayer(input_shape=(None, NUM_INPUTS)))
 # model.model.add(keras.layers.TimeDistributed(keras.layers.Dense(4, activation='tanh')))
-# model.model.add(keras.layers.GRU(units=24, return_sequences=True))
+# model.model.add(keras.layers.GRU(units=8, return_sequences=True))
 # model.model.add(keras.layers.Dense(1))
 model.load_model(model_file)
 model.load_history(model_hist)
@@ -126,22 +126,24 @@ model.load_history(model_hist)
 model.model.summary()
 
 # %%
-model.train(500, IN_train, OUT_train, IN_val, OUT_val, save_model=model_file, save_hist=model_hist)
+model.train(2000, IN_train, OUT_train, IN_val, OUT_val, save_model=model_file, save_hist=model_hist)
 
 # %%
 # plot metrics
 plt.figure()
 model.plot_loss()
-plt.ylim(0, 0.5)
+# plt.ylim(0, 0.5)
 
 plt.figure()
 model.plot_error()
 
 print(len(model.train_loss))
+print(model.train_loss[-1])
+print(model.val_loss[-1])
 
 # %%
 # Test prediction
-idx = 44
+idx = 48
 predictions = model.model.predict(IN_train[idx].reshape(1, NUM_SAMPLES, NUM_INPUTS)).flatten()
 
 # Plot the predictions along with the test data
@@ -170,13 +172,10 @@ plt.xlabel('Frequency [Hz]')
 plt.ylabel('Magnitude [dB]')
 
 # %%
-start = 5500
-end = 7000
-plt.plot(clean_data[idx][start:end], dist_data[idx][start:end])
-plt.plot(clean_data[idx][start:end], predictions[start:end], '--')
+print(losses.esr_loss(OUT_val, model.model.predict(IN_val)))
 
 # %%
-print(losses.esr_loss(OUT_val, model.model.predict(IN_val)))
+print(losses.esr_loss(OUT_train, model.model.predict(IN_train)))
 
 # %%
 model.save_model(model_file)
