@@ -11,10 +11,10 @@ void PreAmpWDF::reset (double sampleRate)
 {
     C3 = std::make_unique<WaveDigitalFilter::Capacitor> (0.1e-6, sampleRate);
     C5 = std::make_unique<WaveDigitalFilter::Capacitor> (68.0e-9, sampleRate);
-    Vbias.setVoltage (0.0);
+    Vbias.setVoltage (0.0f); // (4.5);
 
     C16 = std::make_unique<WaveDigitalFilter::Capacitor> (1.0e-6, sampleRate);
-    Vbias2.setVoltage (0.0);
+    Vbias2.setVoltage (0.0f); // (4.5);
         
     P1 = std::make_unique<WaveDigitalFilter::WDFParallel> (C5.get(), &R6);
     S1 = std::make_unique<WaveDigitalFilter::WDFSeries> (P1.get(), &Vbias);

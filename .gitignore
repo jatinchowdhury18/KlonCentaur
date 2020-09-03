@@ -13,7 +13,7 @@ __pycache__/
 *.log*
 
 # TEX artifacts
-*.synctex.gz
+*.synctex*
 *.out
 *.blg
 *.bbl

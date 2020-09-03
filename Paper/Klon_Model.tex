@@ -170,10 +170,12 @@ The structure of the paper will be as follows: in \S2 we give
 background information on circuit modelling using nodal analysis
 and Wave Digital Filters. \S3 describes the use of recurrent neural
 networks for circuit modelling, and outlines the model and training
-process used for emulating the Centaur circuit. In \S4 we discuss
-the real-time implementation of the circuit models. \S5 shares
-the results of these implementations as well as recommendations
-for circuit modelling using the methods discussed here.
+process used for emulating the ``Gain Stage'' circuit from the Klon
+Centaur. In \S4 we discuss the real-time implementation of a complete
+emulation of the Klon Centaur pedal using the methods outlined in the
+previous sections. \S5 shares the results of Klon Centaur emulation as
+well as recommendations for circuit modelling using the methods
+discussed here.
 
 \section{Traditional Circuit Modelling Techniques}
 First, we examine the use of traditional circuit modelling techniques,
@@ -371,15 +373,16 @@ when a component is changed (e.g. a potentiometer), the component change
 is propagated so that only components with behavior that depends on the
 impedance of the changed component need to be recomputed.
 \newline\newline
-The main disdvantage of WDFs is its difficulty in handling circuits with
+The main disdvantage of WDFs is their difficulty in handling circuits with
 complex topologies or multiple nonlinearities. While the recent addition
 of $\mathcal{R}$-type adaptors to the Wave Digital formalism \cite{KurtThesis}
 has begun to make these circuits tractable, the WDF models of these types of
-circuits are significantly more computationally complex, and somewhat
-compromise the modularity of the system.
+circuits are significantly more computationally complex. Further, the use of
+$\mathcal{R}$-type adaptors can somewhat compromises the modularity that makes
+WDFs advantageous in the first place.
 
 \section{Recurrent Neural Network Model}
-While several styles of machine-learning based models are available for
+While several styles of machine-learning based models have been used for
 modelling analog audio circuitry \cite{WaveNetVA,NLML,MartinezReissDNN},
 we choose the recurrent neural network approach developed in \cite{VArnn}
 as our starting point. Using a recurrent neural network (RNN) allows the for a
@@ -391,54 +394,65 @@ recurrent neural networks are a sensible candidate for modelling distortion
 circuits, particularly circuits with stateful behavior, given the fact that
 recurrent network building blocks, such as gated recurrent units, themselves
 resemble audio distortion effects and can directly be used as such
-\cite{chowdhury:complexNL:2020}.
-\newline\newline
-In the following paragraphs, we outline the use of an RNN for modelling
-the gain stage circuit from the Klon Centaur pedal. While our model
-is similar to the model used in \cite{VArnn}, it differs in some
-notable ways. For instance, the model described in \cite{VArnn} accepts
-the values of control parameters to the circuit as inputs to the RNN,
-however we were unable to successfully train a network in this fashion.
-Instead, we construct separate networks for five different values of the
-``Gain'' parameter, and fade between the outputs of the networks in
-real-time in the final implementation of the model. Other differences are
-outlined further below.
+\cite{chowdhury:complexNL:2020}. In the following paragraphs, we outline the
+use of an RNN for modelling the gain stage circuit from the Klon Centaur pedal.
 
 \subsection{Model Architecture}
 The model architecture described in \cite{VArnn} consists of a single recurrent
-layer followed by a fully connected layer consisting of a single ``neuron''
-(see \cref{fig:rnn_arch}). In our models, we use a recurrent layer made up
-of 8 Gated Recurrent Units. For training, all models are implemented in
-\texttt{Python} using the \texttt{Keras} framework \cite{chollet2015keras}.
+layer followed by a fully connected layer consisting of a single ``neuron''. In
+our model, we add a time-distributed fully connected layer
+before the recurrent layer. The full model architecture is shown in \cref{fig:rnn_arch}.
+For training, all models are implemented in \texttt{Python} using the \texttt{Keras}
+framework \cite{chollet2015keras}.
+\newline\newline
+In the architecture described in \cite{VArnn}, an input vector for the networks
+is constructed to contain a single input audio sample, along with parameter values
+for any parameters present in the circuit. In our model we use a vector of 3 values
+as the network input: a single audio sample, the value of the circuit ``Gain''
+parameter, and the sample period of the input audio. In previous neural network
+circuit modelling literature, the neural network must always be used to process audio
+at the same sample rate at which it was trained. For practical audio effects this
+limitation is problematic, since users often wish to use their effects at arbitrary
+sample rates, and resampling the audio by a non-integer ratio in real-time can be
+computationally expensive. By including the sample period as an input to the network,
+and by training the network on audio at different sample rates, we can effectively train
+the network to give accurate output for audio input at any sample rate within the range
+of sample rates used for training.
 %
 \begin{figure}
     \centering
     \begin{tikzpicture}[node distance=1.5cm]
         \tikzset{
-            mynode/.style = {rectangle, rounded corners, line width=0.8pt, minimum width=2cm, minimum height=0.75cm, text centered, draw=black, fill=white},
+            mynode/.style = {rectangle, rounded corners, line width=0.8pt, minimum width=1.5cm, minimum height=0.75cm, text centered, draw=black, fill=white},
             arrow/.style = {thick,->,>=stealth}
         }
-        \node (input) {Input $x[n]$};
-        \node (rlayer) [mynode, right of=input, xshift=1.25cm] {Recurrent Layer};
-        \coordinate[right of=rlayer, xshift=0.5cm] (h0) ;
-        \node (h0Label) [right of=h0, xshift=-0.15cm] {Current State $h[n]$};
+        \node (input) {Input $\mathbf{u[n]}$};
+        \node (fclayer) [mynode, right of=input, xshift=0.5cm, minimum width=1.0cm] {FCLayer};
+        \node (xlabel) [above of=fclayer, yshift=-1.25cm, xshift=1.05cm] {$\mathbf{x[n]}$};
+        \node (rlayer) [mynode, right of=fclayer, xshift=0.75cm] {Recurrent};
+        \coordinate[right of=rlayer, xshift=0.25cm] (h0) ;
+        \node (h0Label) [above of=h0, yshift=-1.25cm, xshift=0.25cm] {Current State $\mathbf{h[n]}$};
         \node (z1) [rectangle, draw=black, below of=h0, yshift=0.5cm] {$z^{-1}$};
         \coordinate[below of=rlayer, yshift=0.5cm] (h1);
-        \node (h1Label) [below of=h1, yshift=1.15cm] {Previous State $h[n-1]$};
+        \node (h1Label) [below of=h1, yshift=1.15cm, xshift=-0.25cm] {Previous State $\mathbf{h[n-1]}$};
 
-        \draw [arrow] (input) -- (rlayer);
+        \draw [arrow] (input) -- (fclayer);
+        \draw [arrow] (fclayer) -- (rlayer);
         \draw [thick] (rlayer) -- (h0);
         \draw [arrow] (h0) -- (z1);
         \draw [thick] (z1) -- (h1);
         \draw [arrow] (h1) -- (rlayer);
 
-        \node (dense) [mynode, above of=rlayer] {Fully Connected Layer};
+        \node (dense) [mynode, above of=rlayer] {FCLayer};
         \node (out) [above of=dense] {Output $y[n]$};
         \draw [arrow] (rlayer) -- (dense);
         \draw [arrow] (dense) -- (out);
 
     \end{tikzpicture}
-    \caption{\label{fig:rnn_arch}{\it RNN Architecture.}}
+    \caption{\label{fig:rnn_arch}{\it RNN Architecture used for modelling the Klon Centaur
+        gain stage circuit. Nodes labelled ``FCLayer'' denote fully connected neural network
+        layers. The input vector $\mathbf{u[n]}$ consists of a single input audio sample,
+        as well as parameter values and sample rate information.}}
 \end{figure}
 %
 \subsubsection{Recurrent Layer}
@@ -473,6 +487,15 @@ in the above equations are assumed to be standard matrix-vector
 products, except those Hadamard products denoted $\circ$.
 $\sigma(x)$ refers to the sigmoid function
 $\sigma(x) = \frac{1}{1 + e^{-x}}$.
+\newline\newline
+The most important ``hyperparameter'' of the network architecture used
+here is the choice of how many recurrent units to use in the recurrent
+layer. This choice will determine the accuracy of the network as well as
+the computational complexity of evaluating the output of the network in
+real-time. In this work, we use two models: a ``small'' model using a
+dense layer of size 4, followed by a recurrent layer with 8 GRUs, and a
+``large'' model using a dense layer of size 8 followed by a recurrent
+layer with 16 GRUs.
 %
 \subsubsection{Fully Connected Layer}
 A fully connected layer computes an output vector $y[n]$ from
@@ -482,8 +505,16 @@ input vector $x[n]$ as follows:
 \end{equation}
 %
 Where $W$ is the kernel weights, $b$ is the layer bias, and $\alpha(x)$
-is the layer activation. In our model, we use no activation, i.e.,
-$\alpha(x) = x$.
+is the layer activation. In our model, the first fully connected layer
+uses the activation function $\alpha(x) = \tanh(x)$, and the final
+fully connected layer uses no activation, i.e., $\alpha(x) = x$.
+%
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{Training.png}
+    \caption{\label{fig:training} {\it Training accuracy
+        for the ``small'' RNN, shown over epochs.}}
+\end{figure}
 
 \subsection{Training Data}
 Our dataset consists of $\sim 4$ minutes of electric guitar recordings,
@@ -491,30 +522,40 @@ from a variety of electric guitars including a Fender Stratocaster
 and a Gibson Les Paul. The guitars are recorded ``direct'' meaning
 that the recorded signal is equivalent to the signal received by the
 pedal coming directly from the guitar. Recordings were made using a
-Focusrite Scarlett audio interface at 44.1 kHz. Note that this
-sample rate is very low compared to that used for other neural network
-models of nonlinear audio effects (e.g. \cite{WaveNetVA,VArnn}). This sample
-rate was chosen because the embedded hardware on which the final model
-was implemented processes audio at this sample rate. The recordings
-were then separated into segments of 0.5 seconds each, resulting in a
-total of 425 segments.
+Focusrite Scarlett audio interface at 96 kHz, and then resampled
+to a random sample rate on the range [24 kHz, 96 kHz], using the
+\texttt{Librosa} library \cite{librosa}. The recordings were then
+separated into segments of 0.5 seconds each.
 \newline\newline
 Since the original Klon Centaur pedal is quite expensive ($> 1500$ USD),
 we used a SPICE simulation of the Centaur circuit in order to obtain a
 ``ground truth'' reference dataset. The reference dataset measures the
 output voltage of the summing amplifier from the circuit at five
 different values for the ``Gain'' potentiometer.
+%
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{TimeDomain.png}
+    \centering
+    \includegraphics[width=0.5\textwidth]{FreqDomain.png}
+    \caption{\label{fig:freqandtime} {\it Comparison of
+        predicted output of the ``large model'' against reference
+        output shown in the time domain (above) and frequency
+        domain (below). The frequency domain plot uses frequency
+        band smoothing using $1/24$ octave bands for improved clarity.}}
+\end{figure}
+%
 
 \subsection{Training}
-We trained our models on 400 of the 425 audio samples, saving 25
-samples for validation. Training was performed using the Adam
-optimizer \cite{Kingma2015AdamAM}, with an initial learning rate
-of \num{2e-3}. Each model was trained for 500 epochs; each training
-session ran for $\sim 8$ hours.
-
-\subsubsection{Loss Function}
-Similar to \cite{VArnn}, we use an error-to-signal ratio (ESR) as the
-loss function for our models. For a signal of lenght $N$, ESR is defined as:
+We trained our models on 950 audio samples, using 50 samples for
+validation. Training was performed using the Adam optimizer
+\cite{Kingma2015AdamAM}, with an initial learning rate of \num{5e-4}.
+Each model was trained for more than 20,000 epochs, and training was
+stopped manually as the models began to show signs of overfitting to the
+training data. For training, we used the same loss functions as in
+\cite{VArnn}: a weighted error-to-signal ratio summed with a DC loss term.
+For evaluating the model accuracy, we use an un-weighted error-to-signal
+ratio (ESR) defined as,
 \begin{equation}
     \mathcal{E}_{ESR} = \frac{\sum_{n=0}^{N-1} |y[n] - \hat{y}[n]|^2}{\sum_{n=0}^{N-1} |y[n]|^2}
 \end{equation}
@@ -524,48 +565,31 @@ output of the network.
 
 \subsubsection{Training Results}
 For each model, the trained network achieved a validation ESR of less than
-$2\%$. Training and validation accuracies are shown in \cref{table:train}.
-The training accuracy over epochs is shown in \cref{fig:training}. Results
-comparing the output of the network to the reference output are shown in
+$10\%$, a result comparable to that found in \cite{VArnn}. The results of
+training for both models are shown in \cref{table:train}. The training accuracy
+over epochs for the small model is shown in \cref{fig:training}. Results
+comparing the output of the large model to the reference output are shown in
 \cref{fig:freqandtime}. Note that the high frequency response of the RNN
 output is slightly damped compared to the reference.
 %
 \begin{table}[h!]
     \centering
-     \begin{tabular}{||c | c | c||} 
+     \begin{tabular}{| c || c | c |} 
      \hline
-     Gain Parameter & Training ESR & Validation ESR \\
+     Model & \textbf{Small} & \textbf{Large} \\
      \hline\hline
-     0.0  & 0.50 & 0.70 \\
-     0.25 & 0.51 & 0.57 \\
-     0.5  & 0.57 & 0.50 \\
-     0.75 & 0.70 & 0.67 \\
-     1.0  & 1.63 & 1.72 \\
+     \# Dense & 4 & 8 \\
+     \# GRU & 8 & 16 \\
+     \# Epochs & 25000 & 21000 \\
+     Training ESR & 8.08 & 6.62 \\
+     Validation ESR & 9.18 & 7.79 \\
      \hline
      \end{tabular}
-    \caption{\label{table:train} {\it Training and validation
-        accuracies given in error-to-signal ratio percentages
-        for each trained RNN model.}}
+    \caption{\label{table:train} {\it Hyper-parameters and accuracy results for each model.
+        Hyper-parameters include the sizes of the GRU layer and the first dense layer, as
+        well as the number of epochs over which the model was trained. Training and validation
+        accuracies are given as error-to-signal ratio percentages.}}
 \end{table}
-%
-\begin{figure}
-    \centering
-    \includegraphics[width=0.5\textwidth]{Training.png}
-    \caption{\label{fig:training} {\it Training accuracy
-        shown over epochs.}}
-\end{figure}
-%
-\begin{figure}
-    \centering
-    \includegraphics[width=0.5\textwidth]{TimeDomain.png}
-    \centering
-    \includegraphics[width=0.5\textwidth]{FreqDomain.png}
-    \caption{\label{fig:freqandtime} {\it Comparison of
-        predicted output against reference output shown in
-        the time domain (above) and frequency domain (below).
-        The frequency domain plot uses frequency band smoothing
-        using $1/24$ octave bands for improved clarity.}}
-\end{figure}
 
 \subsection{Advantages and Limitations}
 The recurrent neural network is a flexible and powerful
@@ -573,11 +597,29 @@ black-box modelling tool for stateful nonlinear systems.
 The main limitation of the RNN model is its computational
 complexity for large models, mostly due to the fact that the
 $\tanh$ and sigmoid functions required by the recurrent layer
-can be costly to compute. Further, it can be difficult to include
-control parameters in the model, a persistent challenge with
-black-box approaches. Finally, the recurrent neural network
-cannot be used at arbirtary sample rates, and must be trained
-at the same sample rate that is used for processing.
+can be costly to compute. However, the model presented in
+\cite{VArnn} gives a distinct advantage over traditional black-box
+modelling techniques in that it allows control parameters to be
+included in the model. As shown above, the parameter inclusion
+method can be extended to allow the neural network to be used
+for audio at a range of sample rates, a further improvement on
+other neural network-based techniques.
+%
+\begin{figure*}
+    \centering
+    \includegraphics[width=1.0\textwidth]{FullCircuit.png}
+    \caption{\label{fig:fullcircuit} {\it Full circuit schematic
+    for the Klon Centaur guitar pedal with different circuit
+    sections outlined. Adapted from \cite{electrosmash}.}}
+\end{figure*}
+%
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{GainStageCircuit.png}
+    \caption{\label{fig:gaincircuit} {\it Circuit schematic for the
+    gain stage from the Klon Centaur pedal, with the two Feed-Forward
+    networks highlighted. Adapted from \cite{electrosmash}.}}
+\end{figure}
 
 \section{Implementation}
 In order to compare the virtual analog methods described above,
@@ -592,8 +634,8 @@ circuit can be broken down into four separable parts (see \cref{fig:fullcircuit}
     \item Output Buffer
 \end{enumerate}
 %
-Due to their simplicity and linearity, in both emulations the input
-buffer, output buffer, and tone control circuits were modelled using
+Due to their relative simplicity and linearity, in both emulations the
+input buffer, output buffer, and tone control circuits were modelled using
 nodal analysis. The ``Gain Stage'' circuit can be further broken down
 into six (mostly) separable parts (see \cref{fig:gaincircuit}):
 \begin{enumerate}
@@ -642,26 +684,11 @@ plugin containing both models, allowing the user to switch
 between the two models for comparison. The plugin is implemented using
 JUCE/C++, along with a real-time Wave Digital Filter
 library\footnote{\url{https://github.com/jatinchowdhury18/WaveDigitalFilters}}
-for the WDF models. While the current model uses custom implementations
-of the GRU and fully connected layers needed for the RNN model, in the
-future, we plan to upgrade this model to use the implementations provided
-by the Tensorflow Lite library.\footnote{\url{https://www.tensorflow.org/lite/}}
-%
-\begin{figure*}
-    \centering
-    \includegraphics[width=1.0\textwidth]{FullCircuit.png}
-    \caption{\label{fig:fullcircuit} {\it Full circuit schematic
-    for the Klon Centaur guitar pedal with different circuit
-    sections outlined. Adapted from \cite{electrosmash}.}}
-\end{figure*}
-%
-\begin{figure}
-    \centering
-    \includegraphics[width=0.5\textwidth]{GainStageCircuit.png}
-    \caption{\label{fig:gaincircuit} {\it Circuit schematic for the
-    gain stage from the Klon Centaur pedal, with the two Feed-Forward
-    networks highlighted. Adapted from \cite{electrosmash}.}}
-\end{figure}
+for the WDF models. For computing the output of the RNN models, we have
+implemented a custom inferencing engine in C++, with two modes, one using
+the Eigen linear algebra library \cite{eigenweb}, the second using only
+the C++ standard library. In the future, we plan to add a third mode, that
+uses the Tensorflow Lite library.\footnote{\url{https://www.tensorflow.org/lite/}}
 
 \subsection{Embedded Implementation}
 Digital audio effects are sometimes implemented on embedded devices
@@ -685,11 +712,10 @@ Faust to be exported for use on the Teensy \cite{Michon2019RealTA}.
 The Teensy 4.0 with the audio shield can be purchased for 35 USD.
 \newline\newline
 The Teensy implementation is writteen in C++ using the Teensy Audio Library,
-along with the same WDF library as the audio plugin, as well as the same
-implementations for the GRU and fully connected layers. The emulation
-can be compiled to use either the ML or non-ML implementation. Variables
-in the code can be connected to potentiometers or push-buttons to
-control model parameters in real-time.
+along with the same WDF library as the audio plugin, as well as the standard
+library mode of the same RNN inferencing engine. The emulation can be compiled
+to use either the ML or non-ML implementation. Variables in the code can be
+connected to potentiometers or push-buttons to control model parameters in real-time.
 %
 \begin{figure}
     \centering
@@ -760,10 +786,6 @@ above, we provide the following recommendations for circuit modellers:
           consider using recurrent neural networks.
     \item Small RNNs can outperform more complex circuit modelling methods
           while still maintaining model accuracy.
-    \item While handling control parameters with RNNs can be difficult,
-          this can be acceptably solved by training multiple models for
-          different values of the control parameter and fading between them
-          in real time.
 \end{itemize}
 
 \section{Conclusion}
