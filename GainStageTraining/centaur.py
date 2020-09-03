@@ -107,8 +107,8 @@ NUM_SAMPLES = 10000
 NUM_INPUTS = 3
 
 # %%
-model_file = 'models/centaur_small.json'
-model_hist = 'models/centaur_small_history.txt'
+model_file = 'models/centaur.json'
+model_hist = 'models/centaur_history.txt'
 
 # %%
 def model_loss(target_y, predicted_y):
@@ -126,16 +126,15 @@ model.load_history(model_hist)
 model.model.summary()
 
 # %%
-model.train(2000, IN_train, OUT_train, IN_val, OUT_val, save_model=model_file, save_hist=model_hist)
+model.train(1000, IN_train, OUT_train, IN_val, OUT_val, save_model=model_file, save_hist=model_hist)
 
 # %%
 # plot metrics
 plt.figure()
 model.plot_loss()
-# plt.ylim(0, 0.5)
 
-plt.figure()
-model.plot_error()
+# plt.figure()
+# model.plot_error()
 
 print(len(model.train_loss))
 print(model.train_loss[-1])
@@ -143,7 +142,7 @@ print(model.val_loss[-1])
 
 # %%
 # Test prediction
-idx = 48
+idx = 42
 predictions = model.model.predict(IN_train[idx].reshape(1, NUM_SAMPLES, NUM_INPUTS)).flatten()
 
 # Plot the predictions along with the test data
