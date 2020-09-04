@@ -21,8 +21,11 @@ target_sources(ChowCentaur PRIVATE
 
 juce_add_binary_data(BinaryData SOURCES
     gui.xml
-    ../GainStageTraining/models/centaur.json
-    ../GainStageTraining/models/centaur_small.json
+    ../GainStageTraining/models/centaur_0.json
+    ../GainStageTraining/models/centaur_25.json
+    ../GainStageTraining/models/centaur_50.json
+    ../GainStageTraining/models/centaur_75.json
+    ../GainStageTraining/models/centaur_100.json
 )
 
 # Need to build BinaryData with -fPIC flag on Linux

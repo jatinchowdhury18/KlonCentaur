@@ -25,6 +25,9 @@ target_sources(SharedCode PRIVATE
 
 target_compile_definitions(SharedCode PUBLIC
     JUCE_STANDALONE_APPLICATION=0
+    JUCE_REPORT_APP_USAGE=0
+    JUCE_WEB_BROWSER=0
+    JUCE_USE_CURL=0
 )
 
 add_subdirectory(MLUtils)
