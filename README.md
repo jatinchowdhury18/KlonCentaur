@@ -24,7 +24,7 @@ This work began as part of a class project for
 Plugin builds can be downloaded from the
 [releases page](https://github.com/jatinchowdhury18/KlonCentaur/releases).
 
-<img src="./Paper/Figures/Plugin.png" width=50%>
+<img src="./Paper/Figures/Plugin.png" width=500>
 
 Check out the video demo on [YouTube](https://youtu.be/yo4JrceDQ2w).
 

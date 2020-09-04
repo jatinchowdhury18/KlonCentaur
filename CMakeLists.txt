@@ -12,6 +12,7 @@ include_directories(modules/Eigen)
 add_definitions(-DUSE_EIGEN)
 
 # juce_set_vst2_sdk_path(C:/SDKs/VST_SDK/VST2_SDK/)
+# include_directories(C:/SDKs/asiosdk2.3/common)
 
 # build shared code as static lib
 add_subdirectory(SharedCode)

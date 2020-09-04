@@ -1,5 +1,6 @@
 # CMake Build artifacts
 build*/
+bin/
 
 # Python artifacts
 __pycache__/

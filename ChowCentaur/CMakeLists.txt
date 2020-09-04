@@ -19,8 +19,14 @@ target_sources(ChowCentaur PRIVATE
     GainStageMLProc.cpp
 )
 
+add_subdirectory(gui)
+
 juce_add_binary_data(BinaryData SOURCES
-    gui.xml
+    res/gui.xml
+    res/knob.svg
+    res/pointer.svg
+    res/RobotoCondensed-Bold.ttf
+    res/RobotoCondensed-Regular.ttf
     ../GainStageTraining/models/centaur_0.json
     ../GainStageTraining/models/centaur_25.json
     ../GainStageTraining/models/centaur_50.json
@@ -38,6 +44,7 @@ target_compile_definitions(ChowCentaur PUBLIC
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
     JUCE_VST3_CAN_REPLACE_VST2=0
+    # JUCE_ASIO=1
     FOLEYS_SHOW_GUI_EDITOR_PALLETTE=0
     FOLEYS_ENABLE_BINARY_DATA=1
 )

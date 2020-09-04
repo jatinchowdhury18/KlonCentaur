@@ -1,4 +1,7 @@
 #include "ChowCentaurPlugin.h"
+#include "gui/InfoComp.h"
+#include "gui/TitleComp.h"
+#include "gui/TooltipComp.h"
 
 namespace
 {
@@ -16,6 +19,7 @@ ChowCentaur::ChowCentaur() :
     levelParam  = vts.getRawParameterValue (levelTag);
     mlParam     = vts.getRawParameterValue (neuralTag);
 
+    LookAndFeel::setDefaultLookAndFeel (&myLNF);
     scope = magicState.createAndAddObject<foleys::MagicOscilloscope> ("scope");
 }
 
@@ -91,7 +95,16 @@ void ChowCentaur::processBlock (AudioBuffer<float>& buffer)
 
 AudioProcessorEditor* ChowCentaur::createEditor()
 {
-    return new foleys::MagicPluginEditor (magicState, BinaryData::gui_xml, BinaryData::gui_xmlSize);
+    auto builder = std::make_unique<foleys::MagicGUIBuilder> (magicState);
+    builder->registerJUCEFactories();
+    builder->registerJUCELookAndFeels();
+
+    builder->registerLookAndFeel ("MyLNF", std::make_unique<MyLNF>());
+    builder->registerFactory ("TooltipComp", &TooltipItem::factory);
+    builder->registerFactory ("InfoComp", &InfoItem::factory);
+    builder->registerFactory ("TitleComp", &TitleItem::factory);
+
+    return new foleys::MagicPluginEditor (magicState, BinaryData::gui_xml, BinaryData::gui_xmlSize, std::move (builder));
 }
 
 // This creates new instances of the plugin..
