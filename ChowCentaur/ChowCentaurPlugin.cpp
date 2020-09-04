@@ -16,7 +16,7 @@ ChowCentaur::ChowCentaur() :
     levelParam  = vts.getRawParameterValue (levelTag);
     mlParam     = vts.getRawParameterValue (neuralTag);
 
-    scope = magicState.addPlotSource ("scope", std::make_unique<foleys::MagicOscilloscope>());
+    scope = magicState.createAndAddObject<foleys::MagicOscilloscope> ("scope");
 }
 
 ChowCentaur::~ChowCentaur()
@@ -28,7 +28,7 @@ void ChowCentaur::addParameters (Parameters& params)
     params.push_back (std::make_unique<AudioParameterFloat> (gainTag,   "Gain",   0.0f, 1.0f, 0.5f));
     params.push_back (std::make_unique<AudioParameterFloat> (trebleTag, "Treble", 0.0f, 1.0f, 0.5f));
     params.push_back (std::make_unique<AudioParameterFloat> (levelTag,  "Level",  0.0f, 1.0f, 0.5f));
-    params.push_back (std::make_unique<AudioParameterBool>  (neuralTag, "Neural", false));
+    params.push_back (std::make_unique<AudioParameterChoice> (neuralTag, "Mode", StringArray { "Traditional", "Neural" }, 0));
 }
 
 void ChowCentaur::prepareToPlay (double sampleRate, int samplesPerBlock)

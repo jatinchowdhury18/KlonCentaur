@@ -1,5 +1,9 @@
 # CMake Build artifacts
-build/
+build*/
+
+# Python artifacts
+__pycache__/
+*.npy
 
 # SPICE artifacts
 *.net
@@ -9,7 +13,7 @@ build/
 *.log*
 
 # TEX artifacts
-*.synctex.gz
+*.synctex*
 *.out
 *.blg
 *.bbl
@@ -21,4 +25,3 @@ build/
 
 # VSCode config
 .vscode/
-

@@ -1,7 +1,7 @@
 #ifndef IIRFILTER_H_INCLUDED
 #define IIRFILTER_H_INCLUDED
 
-#include "JuceHeader.h"
+#include <type_traits>
 
 /** IIR filter of arbirtary order */
 template<int order, typename FloatType=float>
@@ -12,12 +12,32 @@ public:
 
     virtual void reset()
     {
-        for(int i = 0; i <= order; ++i)
-            z[i] = 0.0f;
+        std::fill (z, &z[order+1], 0.0f);
+    }
+
+    template <int N = order>
+    inline typename std::enable_if <N == 1, FloatType>::type
+    processSample (FloatType x) noexcept
+    {
+        FloatType y = z[1] + x * b[0];
+        z[order] = x * b[order] - y * a[order];
+        return y;
+    }
+
+    template <int N = order>
+    inline typename std::enable_if <N == 2, FloatType>::type
+    processSample (FloatType x) noexcept
+    {
+        FloatType y = z[1] + x * b[0];
+        z[1] = z[2] + x * b[1] - y * a[1];
+        z[order] = x * b[order] - y * a[order];
+        return y;
     }
 
     /** Uses Transposed Direct Form II */
-    inline virtual FloatType processSample (FloatType x) noexcept
+    template <int N = order>
+    inline typename std::enable_if <(N > 2), FloatType>::type
+    processSample (FloatType x) noexcept
     {
         FloatType y = z[1] + x * b[0];
 
@@ -35,14 +55,9 @@ public:
             block[n] = processSample (block[n]);
     }
 
-protected:
     FloatType a[order+1];
     FloatType b[order+1];
-
-private:
     FloatType z[order+1];
-
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (IIRFilterN)
 };
 
 #endif // IIRFILTER_H_INCLUDED

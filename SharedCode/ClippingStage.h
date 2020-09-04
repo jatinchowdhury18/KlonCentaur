@@ -2,6 +2,7 @@
 #define CLIPPINGSTAGE_H_INCLUDED
 
 #include "wdf.h"
+#include <memory>
 
 namespace GainStageSpace
 {
@@ -14,7 +15,7 @@ public:
     {
         C9  = std::make_unique<WaveDigitalFilter::Capacitor> (1.0e-6, sampleRate);
         C10 = std::make_unique<WaveDigitalFilter::Capacitor> (1.0e-6, sampleRate);
-        Vbias.setVoltage (4.5);
+        Vbias.setVoltage (0.0f);
 
         I1 = std::make_unique<WaveDigitalFilter::PolarityInverter> (&Vin);
         S1 = std::make_unique<WaveDigitalFilter::WDFSeries> (I1.get(), C9.get());
@@ -26,7 +27,7 @@ public:
 
     inline float processSample (float x)
     {
-        Vin.setVoltage ((double) x + 4.5); // bias
+        Vin.setVoltage ((double) x);
 
         D23.incident (P1->reflected());
         P1->incident (D23.reflected());
@@ -49,6 +50,7 @@ private:
     std::unique_ptr<WaveDigitalFilter::WDFSeries> S3;
     std::unique_ptr<WaveDigitalFilter::WDFParallel> P1;
 };
+
 }
 
 #endif // CLIPPINGSTAGE_H_INCLUDED

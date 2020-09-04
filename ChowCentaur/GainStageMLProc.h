@@ -2,7 +2,7 @@
 #define GAINSTAGEMLPROC_H_INCLUDED
 
 #include "JuceHeader.h"
-#include "GainStageML.h"
+#include "Json2RnnParser.h"
 
 class GainStageMLProc
 {
@@ -11,13 +11,26 @@ public:
 
     void reset (double sampleRate, int samplesPerBlock);
     void processBlock (AudioBuffer<float>& buffer);
-    void processModel (AudioBuffer<float>& buffer, int modelIdx);
 
 private:
-    std::atomic<float>* gainParam = nullptr;
-    std::unique_ptr<GainStageML<8>> gainStageML[5][2];
+    enum
+    {
+        numModels = 5,
+    };
+
+    using ModelPtr = std::unique_ptr<Model<float>>;
+    void loadModel (ModelPtr model[2], const char* data, int size);
+    void processModel (AudioBuffer<float>& buffer, ModelPtr model[2]);
+
+    inline int getModelIdx() const noexcept
+    { 
+        return jlimit (0, 4, int (numModels * *gainParam));
+    }
+
+    ModelPtr gainStageML[numModels][2];
 
     AudioBuffer<float> fadeBuffer;
+    std::atomic<float>* gainParam = nullptr;
     int lastModelIdx = 0;
 };
 

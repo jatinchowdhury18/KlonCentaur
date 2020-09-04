@@ -1,7 +1,9 @@
 #ifndef AMPSTAGE_H_INCLUDED
 #define AMPSTAGE_H_INCLUDED
 
+#include "SharedJuceHeader.h"
 #include "IIRFilter.h"
+#include "BilinearTools.h"
 
 namespace GainStageSpace
 {
@@ -30,15 +32,6 @@ public:
         calcCoefs (r10bSmooth.getTargetValue());
     }
 
-    static inline float calcPoleFreq (float a, float b, float c)
-    {
-        auto radicand = b*b - 4.0f*a*c;
-        if (radicand >= 0.0f)
-            return 0.0f;
-
-        return std::sqrt (-radicand) / (2.0f * a);
-    }
-
     void calcCoefs (float curR10b)
     {
         // component values
@@ -46,26 +39,19 @@ public:
         constexpr float C8 = (float) 390e-12;
 
         // analog coeffs
-        const float a0s = C7 * C8 * curR10b * R11 * R12;
-        const float a1s = C7 * curR10b * R11 + C8 * R12 * (curR10b + R11);
-        const float a2s = curR10b + R11;
-        const float b0s = a0s;
-        const float b1s = C7 * R11 * R12 + a1s;
-        const float b2s = R12 + a2s;
+        float as[3], bs[3];
+        as[0] = C7 * C8 * curR10b * R11 * R12;
+        as[1] = C7 * curR10b * R11 + C8 * R12 * (curR10b + R11);
+        as[2] = curR10b + R11;
+        bs[0] = as[0];
+        bs[1] = C7 * R11 * R12 + as[1];
+        bs[2] = R12 + as[2];
 
         // frequency warping
-        const float wc = calcPoleFreq (a0s, a1s, a2s);
+        const float wc = Bilinear::calcPoleFreq (as[0], as[1], as[2]);
         const auto K = wc == 0.0f ? 2.0f * fs : wc / std::tan (wc / (2.0f * fs));
-        const auto KSq = K * K;
 
-        // bilinear transform
-        const float a0 = a0s * KSq + a1s * K + a2s;
-        a[0] = a0 / a0;
-        a[1] = 2.0f * (a2s - a0s * KSq) / a0;
-        a[2] = (a0s * KSq - a1s * K + a2s) / a0;
-        b[0] = (b0s * KSq + b1s * K + b2s) / a0;
-        b[1] = 2.0f * (b2s - b0s * KSq) / a0;
-        b[2] = (b0s * KSq - b1s * K + b2s) / a0;
+        Bilinear::BilinearTransform<float, 3>::call (b, a, bs, as, K);
     }
 
     void processBlock (float* block, const int numSamples) noexcept override

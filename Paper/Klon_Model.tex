@@ -125,7 +125,7 @@ guitar pedal circuit, comparing various circuit modelling techniques.
 The techniques analyzed include traditional modelling techniques such
 as nodal analysis and Wave Digital Filters, as well as a machine-learning
 technique using recurrent neural networks. We examine these techniques
-in the contexts of two use cases: an audio ``plug-in'' designed to be
+in the contexts of two use cases: an audio plug-in designed to be
 run on a consumer-grade desktop computer, and a guitar pedal-style effect
 running on an embedded device. Finally, we discuss the advantages and
 disdvantages of each technique for modelling different circuits, and
@@ -170,10 +170,12 @@ The structure of the paper will be as follows: in \S2 we give
 background information on circuit modelling using nodal analysis
 and Wave Digital Filters. \S3 describes the use of recurrent neural
 networks for circuit modelling, and outlines the model and training
-process used for emulating the Centaur circuit. In \S4 we discuss
-the real-time implementation of the circuit models. \S5 shares
-the results of these implementations as well as recommendations
-for circuit modelling using the methods discussed here.
+process used for emulating the ``Gain Stage'' circuit from the Klon
+Centaur. In \S4 we discuss the real-time implementation of a complete
+emulation of the Klon Centaur pedal using the methods outlined in the
+previous sections. \S5 shares the results of Klon Centaur emulation as
+well as recommendations for circuit modelling using the methods
+discussed here.
 
 \section{Traditional Circuit Modelling Techniques}
 First, we examine the use of traditional circuit modelling techniques,
@@ -363,23 +365,24 @@ The primary advantage of the Wave Digital approach is its modularity.
 The ability to construct a circuit model with each circuit component
 treated completely independently in the digital domain opens up many
 interesting possibilities for circuit prototyping, modelling circuit-bent
-instruments and more. Additionally, this modularity allows each circuit
+instruments, and more. Additionally, this modularity allows each circuit
 component to be discretized separately, even using different conformal
 maps, which can improve model behavior for certain classes of circuits
-(see \cite{Germain}). Finally, the separability of components means than
+(see \cite{Germain}). Finally, the separability of components means that
 when a component is changed (e.g. a potentiometer), the component change
 is propagated so that only components with behavior that depends on the
 impedance of the changed component need to be recomputed.
 \newline\newline
-The main disdvantage of WDFs is its difficulty in handling circuits with
+The main disdvantage of WDFs is their difficulty in handling circuits with
 complex topologies or multiple nonlinearities. While the recent addition
 of $\mathcal{R}$-type adaptors to the Wave Digital formalism \cite{KurtThesis}
 has begun to make these circuits tractable, the WDF models of these types of
-circuits are significantly more computationally complex, and somewhat
-compromise the modularity of the system.
+circuits are significantly more computationally complex. Further, the use of
+$\mathcal{R}$-type adaptors can somewhat compromises the modularity that makes
+WDFs advantageous in the first place.
 
 \section{Recurrent Neural Network Model}
-While several styles of machine-learning based models are available for
+While several styles of machine-learning based models have been used for
 modelling analog audio circuitry \cite{WaveNetVA,NLML,MartinezReissDNN},
 we choose the recurrent neural network approach developed in \cite{VArnn}
 as our starting point. Using a recurrent neural network (RNN) allows the for a
@@ -484,6 +487,7 @@ input vector $x[n]$ as follows:
 Where $W$ is the kernel weights, $b$ is the layer bias, and $\alpha(x)$
 is the layer activation. In our model, we use no activation, i.e.,
 $\alpha(x) = x$.
+%
 
 \subsection{Training Data}
 Our dataset consists of $\sim 4$ minutes of electric guitar recordings,
@@ -504,17 +508,34 @@ we used a SPICE simulation of the Centaur circuit in order to obtain a
 ``ground truth'' reference dataset. The reference dataset measures the
 output voltage of the summing amplifier from the circuit at five
 different values for the ``Gain'' potentiometer.
+%
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{TimeDomain.png}
+    \centering
+    \includegraphics[width=0.5\textwidth]{FreqDomain.png}
+    \caption{\label{fig:freqandtime} {\it Comparison of
+        predicted output of the model against reference
+        output shown in the time domain (above) and frequency
+        domain (below). The frequency domain plot uses frequency
+        band smoothing using $1/24$ octave bands for improved clarity.}}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{Training.png}
+    \caption{\label{fig:training} {\it Training accuracy
+        for the RNN, shown over epochs.}}
+\end{figure}
+%
 
 \subsection{Training}
 We trained our models on 400 of the 425 audio samples, saving 25
 samples for validation. Training was performed using the Adam
 optimizer \cite{Kingma2015AdamAM}, with an initial learning rate
 of \num{2e-3}. Each model was trained for 500 epochs; each training
-session ran for $\sim 8$ hours.
-
-\subsubsection{Loss Function}
-Similar to \cite{VArnn}, we use an error-to-signal ratio (ESR) as the
-loss function for our models. For a signal of lenght $N$, ESR is defined as:
+session ran for $\sim 8$ hours. Similar to \cite{VArnn}, we use an
+error-to-signal ratio (ESR) as the loss function for our models. For
+a signal of lenght $N$, ESR is defined as:
 \begin{equation}
     \mathcal{E}_{ESR} = \frac{\sum_{n=0}^{N-1} |y[n] - \hat{y}[n]|^2}{\sum_{n=0}^{N-1} |y[n]|^2}
 \end{equation}
@@ -547,25 +568,6 @@ output is slightly damped compared to the reference.
         accuracies given in error-to-signal ratio percentages
         for each trained RNN model.}}
 \end{table}
-%
-\begin{figure}
-    \centering
-    \includegraphics[width=0.5\textwidth]{Training.png}
-    \caption{\label{fig:training} {\it Training accuracy
-        shown over epochs.}}
-\end{figure}
-%
-\begin{figure}
-    \centering
-    \includegraphics[width=0.5\textwidth]{TimeDomain.png}
-    \centering
-    \includegraphics[width=0.5\textwidth]{FreqDomain.png}
-    \caption{\label{fig:freqandtime} {\it Comparison of
-        predicted output against reference output shown in
-        the time domain (above) and frequency domain (below).
-        The frequency domain plot uses frequency band smoothing
-        using $1/24$ octave bands for improved clarity.}}
-\end{figure}
 
 \subsection{Advantages and Limitations}
 The recurrent neural network is a flexible and powerful
@@ -592,8 +594,8 @@ circuit can be broken down into four separable parts (see \cref{fig:fullcircuit}
     \item Output Buffer
 \end{enumerate}
 %
-Due to their simplicity and linearity, in both emulations the input
-buffer, output buffer, and tone control circuits were modelled using
+Due to their relative simplicity and linearity, in both emulations the
+input buffer, output buffer, and tone control circuits were modelled using
 nodal analysis. The ``Gain Stage'' circuit can be further broken down
 into six (mostly) separable parts (see \cref{fig:gaincircuit}):
 \begin{enumerate}
@@ -626,26 +628,6 @@ FF-2 and the clipping stage) as the input to the summing amplifier.
     as well as the ``neural'' parameter to control whether the
     emulation uses the traiditional circuit model, or the RNN model.}}
 \end{figure}
-
-\subsection{Audio Plugin}
-Digital audio effects are often implemented as audio plugins that
-can be used by mixing engineers, producers, and musicians in a
-consumer digital audio workstation (DAW) software. Common plugin
-formats include the Avid Audio Extension (AAX), Steinberg's Virtual
-Studio Technology (VST), and Apple's Audio Unit (AU) for desktop use,
-as well as Apple's Audio Unit v3 (AUv3) for mobile use. The JUCE C++
-framework\footnote{\url{https://github.com/juce-framework/JUCE}} is
-commonly used to create cross-platform, cross-format plugins.
-\newline\newline
-As a demonstration of the two circuit emulations, we construct an audio
-plugin containing both models, allowing the user to switch
-between the two models for comparison. The plugin is implemented using
-JUCE/C++, along with a real-time Wave Digital Filter
-library\footnote{\url{https://github.com/jatinchowdhury18/WaveDigitalFilters}}
-for the WDF models. While the current model uses custom implementations
-of the GRU and fully connected layers needed for the RNN model, in the
-future, we plan to upgrade this model to use the implementations provided
-by the Tensorflow Lite library.\footnote{\url{https://www.tensorflow.org/lite/}}
 %
 \begin{figure*}
     \centering
@@ -663,6 +645,27 @@ by the Tensorflow Lite library.\footnote{\url{https://www.tensorflow.org/lite/}}
     networks highlighted. Adapted from \cite{electrosmash}.}}
 \end{figure}
 
+\subsection{Audio Plugin}
+Digital audio effects are often implemented as audio plugins that
+can be used by mixing engineers, producers, and musicians in a
+consumer digital audio workstation (DAW) software. Common plugin
+formats include the Avid Audio Extension (AAX), Steinberg's Virtual
+Studio Technology (VST), and Apple's Audio Unit (AU) for desktop use,
+as well as Apple's Audio Unit v3 (AUv3) for mobile use. The JUCE C++
+framework\footnote{\url{https://github.com/juce-framework/JUCE}} is
+commonly used to create cross-platform, cross-format plugins.
+\newline\newline
+As a demonstration of the two circuit emulations, we construct an audio
+plugin containing both models, allowing the user to switch
+between the two models for comparison. The plugin is implemented using
+JUCE/C++, along with a real-time Wave Digital Filter
+library\footnote{\url{https://github.com/jatinchowdhury18/WaveDigitalFilters}}
+for the WDF models. For computing the output of the RNN models, we have
+implemented a custom inferencing engine in C++, with two modes, one using
+the Eigen linear algebra library \cite{eigenweb}, the second using only
+the C++ standard library. In the future, we plan to add a third mode, that
+uses the Tensorflow Lite library.\footnote{\url{https://www.tensorflow.org/lite/}}
+
 \subsection{Embedded Implementation}
 Digital audio effects are sometimes implemented on embedded devices
 for use in stage performances, often in the form of a guitar pedal,
@@ -674,7 +677,7 @@ meaning that the embedded implementation must be able to run with a
 very small buffer size.
 \newline\newline
 We chose the Teensy 4.0 microcontroller as our embedded platform, since
-it contains a reasonbly powerful floating point processor at a relatively
+it contains a reasonably powerful floating point processor at a relatively
 low price point. The Teensy can be purchased along with an Audio Shield,
 which provides 16-bit stereo audio input/output at 44.1 kHz sampling rate.
 The Teensy has gained popularity in the audio community due to
@@ -685,11 +688,10 @@ Faust to be exported for use on the Teensy \cite{Michon2019RealTA}.
 The Teensy 4.0 with the audio shield can be purchased for 35 USD.
 \newline\newline
 The Teensy implementation is writteen in C++ using the Teensy Audio Library,
-along with the same WDF library as the audio plugin, as well as the same
-implementations for the GRU and fully connected layers. The emulation
-can be compiled to use either the ML or non-ML implementation. Variables
-in the code can be connected to potentiometers or push-buttons to
-control model parameters in real-time.
+along with the same WDF library as the audio plugin, and the standard
+library mode of the same RNN inferencing engine. The emulation can be compiled
+to use either the ML or non-ML implementation. Variables in the code can be
+connected to potentiometers or push-buttons to control model parameters in real-time.
 %
 \begin{figure}
     \centering
@@ -718,7 +720,8 @@ For real-time performance it is important to have fast computational
 performance in order to reduce audio latency. In \cref{table:bench},
 we show the speeds of the various models at different input block
 sizes. Note that at all block sizes, the ML implementation outperforms
-the non-ML implementation.
+the non-ML implementation. Performance evaluation was completed using a
+2017 Dell Precision laptop with a 2.9 GHz Intel Core i7 processor.
 %
 \begin{table}[h!]
     \centering
@@ -750,7 +753,7 @@ From the process of implementing the circuit emulations described
 above, we provide the following recommendations for circuit modellers:
 \begin{itemize}
     \item For simple, linear circuits, nodal analysis is the easiest
-          and best performing circuit modelling method.
+          and most performant circuit modelling method.
     \item When modularity is important, prefer Wave Digital Filters.
           This modularity can refer to the circuit topology, the
           components in the circuit, or the way in which the components
@@ -760,9 +763,9 @@ above, we provide the following recommendations for circuit modellers:
           consider using recurrent neural networks.
     \item Small RNNs can outperform more complex circuit modelling methods
           while still maintaining model accuracy.
-    \item While handling control parameters with RNNs can be difficult,
-          this can be acceptably solved by training multiple models for
-          different values of the control parameter and fading between them
+    \item While handling control parameters with RNNs can be difficult,	
+          this can be acceptably solved by training multiple models for	
+          different values of the control parameter and fading between them	
           in real time.
 \end{itemize}
 
@@ -783,10 +786,10 @@ and can be found on GitHub.\footnote{\url{https://github.com/jatinchowdhury18/Kl
 In future works, we would like to extend the RNN framework to be able
 to implement larger networks in real-time. Specifically, the Differentiable
 Digital Signal Processingg (DDSP) library from Google's Magenta project
-\cite{engel2020ddsp} implements complex audio effects including timbral
-transfer, dereverberation, and more using an auto-encoder that contains
-two 512-unit GRUs, along with several other complex operations. Being
-able to implement the DDSP auto-encoder for use on real-time signals
+implements complex audio effects including timbral transfer, dereverberation,
+and more using an auto-encoder that contains two 512-unit GRUs, along with
+several other complex operations \cite{engel2020ddsp}. Being able to
+implement the DDSP auto-encoder for use on real-time signals
 would be a powerful tool for musicians and audio engineers.
 
 \section{Acknowledgments}
