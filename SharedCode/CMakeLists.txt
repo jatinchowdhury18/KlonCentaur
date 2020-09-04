@@ -19,8 +19,8 @@ target_sources(SharedCode PRIVATE
     ToneFilterProcessor.cpp
     OutputStageProcessor.h
     OutputStageProcessor.cpp
-    Json2RNNParser.h
-    Json2RNNParser.cpp
+    Json2RnnParser.h
+    Json2RnnParser.cpp
 )
 
 target_compile_definitions(SharedCode PUBLIC
