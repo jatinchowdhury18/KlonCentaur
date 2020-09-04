@@ -21,6 +21,7 @@ int main (int argc, char* argv[])
     std::cout << "Loading plugin..." << std::endl;
 
     // load plugin...
+    // File pluginFile ("~/Developer/KlonCentaur/build/ChowCentaur/ChowCentaur_artefacts/VST3/ChowCentaur.vst3");
     File pluginFile ("D:/Documents/CCRMA/Research/Klon_Centaur/ChowCentaur/build/Release/VST3/ChowCentaur.vst3");
     auto plugin = getPlugin (pluginFile.getFullPathName());
 

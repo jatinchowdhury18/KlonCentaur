@@ -10,7 +10,7 @@ std::unique_ptr<Model<float>> Json2RnnParser::parseJson (InputStream& input)
         return nullptr;
     
     auto nDims = int (shape.getArray()->getUnchecked (2));
-    std::cout << "# dimensions: " << nDims <<std::endl;
+    // std::cout << "# dimensions: " << nDims <<std::endl;
     auto model = std::make_unique<Model<float>> (nDims);
 
     for (int i = 0; i < layers.getArray()->size(); ++i)
@@ -22,7 +22,7 @@ std::unique_ptr<Model<float>> Json2RnnParser::parseJson (InputStream& input)
         auto layerDims = int (layerShape.getArray()->getUnchecked (2));
 
         auto weights = l["weights"];
-        std::cout << type << " " << layerDims << std::endl;
+        // std::cout << type << " " << layerDims << std::endl;
 
         if (type == "time-distributed-dense" || type == "dense")
         {
