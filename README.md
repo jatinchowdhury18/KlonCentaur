@@ -30,28 +30,36 @@ Check out the video demo on [YouTube](https://youtu.be/yo4JrceDQ2w).
 
 ### Building from Source
 
-The audio plugin is built using
-[JUCE](https://github.com/juce-framework/JUCE),
-[FRUT](https://github.com/McMartin/FRUT), CMake, and
-[PluginGUIMagic](https://github.com/ffAudio/PluginGUIMagic).
-These dependencies are primarily managed by the `setup.sh` script,
-except for CMake, which the user must install on their own.
-
-To build from source, use the following steps:
+To build the audio plugin, you must have CMake installed 
+(version 3.15 or greater). Then use the following steps:
 ```bash
 # clone repository
 $ git clone https://github.com/jatinchowdhury18/KlonCentaur.git
 $ cd KlonCentaur
+$ git submodule update --init --recursive
 
-# run setup script
-$ ./setup.sh
-
-# Build ChowCentaur plugin
-$ cd ChowCentaur
-$ mkdir build && cd build/
-$ cmake ..
-$ cmake --build . --config Release
+# Build with CMake
+$ cmake -Bbuild
+$ cmake --build build/ --config Release
 ```
+
+If you also want to build the sub-circuits and performance
+benchmarking app included in this repo, using the following
+as your first CMake command: `cmake -Bbuild -DBUILD_SUB_CIRCUITS=ON -DBUILD_CENTAUR_BENCH=ON`.
+
+The neural network inferencing engine used by the plugin has
+two implementations, one using the
+[`Eigen`](http://eigen.tuxfamily.org/) linear algebra library,
+and a second using only the C++ standard library (STL). The 
+`Eigen` implementation is enabled by default, but if you would 
+prefer to use the STL implementation, comment out the
+following line in `CMakeLists.txt`:
+
+```CMake
+# comment to use STL implementation instead of Eigen
+add_definitions(-DUSE_EIGEN)
+```
+
 
 ## Teensy Pedal
 

@@ -1,6 +1,6 @@
 # pragma once
 
-#include "JuceHeader.h"
+#include "SharedJuceHeader.h"
 
 /**
  * Base class for plugin processors.

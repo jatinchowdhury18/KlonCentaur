@@ -2,6 +2,7 @@
 #define OUTPUTSTAGEWDF_H_INCLUDED
 
 #include "wdf.h"
+#include <memory>
 
 class OutputStageWDF
 {

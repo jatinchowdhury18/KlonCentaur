@@ -2,6 +2,7 @@
 #define INPUTBUFFERWDF_H_INCLUDED
 
 #include "wdf.h"
+#include <memory>
 
 class InputBufferWDF
 {
