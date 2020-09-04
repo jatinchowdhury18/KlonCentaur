@@ -2,6 +2,7 @@
 
 #include "JuceHeader.h"
 #include "PluginBase.h"
+#include "gui/MyLNF.h"
 
 #include "InputBufferProcessor.h"
 #include "ToneFilterProcessor.h"
@@ -35,6 +36,7 @@ private:
     GainStageProc gainStageProc;
     GainStageMLProc gainStageMLProc;
 
+    MyLNF myLNF;
     foleys::MagicPlotSource* scope = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ChowCentaur)
