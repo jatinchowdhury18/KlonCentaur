@@ -2,6 +2,7 @@
 #define PREAMPSTAGE_H_INCLUDED
 
 #include "wdf.h"
+#include <memory>
 
 namespace GainStageSpace
 {
