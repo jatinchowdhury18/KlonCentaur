@@ -2,8 +2,8 @@
 
 GainStageMLProc::GainStageMLProc (AudioProcessorValueTreeState& vts)
 {
-    loadModel (gainStageML, BinaryData::centaur_json, BinaryData::centaur_jsonSize);
-    loadModel (gainStageMLLarge, BinaryData::centaur_large_json, BinaryData::centaur_large_jsonSize);
+    loadModel (gainStageMLSmall, BinaryData::centaur_small_json, BinaryData::centaur_small_jsonSize);
+    loadModel (gainStageMLLarge, BinaryData::centaur_json, BinaryData::centaur_jsonSize);
 
     gainParam = vts.getRawParameterValue ("gain");
     mlParam     = vts.getRawParameterValue ("neural");
@@ -28,7 +28,7 @@ void GainStageMLProc::reset (double sampleRate, int samplesPerBlock)
 
     for (int ch = 0; ch < 2; ++ch)
     {
-        gainStageML[ch]->reset();
+        gainStageMLSmall[ch]->reset();
         gainStageMLLarge[ch]->reset();
     }
 
@@ -37,7 +37,7 @@ void GainStageMLProc::reset (double sampleRate, int samplesPerBlock)
 
 void GainStageMLProc::processBlock (AudioBuffer<float>& buffer)
 {
-    auto model = gainStageML;
+    auto model = gainStageMLSmall;
     if (*mlParam == 2)
         model = gainStageMLLarge;
 
