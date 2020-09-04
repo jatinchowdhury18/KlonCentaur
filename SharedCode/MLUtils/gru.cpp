@@ -45,7 +45,7 @@ GRULayer<T>::WeightSet::~WeightSet()
     delete[] b[0];
     delete[] b[1];
 
-    for (size_t i = 0; i < Layer<T>::out_size; ++i)
+    for (size_t i = 0; i < this->out_size; ++i)
     {
         delete[] W[i];
         delete[] U[i];
