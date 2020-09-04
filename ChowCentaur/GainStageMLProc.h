@@ -19,7 +19,7 @@ private:
     std::atomic<float>* gainParam = nullptr;
     std::atomic<float>* mlParam = nullptr;
 
-    ModelPtr gainStageML[2];
+    ModelPtr gainStageMLSmall[2];
     ModelPtr gainStageMLLarge[2];
 
     float T = 1.0f / 44100.0f;

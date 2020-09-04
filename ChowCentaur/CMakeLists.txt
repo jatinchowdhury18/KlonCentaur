@@ -22,8 +22,12 @@ target_sources(ChowCentaur PRIVATE
 juce_add_binary_data(BinaryData SOURCES
     gui.xml
     ../GainStageTraining/models/centaur.json
-    ../GainStageTraining/models/centaur_large.json
+    ../GainStageTraining/models/centaur_small.json
 )
+
+# Need to build BinaryData with -fPIC flag on Linux
+set_target_properties(BinaryData PROPERTIES
+    POSITION_INDEPENDENT_CODE TRUE)
 
 target_compile_definitions(ChowCentaur PUBLIC
     JUCE_DISPLAY_SPLASH_SCREEN=0

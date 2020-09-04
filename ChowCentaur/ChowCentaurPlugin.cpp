@@ -28,7 +28,7 @@ void ChowCentaur::addParameters (Parameters& params)
     params.push_back (std::make_unique<AudioParameterFloat> (gainTag,   "Gain",   0.0f, 1.0f, 0.5f));
     params.push_back (std::make_unique<AudioParameterFloat> (trebleTag, "Treble", 0.0f, 1.0f, 0.5f));
     params.push_back (std::make_unique<AudioParameterFloat> (levelTag,  "Level",  0.0f, 1.0f, 0.5f));
-    params.push_back (std::make_unique<AudioParameterChoice> (neuralTag, "Mode", StringArray { "Traditional", "Neural", "Neural Large" }, 0));
+    params.push_back (std::make_unique<AudioParameterChoice> (neuralTag, "Mode", StringArray { "Traditional", "Neural Small", "Neural Large" }, 0));
 }
 
 void ChowCentaur::prepareToPlay (double sampleRate, int samplesPerBlock)
