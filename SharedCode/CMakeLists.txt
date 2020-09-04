@@ -36,3 +36,7 @@ target_link_libraries(SharedCode PRIVATE
     juce::juce_audio_utils
     MLUtils
 )
+
+# Need to build with -fPIC flag on Linux
+set_target_properties(SharedCode PROPERTIES
+    POSITION_INDEPENDENT_CODE TRUE)
