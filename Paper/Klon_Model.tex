@@ -159,12 +159,13 @@ of the system. Traditional black-box techniques include impulse
 response measurements \cite{sasp} and extensions thereof, including
 the Weiner-Hammerstein method \cite{Germain}. Recently, researchers
 have begun using machine learning methods for black-box modelling.
-In \cite{WaveNetVA}, the authors use a WaveNet style architecture
-to generate an output signal sample-by-sample. In \cite{NLML} the
-authors use a deep fully-connected networks to approximate nonlinear
-state-space solutions for a circuit, effectively a ``grey-box'' approach.
-Finally, in \cite{VArnn} the authors use a recurrent neural network
-to model the behavior of audio circuits with control parameters.
+Damsk\"agg et. al. model several guitar distortion circuits, using a
+WaveNet style architecture to generate an output signal sample-by-sample
+\cite{WaveNetVA}. Parker et. al. use deep fully-connected networks to
+approximate nonlinear state-space solutions for the Korg MS-20 filter
+circuit, effectively a ``grey-box'' approach \cite{NLML}. Finally, Wright
+et. al. use a recurrent neural network to model the behavior of guitar
+distortion circuits with control parameters \cite{VArnn}.
 \newline\newline
 The structure of the paper will be as follows: in \S2 we give
 background information on circuit modelling using nodal analysis
@@ -378,7 +379,7 @@ complex topologies or multiple nonlinearities. While the recent addition
 of $\mathcal{R}$-type adaptors to the Wave Digital formalism \cite{KurtThesis}
 has begun to make these circuits tractable, the WDF models of these types of
 circuits are significantly more computationally complex. Further, the use of
-$\mathcal{R}$-type adaptors can somewhat compromises the modularity that makes
+$\mathcal{R}$-type adaptors can somewhat compromise the modularity that makes
 WDFs advantageous in the first place.
 
 \section{Recurrent Neural Network Model}
@@ -663,7 +664,7 @@ library\footnote{\url{https://github.com/jatinchowdhury18/WaveDigitalFilters}}
 for the WDF models. For computing the output of the RNN models, we have
 implemented a custom inferencing engine in C++, with two modes, one using
 the Eigen linear algebra library \cite{eigenweb}, the second using only
-the C++ standard library. In the future, we plan to add a third mode, that
+the C++ standard library. In the future, we plan to add a third mode that
 uses the Tensorflow Lite library.\footnote{\url{https://www.tensorflow.org/lite/}}
 
 \subsection{Embedded Implementation}
@@ -718,16 +719,17 @@ the loss function to weight high frequencies more.
 We also evaluate the computational performance of the emulations.
 For real-time performance it is important to have fast computational
 performance in order to reduce audio latency. In \cref{table:bench},
-we show the speeds of the various models at different input block
-sizes. Note that at all block sizes, the ML implementation outperforms
-the non-ML implementation. Performance evaluation was completed using a
-2017 Dell Precision laptop with a 2.9 GHz Intel Core i7 processor.
+we show the compute time per second of audio processed of the various
+models at different input block sizes. Note that at all block sizes,
+the ML implementation outperforms the non-ML implementation. Performance
+evaluation was completed using a 2017 Dell Precision laptop with a 2.9
+GHz Intel Core i7 processor.
 %
 \begin{table}[h!]
     \centering
      \begin{tabular}{||c | c | c||} 
      \hline
-     Block Size & NonML Speed & ML Speed \\
+     Block Size & NonML Time & ML Time \\
      \hline\hline
      8    & 0.0723437 & 0.0528792 \\
      16   & 0.0703079 & 0.0510437 \\
@@ -770,14 +772,14 @@ above, we provide the following recommendations for circuit modellers:
 \end{itemize}
 
 \section{Conclusion}
-In this writing we have constructed two emulations of the Klon
+We have constructed two emulations of the Klon
 Centaur guitar pedal circuit, using circuit modelling techniques
 including nodal analysis, wave digital filters, and recurrent
-neural networks. We describe and compare the advantages and
-limitations of each method, and show how they can be used together
-to achieve good results. We implement the circuit emulations in the
+neural networks. We described and compared the advantages and
+limitations of each method, and showed how they can be used together
+to achieve good results. We implemented the circuit emulations in the
 form of an audio plugin and guitar-pedal style effect embedded on
-a Teensy microcontroller. Finally, we provide recommendations for
+a Teensy microcontroller. Finally, we provided recommendations for
 utilising different circuit modelling methods for different types
 of circuits, and for different platforms. The code for both
 implementations, as well as the model training, is open source
@@ -787,7 +789,7 @@ In future works, we would like to extend the RNN framework to be able
 to implement larger networks in real-time. Specifically, the Differentiable
 Digital Signal Processingg (DDSP) library from Google's Magenta project
 implements complex audio effects including timbral transfer, dereverberation,
-and more using an auto-encoder that contains two 512-unit GRUs, along with
+and more, using an auto-encoder that contains two 512-unit GRUs, along with
 several other complex operations \cite{engel2020ddsp}. Being able to
 implement the DDSP auto-encoder for use on real-time signals
 would be a powerful tool for musicians and audio engineers.
