@@ -10,11 +10,10 @@ approaches. The model is implemented as an audio plugin
 (Standalone/VST/AU), and as a guitar pedal-style effect
 embedded on a Teensy microcontroller.
 
-For a full technical paper summarizing this project see
-[here](https://ccrma.stanford.edu/~jatin/papers/Klon_Model.pdf).
+A full technical paper summarizing this project is available on the
+[ArXiv](https://arxiv.org/abs/2009.02833).
 Original circuit schematic and analysis on
 [ElectroSmash](https://www.electrosmash.com/klon-centaur-analysis).
-
 
 This work began as part of a class project for
 [EE 292D](https://ee292d.github.io/) at Stanford University.
