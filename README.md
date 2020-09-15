@@ -20,12 +20,14 @@ This work began as part of a class project for
 
 ## Audio Plugin
 
-Plugin builds can be downloaded from the
-[releases page](https://github.com/jatinchowdhury18/KlonCentaur/releases).
-
 <img src="./Paper/Figures/Plugin.png" width=500>
 
+Plugin builds can be downloaded from the
+[releases page](https://github.com/jatinchowdhury18/KlonCentaur/releases).
 Check out the video demo on [YouTube](https://youtu.be/yo4JrceDQ2w).
+Linux users can find builds available on the
+[Open Build Service](https://build.opensuse.org/package/show/home:kill_it:JUCE/ChowCentaur),
+courtesy of Konstantin Voinov.
 
 ### Building from Source
 
