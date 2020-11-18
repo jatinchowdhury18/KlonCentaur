@@ -3,6 +3,10 @@
 % Auriga theme
 % https://github.com/anishathalye/auriga
 
+
+% Notes:
+% - Spelling on slides 47-48
+
 \documentclass[14pt,aspectratio=169]{beamer}
 \usepackage{pgfpages}
 \usepackage{fancyvrb}
@@ -26,13 +30,14 @@
 \usetikzlibrary{positioning}
 \usepackage[american]{circuitikz}
 \usepackage{tkz-euclide}
+\usepackage{listings}
 
 % define some colors for a consistent theme across slides
 \definecolor{red}{RGB}{181, 23, 0}
 \definecolor{blue}{RGB}{0, 118, 186}
 \definecolor{gray}{RGB}{146, 146, 146}
 
-\title{Embedded Virtual Analog Modelling with Recurrent Neural Networks}
+\title{A Comparison of Virtual Analog Modelling Techniques}
 
 \author{Jatin Chowdhury}
 
@@ -40,15 +45,60 @@
 
 \begin{document}
 
-{
-  % rather than use the frame options [noframenumbering,plain], we make the
-  % color match, so that the indicated page numbers match PDF page numbers
-  \setbeamercolor{page number in head/foot}{fg=background canvas.bg}
-  \begin{frame}
-    \titlepage
-  \end{frame}
-}
+% {
+%   % rather than use the frame options [noframenumbering,plain], we make the
+%   % color match, so that the indicated page numbers match PDF page numbers
+%   \setbeamercolor{page number in head/foot}{fg=background canvas.bg}
+%   \begin{frame}
+%     \titlepage
+%   \end{frame}
+% }
 
-\input{slides.tex}
+% macro to show an image as a full slide
+\def\fullslideimg#1{%
+\setbeamertemplate{navigation symbols}{}
+\begin{frame}<article:0>[plain]
+    \begin{tikzpicture}[remember picture,overlay]
+        \node[at=(current page.center)] {
+            \includegraphics[keepaspectratio,
+                             width=\paperwidth,
+                             height=\paperheight]{#1}
+        };
+    \end{tikzpicture}
+\end{frame}}
+
+\fullslideimg{Figures/title.jpg}
+
+\input{Slides/Intro.tex}
+\input{Slides/Nodal.tex}
+\input{Slides/WDF.tex}
+\input{Slides/RNN.tex}
+\input{Slides/Implementation.tex}
+
+\begin{frame}{Links}
+    \begin{itemize}
+        \itemsep0.75em
+        \item \href{https://arxiv.org/abs/2009.02833}{Technical Paper}
+        \item \href{https://github.com/jatinchowdhury18/KlonCentaur}{Source Code (and plugin download)}
+        \item \href{https://www.youtube.com/playlist?list=PLrcXtWXbPsj11cNBamVyMmDcWY1SXZHvz}{Video Demos}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Acknowledgements}
+    \begin{itemize}
+        \item Pete Warden and the EE 292D class, for insipiring this project
+        \item Julius Smith, Kurt Werner, and Jingjie Zhang, for assistance with WDFs
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \begin{centering}
+        \vskip5ex plus 1filll
+        {\usebeamerfont{title page title}\usebeamercolor[fg]{title page} Thank You!\\[1.5ex]}
+        \vskip0pt plus 1filll
+    \end{centering}
+\end{frame}
+
+\fullslideimg{Figures/end.jpg}
 
 \end{document}
