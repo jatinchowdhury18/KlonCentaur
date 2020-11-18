@@ -1,0 +1,56 @@
+\begin{frame}{Recurrent Neural Networks}
+    \begin{columns}
+        \begin{column}{0.5\linewidth}
+            \hspace{-1ex}
+            Advantages:
+            \vspace{1ex}
+            \begin{itemize}
+                \itemsep0.5em
+                \item Efficient black-box modelling technique for distortion circuits
+                \item Can potentially include control parameters
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\linewidth}
+            \hspace{-1ex}
+            Disadvantages:
+            \vspace{1ex}
+            \begin{itemize}
+                \itemsep0.5em
+                \item Large networks can be computationally expensive
+                \item Must be used at the same sample rate as training data
+                \item Can be difficult to train with control parameters
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Neural Networks: Future Work}
+    Computational Efficiency
+    \begin{itemize}
+        \itemsep0.5em
+        \item Dense, recurrent, and convolutional layers often require nonlinear activation functions, like $\tanh$
+        \item In DSP, we often use fast approximations, or look-up tables
+        \item Can we use function approximations in neural networks?
+        \begin{itemize}
+            \itemsep0em
+            \item Is it better to train with approximations, or train with full precision, and use approximations for real-time implementation?
+            \item Similar to questions in TinyML about weight quantization
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Neural Networks: Future Work}
+    Sample Rate
+    \begin{itemize}
+        \itemsep0.5em
+        \item Currently most networks must be used at the same sample rate as the training data
+        \item Can one network to be used for a range of sample rates?
+        \begin{itemize}
+            \itemsep0em
+            \item Sample rate as input?
+            \item Transform network weights?
+            \item Fractional delay (RNN only)?
+        \end{itemize}
+        \item What about aliasing?
+    \end{itemize}
+\end{frame}
