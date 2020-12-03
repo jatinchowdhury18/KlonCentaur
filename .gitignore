@@ -1,6 +1,5 @@
 # CMake Build artifacts
 build*/
-bin/
 
 # Python artifacts
 __pycache__/
@@ -26,3 +25,6 @@ __pycache__/
 
 # VSCode config
 .vscode/
+
+# Mac extras
+.DS_Store
