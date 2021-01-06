@@ -31,6 +31,8 @@ jobs:
     if: contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false
     name: Build plugin for iOS
     runs-on: macOS-latest
+    env:
+      SUPER_SECRET: ${{ secrets.MAC_CERTIFICATES_BASE64 }}
     strategy:
       fail-fast: false # show all errors for each platform (vs. cancel jobs on error)
     
