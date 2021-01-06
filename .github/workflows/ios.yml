@@ -52,4 +52,4 @@ jobs:
 
     - name: Build
       shell: bash
-      run: cmake --build build-ios --target ChowCentaur_AUv3 --config Release --parallel -- -sdk iphonesimulator # @TODO: switch to -sdk iphoneos14.0
+      run: cmake --build build-ios --target ChowCentaur_AUv3 --config Release --parallel 4 -- -sdk iphonesimulator # @TODO: switch to -sdk iphoneos14.0
