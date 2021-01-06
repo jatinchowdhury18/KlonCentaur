@@ -31,9 +31,6 @@ jobs:
     if: contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false
     name: Build plugin for iOS
     runs-on: macOS-latest
-    env:
-      SUPER_SECRET2: ${{ secrets.MAC_CERTIFICATES_BASE64 }}
-      SUPER_SECRET3: ${{ secrets.CCRMA_PASS }}
     strategy:
       fail-fast: false # show all errors for each platform (vs. cancel jobs on error)
     
@@ -46,8 +43,8 @@ jobs:
       with:
         submodules: true
 
-    - name: Setup debug session
-      uses: mxschmitt/action-tmate@v3
+    # - name: Setup debug session
+    #   uses: mxschmitt/action-tmate@v3
 
     - uses: Apple-Actions/import-codesign-certs@v1
       with:
