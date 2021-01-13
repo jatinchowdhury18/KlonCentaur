@@ -43,9 +43,6 @@ jobs:
       with:
         submodules: true
 
-    # - name: Setup debug session
-    #   uses: mxschmitt/action-tmate@v3
-
     - uses: Apple-Actions/import-codesign-certs@v1
       with:
         p12-file-base64: ${{ secrets.MAC_CERTIFICATES_BASE64 }}
@@ -65,6 +62,9 @@ jobs:
     - name: Build
       shell: bash
       run: cmake --build build-ios --target ChowCentaur_AUv3 --config Release --parallel 4 -- -sdk iphoneos14.2 -allowProvisioningUpdates | xcpretty
+
+    - name: Setup debug session
+      uses: mxschmitt/action-tmate@v3
 
     # - uses: Apple-Actions/upload-testflight-build@master
     #   with:
