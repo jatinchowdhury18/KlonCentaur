@@ -36,6 +36,12 @@ private:
     GainStageProc gainStageProc;
     GainStageMLProc gainStageMLProc;
 
+    AudioBuffer<float> fadeBuffer;
+    bool useMLPrev = false;
+
+    using StereoIIR = dsp::ProcessorDuplicator<dsp::IIR::Filter<float>, dsp::IIR::Coefficients<float>>;
+    StereoIIR dcBlocker;
+
     MyLNF myLNF;
     foleys::MagicPlotSource* scope = nullptr;
 
