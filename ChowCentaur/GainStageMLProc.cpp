@@ -34,7 +34,7 @@ void GainStageMLProc::reset (double sampleRate, int samplesPerBlock)
         {
             gainStageML[i][ch]->reset();
 
-            for (int k = 0; k < 512; ++k)
+            for (int k = 0; k < 2048; ++k)
             {
                 float x[] = { 0.0f };
                 gainStageML[i][ch]->forward ({ x });
