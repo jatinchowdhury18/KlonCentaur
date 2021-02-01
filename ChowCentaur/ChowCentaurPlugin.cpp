@@ -144,6 +144,12 @@ AudioProcessorEditor* ChowCentaur::createEditor()
     return new foleys::MagicPluginEditor (magicState, BinaryData::gui_xml, BinaryData::gui_xmlSize, std::move (builder));
 }
 
+void ChowCentaur::setStateInformation (const void* data, int sizeInBytes)
+{
+    MessageManagerLock mml;
+    magicState.setStateInformation (data, sizeInBytes, getActiveEditor());
+}
+
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {

@@ -29,7 +29,7 @@ on:
 jobs:
   build_and_test:
     if: contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false
-    name: Test module on ${{ matrix.os }}
+    name: Test plugin on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false # show all errors for each platform (vs. cancel jobs on error)
