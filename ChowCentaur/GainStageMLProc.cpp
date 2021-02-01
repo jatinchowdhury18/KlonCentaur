@@ -13,12 +13,11 @@ GainStageMLProc::GainStageMLProc (AudioProcessorValueTreeState& vts)
 
 void GainStageMLProc::loadModel (ModelPtr model[2], const char* data, int size)
 {
-    MemoryInputStream jsonInput0 (data, size, false);
-    MemoryInputStream jsonInput1 (data, size, false);
+    MemoryInputStream jsonInputStream (data, size, false);
+    auto jsonInput = nlohmann::json::parse (jsonInputStream.readEntireStreamAsString().toStdString());
 
-    Json2RnnParser parser;
-    model[0] = parser.parseJson (jsonInput0);
-    model[1] = parser.parseJson (jsonInput1);
+    model[0] = RTNeural::json_parser::parseJson<float> (jsonInput);
+    model[1] = RTNeural::json_parser::parseJson<float> (jsonInput);
 
     jassert (model[0].get() != nullptr);
     jassert (model[1].get() != nullptr);

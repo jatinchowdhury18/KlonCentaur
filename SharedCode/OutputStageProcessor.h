@@ -2,9 +2,8 @@
 #define OUTPOUTSTAGEPROCESSOR_H_INCLUDED
 
 #include "SharedJuceHeader.h"
-#include "IIRFilter.h"
 
-class OutputStageProc : public IIRFilterN<1>
+class OutputStageProc : public chowdsp::IIRFilter<1>
 {
 public:
     OutputStageProc()

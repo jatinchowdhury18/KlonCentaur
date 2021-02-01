@@ -1,23 +1,19 @@
 #include "ChowCentaurPlugin.h"
-#include "gui/InfoComp.h"
-#include "gui/TitleComp.h"
-#include "gui/TooltipComp.h"
 
 namespace
 {
-    const String gainTag   = "gain";
-    const String trebleTag = "treble";
-    const String levelTag  = "level";
-    const String neuralTag = "neural";
-}
+const String gainTag = "gain";
+const String trebleTag = "treble";
+const String levelTag = "level";
+const String neuralTag = "neural";
+} // namespace
 
-ChowCentaur::ChowCentaur() :
-    gainStageProc (vts),
-    gainStageMLProc (vts)
+ChowCentaur::ChowCentaur() : gainStageProc (vts),
+                             gainStageMLProc (vts)
 {
     trebleParam = vts.getRawParameterValue (trebleTag);
-    levelParam  = vts.getRawParameterValue (levelTag);
-    mlParam     = vts.getRawParameterValue (neuralTag);
+    levelParam = vts.getRawParameterValue (levelTag);
+    mlParam = vts.getRawParameterValue (neuralTag);
 
     LookAndFeel::setDefaultLookAndFeel (&myLNF);
     scope = magicState.createAndAddObject<foleys::MagicOscilloscope> ("scope");
@@ -26,12 +22,12 @@ ChowCentaur::ChowCentaur() :
 ChowCentaur::~ChowCentaur()
 {
 }
-    
+
 void ChowCentaur::addParameters (Parameters& params)
 {
-    params.push_back (std::make_unique<AudioParameterFloat> (gainTag,   "Gain",   0.0f, 1.0f, 0.5f));
+    params.push_back (std::make_unique<AudioParameterFloat> (gainTag, "Gain", 0.0f, 1.0f, 0.5f));
     params.push_back (std::make_unique<AudioParameterFloat> (trebleTag, "Treble", 0.0f, 1.0f, 0.5f));
-    params.push_back (std::make_unique<AudioParameterFloat> (levelTag,  "Level",  0.0f, 1.0f, 0.5f));
+    params.push_back (std::make_unique<AudioParameterFloat> (levelTag, "Level", 0.0f, 1.0f, 0.5f));
     params.push_back (std::make_unique<AudioParameterChoice> (neuralTag, "Mode", StringArray { "Traditional", "Neural" }, 0));
 }
 
@@ -62,7 +58,7 @@ void ChowCentaur::releaseResources()
 {
 }
 
-void ChowCentaur::processBlock (AudioBuffer<float>& buffer)
+void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
 {
     ScopedNoDenormals noDenormals;
 
@@ -132,15 +128,7 @@ void ChowCentaur::processBlock (AudioBuffer<float>& buffer)
 
 AudioProcessorEditor* ChowCentaur::createEditor()
 {
-    auto builder = std::make_unique<foleys::MagicGUIBuilder> (magicState);
-    builder->registerJUCEFactories();
-    builder->registerJUCELookAndFeels();
-
-    builder->registerLookAndFeel ("MyLNF", std::make_unique<MyLNF>());
-    builder->registerFactory ("TooltipComp", &TooltipItem::factory);
-    builder->registerFactory ("InfoComp", &InfoItem::factory);
-    builder->registerFactory ("TitleComp", &TitleItem::factory);
-
+    auto builder = chowdsp::createGUIBuilder (magicState);
     return new foleys::MagicPluginEditor (magicState, BinaryData::gui_xml, BinaryData::gui_xmlSize, std::move (builder));
 }
 
