@@ -1,9 +1,9 @@
 #ifndef AMPSTAGE_H_INCLUDED
 #define AMPSTAGE_H_INCLUDED
 
-#include "SharedJuceHeader.h"
-#include "IIRFilter.h"
 #include "BilinearTools.h"
+#include "IIRFilter.h"
+#include "SharedJuceHeader.h"
 
 namespace GainStageSpace
 {
@@ -83,6 +83,6 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AmpStage)
 };
-} // namespace
+} // namespace GainStageSpace
 
 #endif // AMPSTAGE_H_INCLUDED

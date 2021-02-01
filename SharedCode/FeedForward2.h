@@ -51,7 +51,7 @@ private:
     std::unique_ptr<chowdsp::WDF::WDFSeries> S5;
     std::unique_ptr<chowdsp::WDF::WDFSeries> S6;
     std::unique_ptr<chowdsp::WDF::WDFSeries> S7;
-    
+
     std::unique_ptr<chowdsp::WDF::PolarityInverter> I1;
     std::unique_ptr<chowdsp::WDF::WDFParallel> P1;
     std::unique_ptr<chowdsp::WDF::WDFParallel> P2;
@@ -60,6 +60,6 @@ private:
     std::unique_ptr<chowdsp::WDF::WDFParallel> P5;
     std::unique_ptr<chowdsp::WDF::WDFParallel> P6;
 };
-}
+} // namespace GainStageSpace
 
 #endif // FEEDFORWARD2_H_INCLUDED

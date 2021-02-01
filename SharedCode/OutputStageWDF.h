@@ -12,7 +12,7 @@ public:
     void reset (double sampleRate)
     {
         C15 = std::make_unique<chowdsp::WDF::Capacitor> (4.7e-6, sampleRate);
-        
+
         P1 = std::make_unique<chowdsp::WDF::WDFParallel> (&R28, &RVBot);
         S1 = std::make_unique<chowdsp::WDF::WDFSeries> (P1.get(), &R25AndVTop);
         S2 = std::make_unique<chowdsp::WDF::WDFSeries> (S1.get(), C15.get());

@@ -17,8 +17,8 @@ void ToneFilterProcessor::calcCoefs (float curTreble)
     constexpr float Rpot = (float) 10e3;
     constexpr float C = (float) 3.9e-9;
     constexpr float G1 = 1.0f / (float) 100e3;
-    const float G2 = 1.0f / ((float) 1.8e3 + (1.0f-curTreble)*Rpot);
-    const float G3 = 1.0f / ((float) 4.7e3 + curTreble*Rpot);
+    const float G2 = 1.0f / ((float) 1.8e3 + (1.0f - curTreble) * Rpot);
+    const float G3 = 1.0f / ((float) 4.7e3 + curTreble * Rpot);
     constexpr float G4 = 1.0f / (float) 100e3;
 
     constexpr float wc = G1 / C; // frequency to match
@@ -30,7 +30,7 @@ void ToneFilterProcessor::calcCoefs (float curTreble)
     bs[1] = G1 * (G2 + G3);
     as[0] = C * (G3 - G4);
     as[1] = -G4 * (G2 + G3);
-        
+
     // bilinear transform
     float aU[2], bU[2];
     Bilinear::BilinearTransform<float, 2>::call (bU, aU, bs, as, K);

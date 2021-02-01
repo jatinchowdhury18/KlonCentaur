@@ -2,19 +2,18 @@
 
 namespace
 {
-    const String gainTag   = "gain";
-    const String trebleTag = "treble";
-    const String levelTag  = "level";
-    const String neuralTag = "neural";
-}
+const String gainTag = "gain";
+const String trebleTag = "treble";
+const String levelTag = "level";
+const String neuralTag = "neural";
+} // namespace
 
-ChowCentaur::ChowCentaur() :
-    gainStageProc (vts),
-    gainStageMLProc (vts)
+ChowCentaur::ChowCentaur() : gainStageProc (vts),
+                             gainStageMLProc (vts)
 {
     trebleParam = vts.getRawParameterValue (trebleTag);
-    levelParam  = vts.getRawParameterValue (levelTag);
-    mlParam     = vts.getRawParameterValue (neuralTag);
+    levelParam = vts.getRawParameterValue (levelTag);
+    mlParam = vts.getRawParameterValue (neuralTag);
 
     LookAndFeel::setDefaultLookAndFeel (&myLNF);
     scope = magicState.createAndAddObject<foleys::MagicOscilloscope> ("scope");
@@ -23,12 +22,12 @@ ChowCentaur::ChowCentaur() :
 ChowCentaur::~ChowCentaur()
 {
 }
-    
+
 void ChowCentaur::addParameters (Parameters& params)
 {
-    params.push_back (std::make_unique<AudioParameterFloat> (gainTag,   "Gain",   0.0f, 1.0f, 0.5f));
+    params.push_back (std::make_unique<AudioParameterFloat> (gainTag, "Gain", 0.0f, 1.0f, 0.5f));
     params.push_back (std::make_unique<AudioParameterFloat> (trebleTag, "Treble", 0.0f, 1.0f, 0.5f));
-    params.push_back (std::make_unique<AudioParameterFloat> (levelTag,  "Level",  0.0f, 1.0f, 0.5f));
+    params.push_back (std::make_unique<AudioParameterFloat> (levelTag, "Level", 0.0f, 1.0f, 0.5f));
     params.push_back (std::make_unique<AudioParameterChoice> (neuralTag, "Mode", StringArray { "Traditional", "Neural" }, 0));
 }
 
@@ -99,7 +98,7 @@ void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
 
         buffer.applyGainRamp (0, numSamples, 0.0f, 1.0f);
         for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
-                buffer.addFromWithRamp (ch, 0, fadeBuffer.getReadPointer (ch), numSamples, 1.0f, 0.0f);
+            buffer.addFromWithRamp (ch, 0, fadeBuffer.getReadPointer (ch), numSamples, 1.0f, 0.0f);
 
         useMLPrev = useML;
     }

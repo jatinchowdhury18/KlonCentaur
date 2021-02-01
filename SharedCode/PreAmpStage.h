@@ -50,6 +50,6 @@ private:
     std::unique_ptr<chowdsp::WDF::WDFParallel> P2;
     std::unique_ptr<chowdsp::WDF::WDFParallel> P3;
 };
-}
+} // namespace GainStageSpace
 
 #endif // PREAMPSTAGE_H_INCLUDED

@@ -1,15 +1,14 @@
 #ifndef DENSEEIGEN_H_INCLUDED
 #define DENSEEIGEN_H_INCLUDED
 
-#include <Eigen>
 #include "Layer.h"
+#include <Eigen>
 
-template<typename T>
+template <typename T>
 class Dense : public Layer<T>
 {
 public:
-    Dense (size_t in_size, size_t out_size) :
-        Layer<T> (in_size, out_size)
+    Dense (size_t in_size, size_t out_size) : Layer<T> (in_size, out_size)
     {
         weights.resize (out_size, in_size);
         bias.resize (out_size, 1);
@@ -28,14 +27,14 @@ public:
         std::copy (outVec.data(), outVec.data() + Layer<T>::out_size, out);
     }
 
-    void setWeights(T** newWeights)
+    void setWeights (T** newWeights)
     {
         for (size_t i = 0; i < Layer<T>::out_size; ++i)
             for (size_t k = 0; k < Layer<T>::in_size; ++k)
                 weights (i, k) = newWeights[i][k];
     }
 
-    void setBias(T* b)
+    void setBias (T* b)
     {
         for (size_t i = 0; i < Layer<T>::out_size; ++i)
             bias (i, 0) = b[i];

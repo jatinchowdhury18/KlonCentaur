@@ -15,7 +15,7 @@ void PreAmpWDF::reset (double sampleRate)
 
     C16 = std::make_unique<chowdsp::WDF::Capacitor> (1.0e-6, sampleRate);
     Vbias2.setVoltage (0.0f); // (4.5);
-        
+
     P1 = std::make_unique<chowdsp::WDF::WDFParallel> (C5.get(), &R6);
     S1 = std::make_unique<chowdsp::WDF::WDFSeries> (P1.get(), &Vbias);
 

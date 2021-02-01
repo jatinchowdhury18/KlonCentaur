@@ -1,9 +1,9 @@
 #ifndef SUMMINGAMP_H_INCLUDED
 #define SUMMINGAMP_H_INCLUDED
 
-#include "SharedJuceHeader.h"
-#include "IIRFilter.h"
 #include "BilinearTools.h"
+#include "IIRFilter.h"
+#include "SharedJuceHeader.h"
 
 namespace GainStageSpace
 {
@@ -17,7 +17,7 @@ public:
         IIRFilterN::reset();
         fs = (float) sampleRate;
 
-        calcCoefs ();
+        calcCoefs();
     }
 
     void calcCoefs()
@@ -41,6 +41,6 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SummingAmp)
 };
-}
+} // namespace GainStageSpace
 
 #endif // SUMMINGAMP_H_INCLUDED

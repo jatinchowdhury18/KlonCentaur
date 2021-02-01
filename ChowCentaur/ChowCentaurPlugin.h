@@ -1,19 +1,19 @@
 #pragma once
 
-#include <JuceHeader.h>
 #include "InputBufferProcessor.h"
-#include "ToneFilterProcessor.h"
 #include "OutputStageProcessor.h"
+#include "ToneFilterProcessor.h"
+#include <JuceHeader.h>
 
-#include "GainStageProc.h"
 #include "GainStageMLProc.h"
+#include "GainStageProc.h"
 
 class ChowCentaur : public chowdsp::PluginBase<ChowCentaur>
 {
 public:
     ChowCentaur();
     ~ChowCentaur();
-    
+
     static void addParameters (Parameters& params);
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
@@ -24,8 +24,8 @@ public:
 
 private:
     std::atomic<float>* trebleParam = nullptr;
-    std::atomic<float>* levelParam  = nullptr;
-    std::atomic<float>* mlParam     = nullptr;
+    std::atomic<float>* levelParam = nullptr;
+    std::atomic<float>* mlParam = nullptr;
 
     InputBufferProcessor inProc[2];
     ToneFilterProcessor tone[2];

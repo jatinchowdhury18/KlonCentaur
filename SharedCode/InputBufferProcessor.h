@@ -1,8 +1,8 @@
 #ifndef INPUTBUFFERPROCESSOR_H_INCLUDED
 #define INPUTBUFFERPROCESSOR_H_INCLUDED
 
-#include "SharedJuceHeader.h"
 #include "IIRFilter.h"
+#include "SharedJuceHeader.h"
 
 class InputBufferProcessor : IIRFilterN<1>
 {

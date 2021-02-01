@@ -27,7 +27,7 @@ void FeedForward2WDF::reset (double sampleRate)
     P6 = std::make_unique<chowdsp::WDF::WDFParallel> (&R5, C4.get());
     S7 = std::make_unique<chowdsp::WDF::WDFSeries> (P6.get(), S6.get());
     I1 = std::make_unique<chowdsp::WDF::PolarityInverter> (S7.get());
-        
+
     Vin.connectToNode (I1.get());
 }
 

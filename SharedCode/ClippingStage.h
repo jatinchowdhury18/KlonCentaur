@@ -13,7 +13,7 @@ public:
 
     void reset (double sampleRate)
     {
-        C9  = std::make_unique<chowdsp::WDF::Capacitor> (1.0e-6, sampleRate);
+        C9 = std::make_unique<chowdsp::WDF::Capacitor> (1.0e-6, sampleRate);
         C10 = std::make_unique<chowdsp::WDF::Capacitor> (1.0e-6, sampleRate);
         Vbias.setVoltage (0.0f);
 
@@ -51,6 +51,6 @@ private:
     std::unique_ptr<chowdsp::WDF::WDFParallel> P1;
 };
 
-}
+} // namespace GainStageSpace
 
 #endif // CLIPPINGSTAGE_H_INCLUDED
