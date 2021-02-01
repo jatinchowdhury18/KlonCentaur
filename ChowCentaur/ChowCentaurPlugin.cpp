@@ -48,6 +48,14 @@ void ChowCentaur::prepareToPlay (double sampleRate, int samplesPerBlock)
     }
 
     scope->prepareToPlay (sampleRate, samplesPerBlock);
+
+    useMLPrev = static_cast<bool> (*mlParam);
+    fadeBuffer.setSize (getMainBusNumOutputChannels(), samplesPerBlock);
+
+    // set up DC blockers
+    *dcBlocker.state = *dsp::IIR::Coefficients<float>::makeHighPass (sampleRate, 35.0f);
+    dsp::ProcessSpec spec { sampleRate, static_cast<uint32> (samplesPerBlock), 2 };
+    dcBlocker.prepare (spec);
 }
 
 void ChowCentaur::releaseResources()
@@ -69,12 +77,36 @@ void ChowCentaur::processBlock (AudioBuffer<float>& buffer)
         FloatVectorOperations::clip (x, x, -4.5f, 4.5f, numSamples); // op amp clipping
     }
 
-    if (*mlParam) // use rnn
-        gainStageMLProc.processBlock (buffer);
-    else // use circuit model
-        gainStageProc.processBlock (buffer);
+    const bool useML = static_cast<bool> (*mlParam);
+    if (useML == useMLPrev)
+    {
+        if (useML) // use rnn
+            gainStageMLProc.processBlock (buffer);
+        else // use circuit model
+            gainStageProc.processBlock (buffer);
+    }
+    else
+    {
+        fadeBuffer.makeCopyOf (buffer, true);
 
-    numSamples = buffer.getNumSamples();
+        if (useML) // use rnn
+        {
+            gainStageMLProc.processBlock (buffer);
+            gainStageProc.processBlock (fadeBuffer);
+        }
+        else // use circuit model
+        {
+            gainStageProc.processBlock (buffer);
+            gainStageMLProc.processBlock (fadeBuffer);
+        }
+
+        buffer.applyGainRamp (0, numSamples, 0.0f, 1.0f);
+        for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
+            buffer.addFromWithRamp (ch, 0, fadeBuffer.getReadPointer (ch), numSamples, 1.0f, 0.0f);
+
+        useMLPrev = useML;
+    }
+
     for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
     {
         auto* x = buffer.getWritePointer (ch);
@@ -89,6 +121,11 @@ void ChowCentaur::processBlock (AudioBuffer<float>& buffer)
         outProc[ch].setLevel (*levelParam);
         outProc[ch].processBlock (x, numSamples);
     }
+
+    // DC Blocker
+    dsp::AudioBlock<float> block (buffer);
+    dsp::ProcessContextReplacing<float> context (block);
+    dcBlocker.process (context);
 
     scope->pushSamples (buffer);
 }
