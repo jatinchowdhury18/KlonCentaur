@@ -1,6 +1,8 @@
 #ifndef LAYER_H_INCLUDED
 #define LAYER_H_INCLUDED
 
+#include <stddef.h>
+
 template <typename T>
 class Layer
 {

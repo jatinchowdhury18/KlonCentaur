@@ -1,8 +1,7 @@
 #ifndef OUTPUTSTAGEWDF_H_INCLUDED
 #define OUTPUTSTAGEWDF_H_INCLUDED
 
-#include <memory>
-#include <wdf.h>
+#include "SharedJuceHeader.h"
 
 class OutputStageWDF
 {

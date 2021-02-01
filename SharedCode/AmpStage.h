@@ -1,13 +1,11 @@
 #ifndef AMPSTAGE_H_INCLUDED
 #define AMPSTAGE_H_INCLUDED
 
-#include "BilinearTools.h"
-#include "IIRFilter.h"
 #include "SharedJuceHeader.h"
 
 namespace GainStageSpace
 {
-class AmpStage : public IIRFilterN<2>
+class AmpStage : public chowdsp::IIRFilter<2>
 {
 public:
     AmpStage()
@@ -23,7 +21,7 @@ public:
 
     void reset (float sampleRate)
     {
-        IIRFilterN::reset();
+        chowdsp::IIRFilter<2>::reset();
         fs = (float) sampleRate;
 
         r10bSmooth.setCurrentAndTargetValue (r10bSmooth.getTargetValue());
@@ -48,10 +46,10 @@ public:
         bs[2] = R12 + as[2];
 
         // frequency warping
-        const float wc = Bilinear::calcPoleFreq (as[0], as[1], as[2]);
+        const float wc = chowdsp::Bilinear::calcPoleFreq (as[0], as[1], as[2]);
         const auto K = wc == 0.0f ? 2.0f * fs : wc / std::tan (wc / (2.0f * fs));
 
-        Bilinear::BilinearTransform<float, 3>::call (b, a, bs, as, K);
+        chowdsp::Bilinear::BilinearTransform<float, 3>::call (b, a, bs, as, K);
     }
 
     void processBlock (float* block, const int numSamples) noexcept override
@@ -69,7 +67,7 @@ public:
         }
         else
         {
-            IIRFilterN::processBlock (block, numSamples);
+            chowdsp::IIRFilter<2>::processBlock (block, numSamples);
             // FloatVectorOperations::add (block, 4.5f * R12 / (R12 + R11 + r10bSmooth.getCurrentValue()), numSamples); // bias
         }
     }

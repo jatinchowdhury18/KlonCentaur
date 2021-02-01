@@ -1,9 +1,8 @@
 #include "ToneFilterProcessor.h"
-#include "BilinearTools.h"
 
 void ToneFilterProcessor::reset (float sampleRate)
 {
-    IIRFilterN::reset();
+    chowdsp::IIRFilter<1>::reset();
     fs = (float) sampleRate;
 
     trebleSmooth.setCurrentAndTargetValue (trebleSmooth.getTargetValue());
@@ -33,7 +32,7 @@ void ToneFilterProcessor::calcCoefs (float curTreble)
 
     // bilinear transform
     float aU[2], bU[2];
-    Bilinear::BilinearTransform<float, 2>::call (bU, aU, bs, as, K);
+    chowdsp::Bilinear::BilinearTransform<float, 2>::call (bU, aU, bs, as, K);
 
     // flip pole inside unit circle to ensure stability
     a[0] = 1.0f;
@@ -54,6 +53,6 @@ void ToneFilterProcessor::processBlock (float* block, const int numSamples) noex
     }
     else
     {
-        IIRFilterN::processBlock (block, numSamples);
+        chowdsp::IIRFilter<1>::processBlock (block, numSamples);
     }
 }

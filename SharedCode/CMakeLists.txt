@@ -3,8 +3,6 @@ add_library(SharedCode STATIC)
 # juce_generate_juce_header(SharedCode)
 
 target_sources(SharedCode PRIVATE
-    IIRFilter.h
-    BilinearTools.h
     InputBufferProcessor.h
     InputBufferProcessor.cpp
     PreAmpStage.h

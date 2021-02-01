@@ -2,6 +2,7 @@
 #define SHAREDCODE_JUCEHEADER_H_INCLUDED
 
 #include "foleys_gui_magic.h"
+#include "chowdsp_utils.h"
 #include "juce_audio_utils/juce_audio_utils.h"
 
 using namespace juce;

@@ -1,6 +1,7 @@
 #ifndef ACTIVATION_H_INCLUDED
 #define ACTIVATION_H_INCLUDED
 
+#include <cmath>
 #include "Layer.h"
 
 template <typename T>

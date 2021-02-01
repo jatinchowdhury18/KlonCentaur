@@ -1,10 +1,9 @@
 #ifndef INPUTBUFFERPROCESSOR_H_INCLUDED
 #define INPUTBUFFERPROCESSOR_H_INCLUDED
 
-#include "IIRFilter.h"
 #include "SharedJuceHeader.h"
 
-class InputBufferProcessor : IIRFilterN<1>
+class InputBufferProcessor : chowdsp::IIRFilter<1>
 {
 public:
     InputBufferProcessor() {}

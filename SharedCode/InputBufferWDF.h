@@ -1,8 +1,7 @@
 #ifndef INPUTBUFFERWDF_H_INCLUDED
 #define INPUTBUFFERWDF_H_INCLUDED
 
-#include <memory>
-#include <wdf.h>
+#include "SharedJuceHeader.h"
 
 class InputBufferWDF
 {

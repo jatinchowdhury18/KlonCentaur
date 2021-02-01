@@ -1,20 +1,18 @@
 #ifndef SUMMINGAMP_H_INCLUDED
 #define SUMMINGAMP_H_INCLUDED
 
-#include "BilinearTools.h"
-#include "IIRFilter.h"
 #include "SharedJuceHeader.h"
 
 namespace GainStageSpace
 {
-class SummingAmp : public IIRFilterN<1>
+class SummingAmp : public chowdsp::IIRFilter<1>
 {
 public:
     SummingAmp() {}
 
     void reset (float sampleRate)
     {
-        IIRFilterN::reset();
+        chowdsp::IIRFilter<1>::reset();
         fs = (float) sampleRate;
 
         calcCoefs();
@@ -33,7 +31,7 @@ public:
         as[1] = 1.0f;
 
         const auto K = 2.0f * fs;
-        Bilinear::BilinearTransform<float, 2>::call (b, a, bs, as, K);
+        chowdsp::Bilinear::BilinearTransform<float, 2>::call (b, a, bs, as, K);
     }
 
 private:
