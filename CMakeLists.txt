@@ -3,15 +3,14 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET "10.12" CACHE STRING "Minimum OS X deployment ta
 set(CMAKE_CXX_STANDARD 17)
 project(ChowCentaur VERSION 1.2.1)
 
+# Using RTNeural with XSimd backend
+set(RTNEURAL_XSIMD ON CACHE BOOL "Use RTnNeural with XSimd backend" FORCE)
+
 add_subdirectory(modules)
 include_directories(modules/JUCE/modules)
 include_directories(modules/foleys_gui_magic)
-include_directories(modules/chowdsp_utils/DSP/WDF)
-include_directories(modules/Eigen)
-
-# comment to use STL implementation instead of Eigen
-# @TODO: disable Eigen for iOS builds
-# add_definitions(-DUSE_EIGEN)
+include_directories(modules/chowdsp_utils)
+include_directories(modules/RTNeural)
 
 # juce_set_vst2_sdk_path(C:/SDKs/VST_SDK/VST2_SDK/)
 # include_directories(C:/SDKs/asiosdk2.3/common)

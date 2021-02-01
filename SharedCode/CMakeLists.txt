@@ -16,8 +16,6 @@ target_sources(SharedCode PRIVATE
     ToneFilterProcessor.cpp
     OutputStageProcessor.h
     OutputStageProcessor.cpp
-    Json2RnnParser.h
-    Json2RnnParser.cpp
 )
 
 target_compile_definitions(SharedCode PUBLIC
@@ -30,12 +28,10 @@ target_compile_definitions(SharedCode PUBLIC
     JucePlugin_Name="${CMAKE_PROJECT_NAME}"
 )
 
-add_subdirectory(MLUtils)
-
 target_link_libraries(SharedCode PRIVATE
     juce::juce_audio_utils
     chowdsp_utils
-    MLUtils
+    RTNeural
 )
 
 # Need to build with -fPIC flag on Linux

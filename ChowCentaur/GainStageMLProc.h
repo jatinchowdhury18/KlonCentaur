@@ -1,8 +1,9 @@
 #ifndef GAINSTAGEMLPROC_H_INCLUDED
 #define GAINSTAGEMLPROC_H_INCLUDED
 
-#include "Json2RnnParser.h"
+// #include "Json2RnnParser.h"
 #include "JuceHeader.h"
+#include <RTNeural/RTNeural.h>
 
 class GainStageMLProc
 {
@@ -18,7 +19,7 @@ private:
         numModels = 5,
     };
 
-    using ModelPtr = std::unique_ptr<Model<float>>;
+    using ModelPtr = std::unique_ptr<RTNeural::Model<float>>;
     void loadModel (ModelPtr model[2], const char* data, int size);
     void processModel (AudioBuffer<float>& buffer, ModelPtr model[2]);
 
