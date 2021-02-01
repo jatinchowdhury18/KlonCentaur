@@ -6,16 +6,16 @@
 #include "Layer.h"
 #include "activation.h"
 #include "dense.h"
-#include "gru.h"
 #include "gru.cpp"
+#include "gru.h"
 
-template<typename T>
+template <typename T>
 class Model
 {
 public:
-    Model (size_t in_size) :
-        in_size (in_size)
-    {}
+    Model (size_t in_size) : in_size (in_size)
+    {
+    }
 
     ~Model()
     {
@@ -32,7 +32,7 @@ public:
     {
         if (layers.empty())
             return in_size;
-        
+
         return layers.back()->out_size;
     }
 
@@ -57,7 +57,7 @@ public:
 
         for (size_t i = 1; i < layers.size(); ++i)
         {
-            layers[i]->forward (outs[i-1], outs[i]);
+            layers[i]->forward (outs[i - 1], outs[i]);
         }
 
         return outs.back()[0];

@@ -2,9 +2,8 @@
 #define TONEFILTERPROCESSOR_H_INCLUDED
 
 #include "SharedJuceHeader.h"
-#include "IIRFilter.h"
 
-class ToneFilterProcessor : public IIRFilterN<1>
+class ToneFilterProcessor : public chowdsp::IIRFilter<1>
 {
 public:
     ToneFilterProcessor()
@@ -14,7 +13,7 @@ public:
 
     void setTreble (float treble)
     {
-        trebleSmooth.setTargetValue (jlimit(0.0f, 1.0f, treble));
+        trebleSmooth.setTargetValue (jlimit (0.0f, 1.0f, treble));
     }
 
     void reset (float sampleRate);

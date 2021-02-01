@@ -4,6 +4,7 @@ juce_add_plugin(ChowCentaur
     PLUGIN_CODE Ctr1
     FORMATS AU VST3 Standalone AUv3 # VST
     ProductName "ChowCentaur"
+    ICON_BIG res/logo.png
 )
 
 add_dependencies(SharedCode ChowCentaur)
@@ -19,14 +20,8 @@ target_sources(ChowCentaur PRIVATE
     GainStageMLProc.cpp
 )
 
-add_subdirectory(gui)
-
 juce_add_binary_data(BinaryData SOURCES
     res/gui.xml
-    res/knob.svg
-    res/pointer.svg
-    res/RobotoCondensed-Bold.ttf
-    res/RobotoCondensed-Regular.ttf
     ../GainStageTraining/models/centaur_0.json
     ../GainStageTraining/models/centaur_25.json
     ../GainStageTraining/models/centaur_50.json
@@ -52,6 +47,7 @@ target_compile_definitions(ChowCentaur PUBLIC
 target_link_libraries(ChowCentaur PRIVATE
     juce::juce_audio_utils
     foleys_gui_magic
+    chowdsp_utils
     BinaryData
     SharedCode
 )

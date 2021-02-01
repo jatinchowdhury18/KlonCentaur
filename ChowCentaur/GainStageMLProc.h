@@ -1,8 +1,8 @@
 #ifndef GAINSTAGEMLPROC_H_INCLUDED
 #define GAINSTAGEMLPROC_H_INCLUDED
 
-#include "JuceHeader.h"
 #include "Json2RnnParser.h"
+#include "JuceHeader.h"
 
 class GainStageMLProc
 {
@@ -23,7 +23,7 @@ private:
     void processModel (AudioBuffer<float>& buffer, ModelPtr model[2]);
 
     inline int getModelIdx() const noexcept
-    { 
+    {
         return jlimit (0, 4, int (numModels * *gainParam));
     }
 

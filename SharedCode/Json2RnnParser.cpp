@@ -8,7 +8,7 @@ std::unique_ptr<Model<float>> Json2RnnParser::parseJson (InputStream& input)
 
     if (! shape.isArray() || ! layers.isArray())
         return nullptr;
-    
+
     auto nDims = int (shape.getArray()->getUnchecked (2));
     // std::cout << "# dimensions: " << nDims <<std::endl;
     auto model = std::make_unique<Model<float>> (nDims);
@@ -17,7 +17,7 @@ std::unique_ptr<Model<float>> Json2RnnParser::parseJson (InputStream& input)
     {
         auto l = layers.getArray()->getUnchecked (i);
         const auto type = l["type"].toString();
-        
+
         const auto layerShape = l["shape"];
         auto layerDims = int (layerShape.getArray()->getUnchecked (2));
 
@@ -45,20 +45,20 @@ std::unique_ptr<Model<float>> Json2RnnParser::parseJson (InputStream& input)
             jassertfalse;
         }
     }
-    
+
     return std::move (model); //.release();
 }
 
 std::unique_ptr<Dense<float>> Json2RnnParser::createDense (size_t in_size, size_t out_size, var& weights)
 {
     auto dense = std::make_unique<Dense<float>> (in_size, out_size);
-    
+
     // load kernel weights
     float** denseWeights;
-    denseWeights = new float* [out_size];
+    denseWeights = new float*[out_size];
     for (size_t i = 0; i < out_size; ++i)
         denseWeights[i] = new float[in_size];
-        
+
     auto layerWeights = weights.getArray()->getUnchecked (0);
     for (int i = 0; i < layerWeights.getArray()->size(); ++i)
     {
@@ -90,10 +90,10 @@ std::unique_ptr<GRULayer<float>> Json2RnnParser::createGRU (size_t in_size, size
 
     // load kernel weights
     float** kernelWeights;
-    kernelWeights = new float* [in_size];
+    kernelWeights = new float*[in_size];
     for (size_t i = 0; i < in_size; ++i)
-        kernelWeights[i] = new float[3*out_size];
-        
+        kernelWeights[i] = new float[3 * out_size];
+
     auto layerWeights = weights.getArray()->getUnchecked (0);
     for (int i = 0; i < layerWeights.getArray()->size(); ++i)
     {
@@ -110,10 +110,10 @@ std::unique_ptr<GRULayer<float>> Json2RnnParser::createGRU (size_t in_size, size
 
     // load recurrent weights
     float** recurrentWeights;
-    recurrentWeights = new float* [out_size];
+    recurrentWeights = new float*[out_size];
     for (size_t i = 0; i < out_size; ++i)
-        recurrentWeights[i] = new float[3*out_size];
-        
+        recurrentWeights[i] = new float[3 * out_size];
+
     auto layerWeights2 = weights.getArray()->getUnchecked (1);
     for (int i = 0; i < layerWeights2.getArray()->size(); ++i)
     {
@@ -130,10 +130,10 @@ std::unique_ptr<GRULayer<float>> Json2RnnParser::createGRU (size_t in_size, size
 
     // load biases
     float** gruBias;
-    gruBias = new float* [2];
+    gruBias = new float*[2];
     for (size_t i = 0; i < 2; ++i)
-        gruBias[i] = new float[3*out_size];
-        
+        gruBias[i] = new float[3 * out_size];
+
     auto layerBias = weights.getArray()->getUnchecked (2);
     for (int i = 0; i < layerBias.getArray()->size(); ++i)
     {

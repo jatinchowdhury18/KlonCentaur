@@ -1,9 +1,8 @@
 #include "OutputStageProcessor.h"
-#include "BilinearTools.h"
 
 void OutputStageProc::reset (float sampleRate)
 {
-    IIRFilterN::reset();
+    chowdsp::IIRFilter<1>::reset();
     fs = (float) sampleRate;
 
     levelSmooth.setCurrentAndTargetValue (levelSmooth.getTargetValue());
@@ -27,7 +26,7 @@ void OutputStageProc::calcCoefs (float curLevel)
 
     // bilinear transform
     const auto K = 2.0f * fs;
-    Bilinear::BilinearTransform<float, 2>::call (b, a, bs, as, K);
+    chowdsp::Bilinear::BilinearTransform<float, 2>::call (b, a, bs, as, K);
 }
 
 void OutputStageProc::processBlock (float* block, const int numSamples) noexcept
@@ -42,6 +41,6 @@ void OutputStageProc::processBlock (float* block, const int numSamples) noexcept
     }
     else
     {
-        IIRFilterN::processBlock (block, numSamples);
+        chowdsp::IIRFilter<1>::processBlock (block, numSamples);
     }
 }

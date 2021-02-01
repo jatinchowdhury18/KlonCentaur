@@ -1,16 +1,17 @@
 #ifndef ACTIVATION_H_INCLUDED
 #define ACTIVATION_H_INCLUDED
 
+#include <cmath>
 #include "Layer.h"
 
-template<typename T>
+template <typename T>
 class Activation : public Layer<T>
 {
 public:
-    Activation (size_t size, std::function<T(T)> func) :
-        Layer<T> (size, size),
-        func (func)
-    {}
+    Activation (size_t size, std::function<T (T)> func) : Layer<T> (size, size),
+                                                          func (func)
+    {
+    }
 
     virtual ~Activation() {}
 
@@ -23,17 +24,16 @@ public:
     }
 
 private:
-    const std::function<T(T)> func;
+    const std::function<T (T)> func;
 };
 
 #ifdef USE_EIGEN
 #include <Eigen>
-template<typename T>
+template <typename T>
 class TanhActivation : public Activation<T>
 {
 public:
-    TanhActivation (size_t size) :
-        Activation<T> (size, {})
+    TanhActivation (size_t size) : Activation<T> (size, {})
     {
         vector.resize (size, 1);
     }
@@ -48,13 +48,13 @@ public:
     Eigen::Matrix<T, Eigen::Dynamic, 1> vector;
 };
 #else
-template<typename T>
+template <typename T>
 class TanhActivation : public Activation<T>
 {
 public:
-    TanhActivation (size_t size) :
-        Activation<T> (size, [] (float x) { return std::tanh (x); })
-    {}
+    TanhActivation (size_t size) : Activation<T> (size, [] (float x) { return std::tanh (x); })
+    {
+    }
 };
 #endif
 

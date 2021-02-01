@@ -1,8 +1,7 @@
 #ifndef OUTPUTSTAGEWDF_H_INCLUDED
 #define OUTPUTSTAGEWDF_H_INCLUDED
 
-#include "wdf.h"
-#include <memory>
+#include "SharedJuceHeader.h"
 
 class OutputStageWDF
 {
@@ -11,12 +10,12 @@ public:
 
     void reset (double sampleRate)
     {
-        C15 = std::make_unique<WaveDigitalFilter::Capacitor> (4.7e-6, sampleRate);
-        
-        P1 = std::make_unique<WaveDigitalFilter::WDFParallel> (&R28, &RVBot);
-        S1 = std::make_unique<WaveDigitalFilter::WDFSeries> (P1.get(), &R25AndVTop);
-        S2 = std::make_unique<WaveDigitalFilter::WDFSeries> (S1.get(), C15.get());
-        I1 = std::make_unique<WaveDigitalFilter::PolarityInverter> (S2.get());
+        C15 = std::make_unique<chowdsp::WDF::Capacitor> (4.7e-6, sampleRate);
+
+        P1 = std::make_unique<chowdsp::WDF::WDFParallel> (&R28, &RVBot);
+        S1 = std::make_unique<chowdsp::WDF::WDFSeries> (P1.get(), &R25AndVTop);
+        S2 = std::make_unique<chowdsp::WDF::WDFSeries> (S1.get(), C15.get());
+        I1 = std::make_unique<chowdsp::WDF::PolarityInverter> (S2.get());
         Vin.connectToNode (I1.get());
     }
 
@@ -38,16 +37,16 @@ public:
     }
 
 private:
-    WaveDigitalFilter::IdealVoltageSource Vin;
-    std::unique_ptr<WaveDigitalFilter::Capacitor> C15;
-    WaveDigitalFilter::Resistor R25AndVTop { 560 };
-    WaveDigitalFilter::Resistor RVBot { 50000.0 };
-    WaveDigitalFilter::Resistor R28 { 100e3 };
+    chowdsp::WDF::IdealVoltageSource Vin;
+    std::unique_ptr<chowdsp::WDF::Capacitor> C15;
+    chowdsp::WDF::Resistor R25AndVTop { 560 };
+    chowdsp::WDF::Resistor RVBot { 50000.0 };
+    chowdsp::WDF::Resistor R28 { 100e3 };
 
-    std::unique_ptr<WaveDigitalFilter::PolarityInverter> I1;
-    std::unique_ptr<WaveDigitalFilter::WDFSeries> S1;
-    std::unique_ptr<WaveDigitalFilter::WDFSeries> S2;
-    std::unique_ptr<WaveDigitalFilter::WDFParallel> P1;
+    std::unique_ptr<chowdsp::WDF::PolarityInverter> I1;
+    std::unique_ptr<chowdsp::WDF::WDFSeries> S1;
+    std::unique_ptr<chowdsp::WDF::WDFSeries> S2;
+    std::unique_ptr<chowdsp::WDF::WDFParallel> P1;
 };
 
 #endif // OUTPUTSTAGEWDF_H_INCLUDED

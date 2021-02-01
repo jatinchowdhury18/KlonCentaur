@@ -22,6 +22,7 @@ rm -Rf bin/*Win32*
 sed -i -e "14s/#//" CMakeLists.txt
 sed -i -e "15s/#//" CMakeLists.txt
 sed -i -e '5s/#//' ChowCentaur/CMakeLists.txt
+sed -i -e '42s/#//' ChowCentaur/CMakeLists.txt
 
 # cmake new builds
 build64 &
