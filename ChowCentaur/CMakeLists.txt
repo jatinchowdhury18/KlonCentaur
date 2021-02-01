@@ -4,6 +4,7 @@ juce_add_plugin(ChowCentaur
     PLUGIN_CODE Ctr1
     FORMATS AU VST3 Standalone AUv3 # VST
     ProductName "ChowCentaur"
+    ICON_BIG res/logo.png
 )
 
 add_dependencies(SharedCode ChowCentaur)
