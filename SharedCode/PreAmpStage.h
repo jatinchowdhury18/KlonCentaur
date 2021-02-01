@@ -1,8 +1,8 @@
 #ifndef PREAMPSTAGE_H_INCLUDED
 #define PREAMPSTAGE_H_INCLUDED
 
-#include "wdf.h"
 #include <memory>
+#include <wdf.h>
 
 namespace GainStageSpace
 {
@@ -31,24 +31,24 @@ public:
     }
 
 private:
-    WaveDigitalFilter::IdealVoltageSource Vin;
-    std::unique_ptr<WaveDigitalFilter::Capacitor> C3;
-    std::unique_ptr<WaveDigitalFilter::Capacitor> C5;
-    WaveDigitalFilter::Resistor R6 { 10000.0 };
-    WaveDigitalFilter::ResistiveVoltageSource Vbias;
+    chowdsp::WDF::IdealVoltageSource Vin;
+    std::unique_ptr<chowdsp::WDF::Capacitor> C3;
+    std::unique_ptr<chowdsp::WDF::Capacitor> C5;
+    chowdsp::WDF::Resistor R6 { 10000.0 };
+    chowdsp::WDF::ResistiveVoltageSource Vbias;
 
-    WaveDigitalFilter::Resistor R7 { 1500.0 };
-    std::unique_ptr<WaveDigitalFilter::Capacitor> C16;
-    WaveDigitalFilter::ResistiveVoltageSource Vbias2 { 15000.0 };
+    chowdsp::WDF::Resistor R7 { 1500.0 };
+    std::unique_ptr<chowdsp::WDF::Capacitor> C16;
+    chowdsp::WDF::ResistiveVoltageSource Vbias2 { 15000.0 };
 
-    std::unique_ptr<WaveDigitalFilter::PolarityInverter> I1;
-    std::unique_ptr<WaveDigitalFilter::WDFSeries> S1;
-    std::unique_ptr<WaveDigitalFilter::WDFSeries> S2;
-    std::unique_ptr<WaveDigitalFilter::WDFSeries> S3;
-    std::unique_ptr<WaveDigitalFilter::WDFSeries> S4;
-    std::unique_ptr<WaveDigitalFilter::WDFParallel> P1;
-    std::unique_ptr<WaveDigitalFilter::WDFParallel> P2;
-    std::unique_ptr<WaveDigitalFilter::WDFParallel> P3;
+    std::unique_ptr<chowdsp::WDF::PolarityInverter> I1;
+    std::unique_ptr<chowdsp::WDF::WDFSeries> S1;
+    std::unique_ptr<chowdsp::WDF::WDFSeries> S2;
+    std::unique_ptr<chowdsp::WDF::WDFSeries> S3;
+    std::unique_ptr<chowdsp::WDF::WDFSeries> S4;
+    std::unique_ptr<chowdsp::WDF::WDFParallel> P1;
+    std::unique_ptr<chowdsp::WDF::WDFParallel> P2;
+    std::unique_ptr<chowdsp::WDF::WDFParallel> P3;
 };
 }
 
