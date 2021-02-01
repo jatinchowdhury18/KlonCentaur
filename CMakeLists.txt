@@ -9,7 +9,8 @@ include_directories(modules/WaveDigitalFilters/shared)
 include_directories(modules/Eigen)
 
 # comment to use STL implementation instead of Eigen
-add_definitions(-DUSE_EIGEN)
+# @TODO: disable Eigen for iOS builds
+# add_definitions(-DUSE_EIGEN)
 
 # juce_set_vst2_sdk_path(C:/SDKs/VST_SDK/VST2_SDK/)
 # include_directories(C:/SDKs/asiosdk2.3/common)

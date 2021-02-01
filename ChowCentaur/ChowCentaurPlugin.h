@@ -22,7 +22,8 @@ public:
     void releaseResources() override;
     void processBlock (AudioBuffer<float>& buffer) override;
 
-    AudioProcessorEditor* createEditor();
+    AudioProcessorEditor* createEditor() override;
+    void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
     std::atomic<float>* trebleParam = nullptr;
