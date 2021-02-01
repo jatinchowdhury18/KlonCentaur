@@ -99,7 +99,7 @@ void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
 
         buffer.applyGainRamp (0, numSamples, 0.0f, 1.0f);
         for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
-            buffer.addFromWithRamp (ch, 0, fadeBuffer.getReadPointer (ch), numSamples, 1.0f, 0.0f);
+                buffer.addFromWithRamp (ch, 0, fadeBuffer.getReadPointer (ch), numSamples, 1.0f, 0.0f);
 
         useMLPrev = useML;
     }
