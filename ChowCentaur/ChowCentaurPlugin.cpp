@@ -1,7 +1,4 @@
 #include "ChowCentaurPlugin.h"
-#include "gui/InfoComp.h"
-#include "gui/TitleComp.h"
-#include "gui/TooltipComp.h"
 
 namespace
 {
@@ -62,7 +59,7 @@ void ChowCentaur::releaseResources()
 {
 }
 
-void ChowCentaur::processBlock (AudioBuffer<float>& buffer)
+void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
 {
     ScopedNoDenormals noDenormals;
 
@@ -102,7 +99,7 @@ void ChowCentaur::processBlock (AudioBuffer<float>& buffer)
 
         buffer.applyGainRamp (0, numSamples, 0.0f, 1.0f);
         for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
-            buffer.addFromWithRamp (ch, 0, fadeBuffer.getReadPointer (ch), numSamples, 1.0f, 0.0f);
+                buffer.addFromWithRamp (ch, 0, fadeBuffer.getReadPointer (ch), numSamples, 1.0f, 0.0f);
 
         useMLPrev = useML;
     }
@@ -132,15 +129,7 @@ void ChowCentaur::processBlock (AudioBuffer<float>& buffer)
 
 AudioProcessorEditor* ChowCentaur::createEditor()
 {
-    auto builder = std::make_unique<foleys::MagicGUIBuilder> (magicState);
-    builder->registerJUCEFactories();
-    builder->registerJUCELookAndFeels();
-
-    builder->registerLookAndFeel ("MyLNF", std::make_unique<MyLNF>());
-    builder->registerFactory ("TooltipComp", &TooltipItem::factory);
-    builder->registerFactory ("InfoComp", &InfoItem::factory);
-    builder->registerFactory ("TitleComp", &TitleItem::factory);
-
+    auto builder = chowdsp::createGUIBuilder (magicState);
     return new foleys::MagicPluginEditor (magicState, BinaryData::gui_xml, BinaryData::gui_xmlSize, std::move (builder));
 }
 

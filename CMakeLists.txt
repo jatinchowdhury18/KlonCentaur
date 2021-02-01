@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(modules)
 include_directories(modules/JUCE/modules)
 include_directories(modules/foleys_gui_magic)
-include_directories(modules/WaveDigitalFilters/shared)
+include_directories(modules/chowdsp_utils/DSP/WDF)
 include_directories(modules/Eigen)
 
 # comment to use STL implementation instead of Eigen
