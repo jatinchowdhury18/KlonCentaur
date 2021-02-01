@@ -16,8 +16,8 @@ void GainStageMLProc::loadModel (ModelPtr model[2], const char* data, int size)
     MemoryInputStream jsonInputStream (data, size, false);
     auto jsonInput = nlohmann::json::parse (jsonInputStream.readEntireStreamAsString().toStdString());
 
-    model[0] = RTNeural::json_parser::parseJson<float>(jsonInput);
-    model[1] = RTNeural::json_parser::parseJson<float>(jsonInput);
+    model[0] = RTNeural::json_parser::parseJson<float> (jsonInput);
+    model[1] = RTNeural::json_parser::parseJson<float> (jsonInput);
 
     jassert (model[0].get() != nullptr);
     jassert (model[1].get() != nullptr);
