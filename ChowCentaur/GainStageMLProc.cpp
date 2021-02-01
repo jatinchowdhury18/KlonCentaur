@@ -29,8 +29,18 @@ void GainStageMLProc::reset (double sampleRate, int samplesPerBlock)
     ignoreUnused (sampleRate);
 
     for (int i = 0; i < numModels; ++i)
+    {
         for (int ch = 0; ch < 2; ++ch)
+        {
             gainStageML[i][ch]->reset();
+
+            for (int k = 0; k < 2048; ++k)
+            {
+                float x[] = { 0.0f };
+                gainStageML[i][ch]->forward ({ x });
+            }
+        }
+    }
 
     fadeBuffer.setSize (2, samplesPerBlock);
 
