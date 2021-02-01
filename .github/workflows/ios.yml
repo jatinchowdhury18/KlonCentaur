@@ -61,7 +61,7 @@ jobs:
 
     - name: Build
       shell: bash
-      run: cmake --build build-ios --target ChowCentaur_AUv3 --config Release --parallel 4 -- -sdk iphoneos14.2 -allowProvisioningUpdates | xcpretty
+      run: cmake --build build-ios --target ChowCentaur_AUv3 --config Release --parallel 4 -- -sdk iphoneos -allowProvisioningUpdates | xcpretty
 
     # - name: Setup debug session
     #   uses: mxschmitt/action-tmate@v3
