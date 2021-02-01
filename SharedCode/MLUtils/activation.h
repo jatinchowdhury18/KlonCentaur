@@ -1,8 +1,8 @@
 #ifndef ACTIVATION_H_INCLUDED
 #define ACTIVATION_H_INCLUDED
 
-#include <cmath>
 #include "Layer.h"
+#include <cmath>
 
 template <typename T>
 class Activation : public Layer<T>
