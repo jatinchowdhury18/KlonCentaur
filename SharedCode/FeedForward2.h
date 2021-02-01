@@ -1,8 +1,7 @@
 #ifndef FEEDFORWARD2_H_INCLUDED
 #define FEEDFORWARD2_H_INCLUDED
 
-#include "wdf.h"
-#include <memory>
+#include "SharedJuceHeader.h"
 
 namespace GainStageSpace
 {
@@ -26,40 +25,40 @@ public:
     }
 
 private:
-    WaveDigitalFilter::IdealVoltageSource Vin;
-    WaveDigitalFilter::ResistiveVoltageSource Vbias;
+    chowdsp::WDF::IdealVoltageSource Vin;
+    chowdsp::WDF::ResistiveVoltageSource Vbias;
 
-    WaveDigitalFilter::Resistor R5 { 5100.0 };
-    WaveDigitalFilter::Resistor R8 { 1500.0 };
-    WaveDigitalFilter::Resistor R9 { 1000.0 };
-    WaveDigitalFilter::Resistor RVTop { 50000.0 };
-    WaveDigitalFilter::Resistor RVBot { 50000.0 };
-    WaveDigitalFilter::Resistor R15 { 22000.0 };
-    WaveDigitalFilter::Resistor R16 { 47000.0 };
-    WaveDigitalFilter::Resistor R17 { 27000.0 };
-    WaveDigitalFilter::Resistor R18 { 12000.0 };
+    chowdsp::WDF::Resistor R5 { 5100.0 };
+    chowdsp::WDF::Resistor R8 { 1500.0 };
+    chowdsp::WDF::Resistor R9 { 1000.0 };
+    chowdsp::WDF::Resistor RVTop { 50000.0 };
+    chowdsp::WDF::Resistor RVBot { 50000.0 };
+    chowdsp::WDF::Resistor R15 { 22000.0 };
+    chowdsp::WDF::Resistor R16 { 47000.0 };
+    chowdsp::WDF::Resistor R17 { 27000.0 };
+    chowdsp::WDF::Resistor R18 { 12000.0 };
 
-    std::unique_ptr<WaveDigitalFilter::Capacitor> C4;
-    std::unique_ptr<WaveDigitalFilter::Capacitor> C6;
-    std::unique_ptr<WaveDigitalFilter::Capacitor> C11;
-    std::unique_ptr<WaveDigitalFilter::Capacitor> C12;
+    std::unique_ptr<chowdsp::WDF::Capacitor> C4;
+    std::unique_ptr<chowdsp::WDF::Capacitor> C6;
+    std::unique_ptr<chowdsp::WDF::Capacitor> C11;
+    std::unique_ptr<chowdsp::WDF::Capacitor> C12;
 
-    std::unique_ptr<WaveDigitalFilter::WDFSeries> S1;
-    std::unique_ptr<WaveDigitalFilter::WDFSeries> S2;
-    std::unique_ptr<WaveDigitalFilter::WDFSeries> S3;
-    std::unique_ptr<WaveDigitalFilter::WDFSeries> S4;
-    std::unique_ptr<WaveDigitalFilter::WDFSeries> S5;
-    std::unique_ptr<WaveDigitalFilter::WDFSeries> S6;
-    std::unique_ptr<WaveDigitalFilter::WDFSeries> S7;
-    
-    std::unique_ptr<WaveDigitalFilter::PolarityInverter> I1;
-    std::unique_ptr<WaveDigitalFilter::WDFParallel> P1;
-    std::unique_ptr<WaveDigitalFilter::WDFParallel> P2;
-    std::unique_ptr<WaveDigitalFilter::WDFParallel> P3;
-    std::unique_ptr<WaveDigitalFilter::WDFParallel> P4;
-    std::unique_ptr<WaveDigitalFilter::WDFParallel> P5;
-    std::unique_ptr<WaveDigitalFilter::WDFParallel> P6;
+    std::unique_ptr<chowdsp::WDF::WDFSeries> S1;
+    std::unique_ptr<chowdsp::WDF::WDFSeries> S2;
+    std::unique_ptr<chowdsp::WDF::WDFSeries> S3;
+    std::unique_ptr<chowdsp::WDF::WDFSeries> S4;
+    std::unique_ptr<chowdsp::WDF::WDFSeries> S5;
+    std::unique_ptr<chowdsp::WDF::WDFSeries> S6;
+    std::unique_ptr<chowdsp::WDF::WDFSeries> S7;
+
+    std::unique_ptr<chowdsp::WDF::PolarityInverter> I1;
+    std::unique_ptr<chowdsp::WDF::WDFParallel> P1;
+    std::unique_ptr<chowdsp::WDF::WDFParallel> P2;
+    std::unique_ptr<chowdsp::WDF::WDFParallel> P3;
+    std::unique_ptr<chowdsp::WDF::WDFParallel> P4;
+    std::unique_ptr<chowdsp::WDF::WDFParallel> P5;
+    std::unique_ptr<chowdsp::WDF::WDFParallel> P6;
 };
-}
+} // namespace GainStageSpace
 
 #endif // FEEDFORWARD2_H_INCLUDED

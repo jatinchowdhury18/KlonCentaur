@@ -50,7 +50,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
       with:
-        submodules: true
+        submodules: recursive
 
     # - name: Setup debug session
     #   uses: mxschmitt/action-tmate@v3

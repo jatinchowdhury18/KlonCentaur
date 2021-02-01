@@ -1,11 +1,11 @@
 #ifndef GAINSTAGEPROC_H_INCLUDED
 #define GAINSTAGEPROC_H_INCLUDED
 
-#include "JuceHeader.h"
-#include "PreAmpStage.h"
 #include "AmpStage.h"
 #include "ClippingStage.h"
 #include "FeedForward2.h"
+#include "JuceHeader.h"
+#include "PreAmpStage.h"
 #include "SummingAmp.h"
 
 class GainStageProc
@@ -15,7 +15,7 @@ public:
 
     void reset (double sampleRate, int samplesPerBlock);
     void processBlock (AudioBuffer<float>& buffer);
-    
+
 private:
     std::atomic<float>* gainParam = nullptr;
 

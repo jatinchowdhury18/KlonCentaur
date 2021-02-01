@@ -3,9 +3,6 @@ add_library(SharedCode STATIC)
 # juce_generate_juce_header(SharedCode)
 
 target_sources(SharedCode PRIVATE
-    PluginBase.h
-    IIRFilter.h
-    BilinearTools.h
     InputBufferProcessor.h
     InputBufferProcessor.cpp
     PreAmpStage.h
@@ -19,8 +16,6 @@ target_sources(SharedCode PRIVATE
     ToneFilterProcessor.cpp
     OutputStageProcessor.h
     OutputStageProcessor.cpp
-    Json2RnnParser.h
-    Json2RnnParser.cpp
 )
 
 target_compile_definitions(SharedCode PUBLIC
@@ -28,13 +23,15 @@ target_compile_definitions(SharedCode PUBLIC
     JUCE_REPORT_APP_USAGE=0
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
+    JucePlugin_Manufacturer="chowdsp"
+    JucePlugin_VersionString="${CMAKE_PROJECT_VERSION}"
+    JucePlugin_Name="${CMAKE_PROJECT_NAME}"
 )
-
-add_subdirectory(MLUtils)
 
 target_link_libraries(SharedCode PRIVATE
     juce::juce_audio_utils
-    MLUtils
+    chowdsp_utils
+    RTNeural
 )
 
 # Need to build with -fPIC flag on Linux
