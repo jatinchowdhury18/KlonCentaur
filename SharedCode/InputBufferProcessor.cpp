@@ -1,9 +1,8 @@
 #include "InputBufferProcessor.h"
-#include "BilinearTools.h"
 
 void InputBufferProcessor::reset (float sampleRate)
 {
-    IIRFilterN::reset();
+    chowdsp::IIRFilter<1>::reset();
     fs = sampleRate;
 
     calcCoefs();
@@ -24,11 +23,11 @@ void InputBufferProcessor::calcCoefs()
 
     // bilinear transform
     const auto K = 2.0f * fs;
-    Bilinear::BilinearTransform<float, 2>::call (b, a, bs, as, K);
+    chowdsp::Bilinear::BilinearTransform<float, 2>::call (b, a, bs, as, K);
 }
 
 void InputBufferProcessor::processBlock (float* buffer, const int numSamples) noexcept
 {
-    IIRFilterN::processBlock (buffer, numSamples);
+    chowdsp::IIRFilter<1>::processBlock (buffer, numSamples);
     // FloatVectorOperations::add (buffer, 4.5, numSamples); // bias
 }
