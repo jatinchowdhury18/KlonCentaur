@@ -12,17 +12,6 @@ on:
     - 'Teensy*/**'
     - '*.sh'
     - '*.md'
-  pull_request:
-    branches:
-    - master
-    - develop
-    paths-ignore:
-    - 'bin/**'
-    - 'Paper/**'
-    - 'Slider/**'
-    - 'Teensy*/**'
-    - '*.sh'
-    - '*.md'
 
   workflow_dispatch:
 
