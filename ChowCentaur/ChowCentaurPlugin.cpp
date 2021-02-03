@@ -56,6 +56,8 @@ void ChowCentaur::prepareToPlay (double sampleRate, int samplesPerBlock)
     *dcBlocker.state = *dsp::IIR::Coefficients<float>::makeHighPass (sampleRate, 35.0f);
     dsp::ProcessSpec spec { sampleRate, static_cast<uint32> (samplesPerBlock), 2 };
     dcBlocker.prepare (spec);
+
+    bypass.prepare (samplesPerBlock, ! bypass.toBool (bypassParam));
 }
 
 void ChowCentaur::releaseResources()
@@ -65,6 +67,18 @@ void ChowCentaur::releaseResources()
 void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
 {
     ScopedNoDenormals noDenormals;
+
+    if (! bypass.processBlockIn (buffer, ! bypass.toBool (bypassParam)))
+    {
+        // DC Blocker
+        dsp::AudioBlock<float> block (buffer);
+        dsp::ProcessContextReplacing<float> context (block);
+        dcBlocker.process (context);
+    
+        scope->pushSamples (buffer);
+
+        return;
+    }
 
     auto numSamples = buffer.getNumSamples();
     for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
@@ -121,6 +135,8 @@ void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
         outProc[ch].setLevel (*levelParam);
         outProc[ch].processBlock (x, numSamples);
     }
+
+    bypass.processBlockOut (buffer, ! bypass.toBool (bypassParam));
 
     // DC Blocker
     dsp::AudioBlock<float> block (buffer);

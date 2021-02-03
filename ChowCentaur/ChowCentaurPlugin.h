@@ -5,6 +5,7 @@
 #include "ToneFilterProcessor.h"
 #include <JuceHeader.h>
 
+#include "BypassProcessor.h"
 #include "GainStageMLProc.h"
 #include "GainStageProc.h"
 
@@ -28,6 +29,7 @@ private:
     std::atomic<float>* mlParam = nullptr;
     std::atomic<float>* bypassParam = nullptr;
 
+    BypassProcessor bypass;
     InputBufferProcessor inProc[2];
     ToneFilterProcessor tone[2];
     OutputStageProc outProc[2];
