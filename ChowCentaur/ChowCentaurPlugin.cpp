@@ -74,7 +74,7 @@ void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
         dsp::AudioBlock<float> block (buffer);
         dsp::ProcessContextReplacing<float> context (block);
         dcBlocker.process (context);
-    
+
         scope->pushSamples (buffer);
 
         return;
