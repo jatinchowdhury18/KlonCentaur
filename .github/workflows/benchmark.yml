@@ -1,0 +1,61 @@
+name: Bench
+
+on:
+  push:
+    branches:
+    - master
+    - develop
+    paths-ignore:
+    - 'bin/**'
+    - 'Paper/**'
+    - 'Slider/**'
+    - 'Teensy*/**'
+    - '*.sh'
+    - '*.md'
+  pull_request:
+    branches:
+    - master
+    - develop
+    paths-ignore:
+    - 'bin/**'
+    - 'Paper/**'
+    - 'Slider/**'
+    - 'Teensy*/**'
+    - '*.sh'
+    - '*.md'
+
+  workflow_dispatch:
+
+jobs:
+  build_and_test:
+    if: contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false
+    name: Run ChowCentaur benchmarks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Install Linux Deps
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt install libasound2-dev libcurl4-openssl-dev libx11-dev libxinerama-dev libxext-dev libfreetype6-dev libwebkit2gtk-4.0-dev libglu1-mesa-dev
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9
+        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
+    - name: Get latest CMake
+      uses: lukka/get-cmake@latest
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Configure
+      shell: bash
+      run: cmake -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_CENTAUR_BENCH=ON
+
+    - name: Build
+      shell: bash
+      run: cmake --build build --target CentaurBench --config Release --parallel
+
+    - name: Run
+      shell: bash
+      run: ./build/CentaurBenchExe 30
