@@ -1,4 +1,5 @@
 #include "ChowCentaurPlugin.h"
+#include "ComboBoxLNF.h"
 
 namespace
 {
@@ -129,6 +130,7 @@ void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
 AudioProcessorEditor* ChowCentaur::createEditor()
 {
     auto builder = chowdsp::createGUIBuilder (magicState);
+    builder->registerLookAndFeel ("ComboBoxLNF", std::make_unique<ComboBoxLNF>());
     return new foleys::MagicPluginEditor (magicState, BinaryData::gui_xml, BinaryData::gui_xmlSize, std::move (builder));
 }
 
