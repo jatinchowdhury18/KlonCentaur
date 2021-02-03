@@ -1,5 +1,5 @@
 #include "ChowCentaurPlugin.h"
-#include "ComboBoxLNF.h"
+#include "CustomLNFs.h"
 
 namespace
 {
@@ -7,6 +7,7 @@ const String gainTag = "gain";
 const String trebleTag = "treble";
 const String levelTag = "level";
 const String neuralTag = "neural";
+const String bypassTag = "bypass";
 } // namespace
 
 ChowCentaur::ChowCentaur() : gainStageProc (vts),
@@ -15,6 +16,7 @@ ChowCentaur::ChowCentaur() : gainStageProc (vts),
     trebleParam = vts.getRawParameterValue (trebleTag);
     levelParam = vts.getRawParameterValue (levelTag);
     mlParam = vts.getRawParameterValue (neuralTag);
+    bypassParam = vts.getRawParameterValue (bypassTag);
 
     LookAndFeel::setDefaultLookAndFeel (&myLNF);
     scope = magicState.createAndAddObject<foleys::MagicOscilloscope> ("scope");
@@ -30,6 +32,7 @@ void ChowCentaur::addParameters (Parameters& params)
     params.push_back (std::make_unique<AudioParameterFloat> (trebleTag, "Treble", 0.0f, 1.0f, 0.5f));
     params.push_back (std::make_unique<AudioParameterFloat> (levelTag, "Level", 0.0f, 1.0f, 0.5f));
     params.push_back (std::make_unique<AudioParameterChoice> (neuralTag, "Mode", StringArray { "Traditional", "Neural" }, 0));
+    params.push_back (std::make_unique<AudioParameterBool> (bypassTag, "Bypass", false));
 }
 
 void ChowCentaur::prepareToPlay (double sampleRate, int samplesPerBlock)
@@ -53,6 +56,8 @@ void ChowCentaur::prepareToPlay (double sampleRate, int samplesPerBlock)
     *dcBlocker.state = *dsp::IIR::Coefficients<float>::makeHighPass (sampleRate, 35.0f);
     dsp::ProcessSpec spec { sampleRate, static_cast<uint32> (samplesPerBlock), 2 };
     dcBlocker.prepare (spec);
+
+    bypass.prepare (samplesPerBlock, ! bypass.toBool (bypassParam));
 }
 
 void ChowCentaur::releaseResources()
@@ -62,6 +67,18 @@ void ChowCentaur::releaseResources()
 void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
 {
     ScopedNoDenormals noDenormals;
+
+    if (! bypass.processBlockIn (buffer, ! bypass.toBool (bypassParam)))
+    {
+        // DC Blocker
+        dsp::AudioBlock<float> block (buffer);
+        dsp::ProcessContextReplacing<float> context (block);
+        dcBlocker.process (context);
+    
+        scope->pushSamples (buffer);
+
+        return;
+    }
 
     auto numSamples = buffer.getNumSamples();
     for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
@@ -119,6 +136,8 @@ void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
         outProc[ch].processBlock (x, numSamples);
     }
 
+    bypass.processBlockOut (buffer, ! bypass.toBool (bypassParam));
+
     // DC Blocker
     dsp::AudioBlock<float> block (buffer);
     dsp::ProcessContextReplacing<float> context (block);
@@ -131,6 +150,8 @@ AudioProcessorEditor* ChowCentaur::createEditor()
 {
     auto builder = chowdsp::createGUIBuilder (magicState);
     builder->registerLookAndFeel ("ComboBoxLNF", std::make_unique<ComboBoxLNF>());
+    builder->registerLookAndFeel ("ButtonLNF", std::make_unique<ButtonLNF>());
+
     return new foleys::MagicPluginEditor (magicState, BinaryData::gui_xml, BinaryData::gui_xmlSize, std::move (builder));
 }
 
