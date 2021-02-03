@@ -46,6 +46,7 @@ target_compile_definitions(ChowCentaur PUBLIC
 
 target_link_libraries(ChowCentaur PRIVATE
     juce::juce_audio_utils
+    juce::juce_audio_plugin_client
     foleys_gui_magic
     chowdsp_utils
     BinaryData

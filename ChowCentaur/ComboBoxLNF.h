@@ -17,8 +17,11 @@ public:
     Component* getParentComponentForMenuOptions (const PopupMenu::Options& options) override
     {
 #if JUCE_IOS
-        if (options.getParentComponent() == nullptr && options.getTargetComponent() != nullptr)
-            return options.getTargetComponent()->getTopLevelComponent();
+        if (PluginHostType::getPluginLoadedAs() == AudioProcessor::wrapperType_AudioUnitv3)
+        {
+            if (options.getParentComponent() == nullptr && options.getTargetComponent() != nullptr)
+                return options.getTargetComponent()->getTopLevelComponent();
+        }
 #endif
         return LookAndFeel_V2::getParentComponentForMenuOptions (options);
     }
