@@ -1,38 +1,49 @@
-#include "JuceHeader.h"
+#include <JuceHeader.h>
 #include <iostream>
+
+#include "ChowCentaurPlugin.h"
 
 namespace 
 {
     constexpr double pluginSampleRate = 44100.0;
-    constexpr int blockSizes[] = {8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096};
+    constexpr int blockSizes[] = {64, 128, 256, 512, 1024};
     constexpr int numChannels = 2;
 }
 
-std::unique_ptr<AudioPluginInstance> getPlugin (String file);
 void createRandomAudioInput (AudioBuffer<float>& buffer, double lengthSeconds);
-double timeAudioProcess (AudioPluginInstance* plugin, AudioBuffer<float>& audio, const int blockSize);
+double timeAudioProcess (AudioProcessor* plugin, AudioBuffer<float>& audio, const int blockSize);
 
 int main (int argc, char* argv[])
 {
-    ignoreUnused (argc, argv);
+    if (argc > 1 && std::string (argv[1]) == "--help")
+    {
+        std::cout << "ChowCentaur Benchmarks:" << std::endl;
+        std::cout << "Usage: CentaurBench <mode> <seconds>" << std::endl;
+        return 1;
+    }
 
     ScopedJuceInitialiser_GUI scopedJuce;
-
     std::cout << "Loading plugin..." << std::endl;
-
-    // load plugin...
-    // File pluginFile ("~/Developer/KlonCentaur/build/ChowCentaur/ChowCentaur_artefacts/VST3/ChowCentaur.vst3");
-    File pluginFile ("D:/Documents/CCRMA/Research/Klon_Centaur/build/ChowCentaur/ChowCentaur_artefacts/Release/VST3/ChowCentaur.vst3");
-    auto plugin = getPlugin (pluginFile.getFullPathName());
+    auto plugin = std::make_unique<ChowCentaur>();
 
     if (plugin.get() == nullptr)
     {
+        std::cout << "Unable to load plugin! Exiting..." << std::endl;
         return 1;
     }
 
     AudioBuffer<float> audio;
     auto neuralParam = plugin->getParameters()[3];
-    constexpr double audioLength = 100.0; // seconds
+
+    double audioLength = 100.0; // seconds
+    if (argc > 1)
+    {
+        double tryAudioLength = std::atof(argv[1]);
+        
+        if (tryAudioLength > 0.0 && tryAudioLength < 1000.0)
+            audioLength = tryAudioLength;
+    }
+    std::cout << "Using audio length " << audioLength << " seconds" << std::endl;
     
     for (auto blockSize : blockSizes)
     {
@@ -62,35 +73,6 @@ int main (int argc, char* argv[])
     return 0;
 }
 
-std::unique_ptr<AudioPluginInstance> getPlugin (String file)
-{
-    AudioPluginFormatManager pluginManager;
-    pluginManager.addDefaultFormats();
-
-    OwnedArray<PluginDescription> plugins;
-    KnownPluginList pluginList;
-
-    // attempt to load plugin from file
-    File pluginFile;
-    if (! File::isAbsolutePath (String(file)))
-        pluginFile = File (File::getCurrentWorkingDirectory().getFullPathName() + "/" + file);
-    else
-        pluginFile = File (file);
-    pluginList.scanAndAddDragAndDroppedFiles (pluginManager, StringArray (pluginFile.getFullPathName()), plugins);
-
-    if (plugins.isEmpty()) // check if loaded
-    {
-        std::cout << "Error: unable to load plugin" << std::endl;
-        return {};
-    }
-
-    // create plugin instance
-    String error ("Unable to load plugin");
-    auto plugin = pluginManager.createPluginInstance (*plugins.getFirst(), 44100.0, 256, error);
-
-    return std::move (plugin);
-}
-
 void createRandomAudioInput (AudioBuffer<float>& buffer, double lengthSeconds)
 {
     const int numSamples = int (lengthSeconds * pluginSampleRate);
@@ -107,7 +89,7 @@ void createRandomAudioInput (AudioBuffer<float>& buffer, double lengthSeconds)
     }
 }
 
-double timeAudioProcess (AudioPluginInstance* plugin, AudioBuffer<float>& audio, const int blockSize)
+double timeAudioProcess (AudioProcessor* plugin, AudioBuffer<float>& audio, const int blockSize)
 {
     Time time;
 

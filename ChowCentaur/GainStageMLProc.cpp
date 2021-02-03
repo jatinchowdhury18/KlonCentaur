@@ -33,10 +33,11 @@ void GainStageMLProc::reset (double sampleRate, int samplesPerBlock)
         {
             gainStageML[i][ch]->reset();
 
+            // pre-buffer to avoid "click" on initialisation
             for (int k = 0; k < 2048; ++k)
             {
                 float x[] = { 0.0f };
-                gainStageML[i][ch]->forward ({ x });
+                gainStageML[i][ch]->forward (x);
             }
         }
     }
