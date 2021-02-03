@@ -2,7 +2,7 @@ juce_add_plugin(ChowCentaur
     COMPANY_NAME chowdsp
     PLUGIN_MANUFACTURER_CODE Chow
     PLUGIN_CODE Ctr1
-    FORMATS AU VST3 Standalone AUv3 # VST
+    FORMATS AU VST3 Standalone LV2 AUv3 # VST
     ProductName "ChowCentaur"
     ICON_BIG res/logo.png
 )
