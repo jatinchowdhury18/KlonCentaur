@@ -1,5 +1,5 @@
 #include "ChowCentaurPlugin.h"
-#include "ComboBoxLNF.h"
+#include "CustomLNFs.h"
 
 namespace
 {
@@ -7,6 +7,7 @@ const String gainTag = "gain";
 const String trebleTag = "treble";
 const String levelTag = "level";
 const String neuralTag = "neural";
+const String bypassTag = "bypass";
 } // namespace
 
 ChowCentaur::ChowCentaur() : gainStageProc (vts),
@@ -15,6 +16,7 @@ ChowCentaur::ChowCentaur() : gainStageProc (vts),
     trebleParam = vts.getRawParameterValue (trebleTag);
     levelParam = vts.getRawParameterValue (levelTag);
     mlParam = vts.getRawParameterValue (neuralTag);
+    bypassParam = vts.getRawParameterValue (bypassTag);
 
     LookAndFeel::setDefaultLookAndFeel (&myLNF);
     scope = magicState.createAndAddObject<foleys::MagicOscilloscope> ("scope");
@@ -30,6 +32,7 @@ void ChowCentaur::addParameters (Parameters& params)
     params.push_back (std::make_unique<AudioParameterFloat> (trebleTag, "Treble", 0.0f, 1.0f, 0.5f));
     params.push_back (std::make_unique<AudioParameterFloat> (levelTag, "Level", 0.0f, 1.0f, 0.5f));
     params.push_back (std::make_unique<AudioParameterChoice> (neuralTag, "Mode", StringArray { "Traditional", "Neural" }, 0));
+    params.push_back (std::make_unique<AudioParameterBool> (bypassTag, "Bypass", false));
 }
 
 void ChowCentaur::prepareToPlay (double sampleRate, int samplesPerBlock)
@@ -131,6 +134,8 @@ AudioProcessorEditor* ChowCentaur::createEditor()
 {
     auto builder = chowdsp::createGUIBuilder (magicState);
     builder->registerLookAndFeel ("ComboBoxLNF", std::make_unique<ComboBoxLNF>());
+    builder->registerLookAndFeel ("ButtonLNF", std::make_unique<ButtonLNF>());
+
     return new foleys::MagicPluginEditor (magicState, BinaryData::gui_xml, BinaryData::gui_xmlSize, std::move (builder));
 }
 
