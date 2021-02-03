@@ -10,3 +10,6 @@
 [submodule "modules/RTNeural"]
 	path = modules/RTNeural
 	url = https://github.com/jatinchowdhury18/RTNeural
+[submodule "distrho-juce"]
+	path = modules/distrho-juce
+	url = https://github.com/Chowdhury-DSP/DISTRHO-JUCE
