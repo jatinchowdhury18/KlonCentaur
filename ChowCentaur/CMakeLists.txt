@@ -5,6 +5,7 @@ juce_add_plugin(ChowCentaur
     FORMATS AU VST3 Standalone LV2 AUv3 # VST
     ProductName "ChowCentaur"
     ICON_BIG res/logo.png
+    LV2_URI https://github.com/jatinchowdhury18/KlonCentaur
 )
 
 add_dependencies(SharedCode ChowCentaur)
