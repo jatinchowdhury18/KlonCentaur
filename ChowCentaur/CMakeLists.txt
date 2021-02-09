@@ -6,6 +6,7 @@ juce_add_plugin(ChowCentaur
     ProductName "ChowCentaur"
     ICON_BIG res/logo.png
     LV2_URI https://github.com/jatinchowdhury18/KlonCentaur
+    MICROPHONE_PERMISSION_ENABLED TRUE
 )
 
 add_dependencies(SharedCode ChowCentaur)
