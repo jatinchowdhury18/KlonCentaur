@@ -3,13 +3,13 @@
 ![CI](https://github.com/jatinchowdhury18/KlonCentaur/workflows/CI/badge.svg)
 ![CI-iOS](https://github.com/jatinchowdhury18/KlonCentaur/workflows/CI-iOS/badge.svg)
 
-This repository contains a digital model of the Klon Centaur 
-guitar pedal. The goal is to use this circuit as a test
-bench for comparing/combining nodal analysis, wave 
-digital filters, and neural network circuit modelling
-approaches. The model is implemented as an audio plugin 
-(Standalone/VST/AU), and as a guitar pedal-style effect
-embedded on a Teensy microcontroller.
+This repository contains a digital model of the Klon
+Centaur  guitar pedal. The model is constructed using
+a variety of circuit modelling techniques, including
+nodal analysis, wave digital filters, and recurrent
+neural networks. The model is implemented as an audio
+plugin  (Standalone/VST/AU/LV2), and as a guitar
+pedal-style effect embedded on a Teensy microcontroller.
 
 A full technical paper summarizing this project is available on the
 [ArXiv](https://arxiv.org/abs/2009.02833).
