@@ -47,7 +47,7 @@ echo "AUVAL code: $auval_code"
 if [ "$auval_code" != 0 ]; then
     echo "$auval_result"
     echo "auval FAIL!!!"
-    # exit 1
+    exit 1
 else
     echo "auval PASSED"
 fi
