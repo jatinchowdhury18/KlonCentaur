@@ -2,6 +2,10 @@
 
 ![CI](https://github.com/jatinchowdhury18/KlonCentaur/workflows/CI/badge.svg)
 ![CI-iOS](https://github.com/jatinchowdhury18/KlonCentaur/workflows/CI-iOS/badge.svg)
+[![License](https://img.shields.io/badge/License-BSD-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![Downloads](https://img.shields.io/github/downloads/jatinchowdhury18/KlonCentaur/total)](https://somsubhra.github.io/github-release-stats/?username=jatinchowdhury18&repository=KlonCentaur&page=1&per_page=30)
+[![arXiv](https://img.shields.io/badge/arXiv-2009.02833-b31b1b.svg)](https://arxiv.org/abs/2009.02833)
+
 
 This repository contains a digital model of the Klon
 Centaur  guitar pedal. The model is constructed using
@@ -10,14 +14,14 @@ nodal analysis, wave digital filters, and recurrent
 neural networks. The model is implemented as an audio
 plugin  (Standalone/VST/AU/LV2), and as a guitar
 pedal-style effect embedded on a Teensy microcontroller.
-
-A full technical paper summarizing this project is available on the
-[ArXiv](https://arxiv.org/abs/2009.02833).
-Original circuit schematic and analysis on
-[ElectroSmash](https://www.electrosmash.com/klon-centaur-analysis).
-
 This work began as part of a class project for
 [EE 292D](https://ee292d.github.io/) at Stanford University.
+
+### More Information:
+- This project was presented at the 2020 [Audio Developer Conference](https://youtu.be/FeS6wQJ6mYI).
+- A full technical paper summarizing this project is available on the
+[ArXiv](https://arxiv.org/abs/2009.02833).
+- A video demo is available on [YouTube](https://youtu.be/yo4JrceDQ2w).
 
 ## Audio Plugin
 
@@ -25,7 +29,6 @@ This work began as part of a class project for
 
 Plugin builds can be downloaded from the
 [releases page](https://github.com/jatinchowdhury18/KlonCentaur/releases).
-Check out the video demo on [YouTube](https://youtu.be/yo4JrceDQ2w).
 Linux users can find builds available on the
 [Open Build Service](https://build.opensuse.org/package/show/home:kill_it:JUCE/ChowCentaur),
 courtesy of Konstantin Voinov.
@@ -49,18 +52,15 @@ If you also want to build the sub-circuits and performance
 benchmarking app included in this repo, using the following
 as your first CMake command: `cmake -Bbuild -DBUILD_SUB_CIRCUITS=ON -DBUILD_CENTAUR_BENCH=ON`.
 
-The neural network inferencing engine used by the plugin has
-two implementations, one using the
-[`Eigen`](http://eigen.tuxfamily.org/) linear algebra library,
-and a second using only the C++ standard library (STL). The 
-`Eigen` implementation is enabled by default, but if you would 
-prefer to use the STL implementation, comment out the
-following line in `CMakeLists.txt`:
-
-```CMake
-# comment to use STL implementation instead of Eigen
-add_definitions(-DUSE_EIGEN)
-```
+ChowCentaur uses the
+[RTNeural](https://github.com/jatinchowdhury18/RTNeural) 
+neural network inferencing engine for running
+computing the output of a recurrent neural network
+in real-time. RTNeural has three available computational
+backends: `Eigen`, `xsimd`, and `STL`. By default,
+ChowCentaur uses the `xsimd` backend, but that can
+be changed using a different `CMake` configuration
+command, for example: `cmake -Bbuild -DRTNEURAL_EIGEN=ON`.
 
 
 ## Teensy Pedal
