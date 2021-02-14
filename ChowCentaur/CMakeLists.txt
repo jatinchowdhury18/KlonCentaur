@@ -54,3 +54,14 @@ target_link_libraries(ChowCentaur PRIVATE
     BinaryData
     SharedCode
 )
+
+if(IOS)
+    message(STATUS "Setting iOS-specific properties...")
+    set_target_properties(ChowCentaur PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "./")
+    set_target_properties(BinaryData PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "./")
+    set_target_properties(RTNeural PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "./")
+    set_target_properties(SharedCode PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "./")
+    set_target_properties(ChowCentaur_Standalone PROPERTIES
+        XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)"
+        XCODE_ATTRIBUTE_SKIP_INSTALL "NO")
+endif()
