@@ -1,6 +1,7 @@
-# CMake Build artifacts
+# Build artifacts
 build*/
 bin/*[!.zip]
+JuceLibraryCode/
 
 # Python artifacts
 __pycache__/
