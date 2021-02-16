@@ -29,17 +29,18 @@ xcodebuild -project build-ios/ChowCentaur.xcodeproj \
 fi
 
 if [ "$1" == "version" ]; then
-  echo "Setting version for archive"
-
   # set version number to include commit hash
-  PLIST=ChowCentaur.xcarchive/Info.plist
   COMMIT=$(git log --pretty=format:'%h' -n 1)
   VERSION=$(cut -f 2 -d '=' <<< "$(grep 'CMAKE_PROJECT_VERSION:STATIC' build-ios/CMakeCache.txt)")
   BUILD_NUMBER="$VERSION-$COMMIT"
+  echo "Setting version for archive: $BUILD_NUMBER"
+
+  PLIST=ChowCentaur.xcarchive/Info.plist
   /usr/libexec/Plistbuddy -c "Set ApplicationProperties:CFBundleVersion $BUILD_NUMBER" "$PLIST"
 
   # move to archives folder so Xcode can find it
   archive_dir="$HOME/Library/Developer/Xcode/Archives/$(date '+%Y-%m-%d')"
+  echo "Moving to directory: $archive_dir"
   mkdir -p "$archive_dir"
   mv ChowCentaur.xcarchive "$archive_dir/ChowCentaur-$COMMIT.xcarchive"
 fi

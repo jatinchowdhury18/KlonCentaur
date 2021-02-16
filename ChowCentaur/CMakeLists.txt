@@ -71,6 +71,6 @@ if(IOS)
             XCODE_ATTRIBUTE_SKIP_INSTALL "NO")
 
     set_target_properties(ChowCentaur_AUv3 PROPERTIES
-            XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)/ChowCentaur.app/Plugins"
+            XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)/ChowCentaur.app/PlugIns"
             XCODE_ATTRIBUTE_SKIP_INSTALL "NO")
 endif()
