@@ -47,4 +47,4 @@ jobs:
 
     - name: Run
       shell: bash
-      run: ./build/CentaurBenchHeadless 30
+      run: ./build/ChowCentaurHeadless bench 30
