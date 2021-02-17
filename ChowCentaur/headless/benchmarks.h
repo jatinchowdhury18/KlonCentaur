@@ -13,12 +13,12 @@ namespace
 void createRandomAudioInput (AudioBuffer<float>& buffer, double lengthSeconds);
 double timeAudioProcess (AudioProcessor* plugin, AudioBuffer<float>& audio, const int blockSize);
 
-int main (int argc, char* argv[])
+int benchmarks (int argc, char* argv[])
 {
     if (argc > 1 && std::string (argv[1]) == "--help")
     {
         std::cout << "ChowCentaur Benchmarks:" << std::endl;
-        std::cout << "Usage: CentaurBench <mode> <seconds>" << std::endl;
+        std::cout << "Usage: CentaurBench <seconds>" << std::endl;
         return 1;
     }
 
