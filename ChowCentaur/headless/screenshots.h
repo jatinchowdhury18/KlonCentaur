@@ -1,5 +1,5 @@
-#include <JuceHeader.h>
 #include "ChowCentaurPlugin.h"
+#include <JuceHeader.h>
 
 /**
   * Process audio through the plugin so the screenshots have
@@ -53,5 +53,5 @@ void takeScreenshots()
 
     screenshotForBounds (editor.get(), editor->getLocalBounds(), outputDir, "Plugin.png");
 
-    plugin->editorBeingDeleted(editor.get());
+    plugin->editorBeingDeleted (editor.get());
 }
