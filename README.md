@@ -48,9 +48,18 @@ $ cmake -Bbuild
 $ cmake --build build/ --config Release
 ```
 
-If you also want to build the sub-circuits and performance
-benchmarking app included in this repo, using the following
-as your first CMake command: `cmake -Bbuild -DBUILD_SUB_CIRCUITS=ON -DBUILD_CENTAUR_BENCH=ON`.
+ChowCentaur also has a headless mode that contains a performance
+benchmarking app. You can run the benchmarks yourself as follows:
+```bash
+# build with CMake
+$ cmake -Bbuild -DBUILD_CENTAUR_HEADLESS=ON
+$ cmake --build build/ --config Release --target Centaur_Headless
+
+# run benchmarks
+$ ./build/ChowCentaurHeadless bench
+```
+
+For more information, run `./build/ChowCentaurHeadless bench --help`.
 
 ChowCentaur uses the
 [RTNeural](https://github.com/jatinchowdhury18/RTNeural) 

@@ -74,3 +74,10 @@ if(IOS)
             XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)/ChowCentaur.app/PlugIns"
             XCODE_ATTRIBUTE_SKIP_INSTALL "NO")
 endif()
+
+# build headless
+option(BUILD_CENTAUR_HEADLESS "Builds headless tool for ChowCentaur" OFF)
+if(BUILD_CENTAUR_HEADLESS)
+    message(STATUS "Building Centaur Headless...")
+    add_subdirectory(headless)
+endif()
