@@ -57,11 +57,20 @@ target_link_libraries(ChowCentaur PRIVATE
 
 if(IOS)
     message(STATUS "Setting iOS-specific properties...")
-    set_target_properties(ChowCentaur PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "./")
-    set_target_properties(BinaryData PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "./")
-    set_target_properties(RTNeural PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "./")
-    set_target_properties(SharedCode PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "./")
+
+    foreach(target IN ITEMS BinaryData RTNeural SharedCode ChowCentaur ChowCentaur_Standalone ChowCentaur_AUv3)
+        set_target_properties(${target}
+            PROPERTIES
+                RUNTIME_OUTPUT_DIRECTORY "./"
+                ARCHIVE_OUTPUT_DIRECTORY "./"
+                LIBRARY_OUTPUT_DIRECTORY "./")
+    endforeach()
+
     set_target_properties(ChowCentaur_Standalone PROPERTIES
-        XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)"
-        XCODE_ATTRIBUTE_SKIP_INSTALL "NO")
+            XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)"
+            XCODE_ATTRIBUTE_SKIP_INSTALL "NO")
+
+    set_target_properties(ChowCentaur_AUv3 PROPERTIES
+            XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)/ChowCentaur.app/PlugIns"
+            XCODE_ATTRIBUTE_SKIP_INSTALL "NO")
 endif()
