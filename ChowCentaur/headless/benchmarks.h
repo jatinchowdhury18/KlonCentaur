@@ -3,22 +3,22 @@
 
 #include "ChowCentaurPlugin.h"
 
-namespace 
+namespace
 {
-    constexpr double pluginSampleRate = 44100.0;
-    constexpr int blockSizes[] = {64, 128, 256, 512, 1024};
-    constexpr int numChannels = 2;
-}
+constexpr double pluginSampleRate = 44100.0;
+constexpr int blockSizes[] = { 64, 128, 256, 512, 1024 };
+constexpr int numChannels = 2;
+} // namespace
 
 void createRandomAudioInput (AudioBuffer<float>& buffer, double lengthSeconds);
 double timeAudioProcess (AudioProcessor* plugin, AudioBuffer<float>& audio, const int blockSize);
 
-int main (int argc, char* argv[])
+int benchmarks (int argc, char* argv[])
 {
     if (argc > 1 && std::string (argv[1]) == "--help")
     {
         std::cout << "ChowCentaur Benchmarks:" << std::endl;
-        std::cout << "Usage: CentaurBench <mode> <seconds>" << std::endl;
+        std::cout << "Usage: CentaurBench <seconds>" << std::endl;
         return 1;
     }
 
@@ -38,13 +38,13 @@ int main (int argc, char* argv[])
     double audioLength = 100.0; // seconds
     if (argc > 1)
     {
-        double tryAudioLength = std::atof(argv[1]);
-        
+        double tryAudioLength = std::atof (argv[1]);
+
         if (tryAudioLength > 0.0 && tryAudioLength < 1000.0)
             audioLength = tryAudioLength;
     }
     std::cout << "Using audio length " << audioLength << " seconds" << std::endl;
-    
+
     for (auto blockSize : blockSizes)
     {
         std::cout << "Block size: " << blockSize << std::endl;
@@ -66,8 +66,10 @@ int main (int argc, char* argv[])
         plugin->releaseResources();
 
         std::cout << "Results:" << std::endl;
-        std::cout << "NonML: processes 1 second of audio in " << nonMlTime / audioLength << " seconds" << std::endl;;
-        std::cout << "ML: processes 1 second of audio in " << mlTime / audioLength << " seconds" << std::endl;;
+        std::cout << "NonML: processes 1 second of audio in " << nonMlTime / audioLength << " seconds" << std::endl;
+        ;
+        std::cout << "ML: processes 1 second of audio in " << mlTime / audioLength << " seconds" << std::endl;
+        ;
     }
 
     return 0;
@@ -111,4 +113,3 @@ double timeAudioProcess (AudioProcessor* plugin, AudioBuffer<float>& audio, cons
 
     return (time.getMillisecondCounterHiRes() - start) / 1000.0;
 }
-

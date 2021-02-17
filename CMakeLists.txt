@@ -32,10 +32,3 @@ if(BUILD_SUBCIRCUITS)
     message("Building SubCircuits...")
     add_subdirectory(SubCircuits)
 endif()
-
-# build benchmarks
-option(BUILD_CENTAUR_BENCH "Builds benchmarking tool for ChowCentaur" OFF)
-if(BUILD_CENTAUR_BENCH)
-    message("Building Centaur Bench...")
-    add_subdirectory(CentaurBench)
-endif()
