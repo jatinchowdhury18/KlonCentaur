@@ -2,6 +2,7 @@
 build*/
 bin/*[!.zip]
 JuceLibraryCode/
+*.exe
 
 # Python artifacts
 __pycache__/

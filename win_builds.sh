@@ -48,6 +48,7 @@ git restore CMakeLists.txt
 git restore ChowCentaur/CMakeLists.txt
 
 # zip builds
+echo "Zipping builds..."
 VERSION=$(cut -f 2 -d '=' <<< "$(grep 'CMAKE_PROJECT_VERSION:STATIC' build/CMakeCache.txt)")
 (
     cd bin
@@ -55,4 +56,11 @@ VERSION=$(cut -f 2 -d '=' <<< "$(grep 'CMAKE_PROJECT_VERSION:STATIC' build/CMake
     rm -f "ChowCentaur-Win32-${VERSION}.zip"
     zip -r "ChowCentaur-Win64-${VERSION}.zip" Win64
     zip -r "ChowCentaur-Win32-${VERSION}.zip" Win32
+)
+
+# create installer
+echo "Creating installer..."
+(
+    cd Installers/windows
+    bash build_win_installer.sh
 )
