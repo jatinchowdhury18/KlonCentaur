@@ -13,10 +13,13 @@ sed -i '' '5s/#//' ChowCentaur/CMakeLists.txt
 
 # cmake new builds
 TEAM_ID=$(more ~/Developer/mac_id)
-cmake -Bbuild -GXcode -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY="Apple Distribution" \
+cmake -Bbuild -GXcode -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY="Developer ID Application" \
     -DCMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM="$TEAM_ID" \
     -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_STYLE="Manual" \
-    -D"CMAKE_OSX_ARCHITECTURES=arm64;x86_64"
+    -D"CMAKE_OSX_ARCHITECTURES=arm64;x86_64" \
+    -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO \
+    -DCMAKE_XCODE_ATTRIBUTE_OTHER_CODE_SIGN_FLAGS="--timestamp" \
+    -DMACOS_RELEASE=ON
 cmake --build build --config Release -j12 | xcpretty
 
 # copy builds to bin
@@ -35,7 +38,8 @@ git restore ChowCentaur/CMakeLists.txt
 
 # run auval
 echo "Running AU validation..."
-cp -R build/${plugin}/${plugin}_artefacts/Release/AU/${plugin}.component ~/Library/Audio/Plug-Ins/Components/${plugin}.component
+rm -Rf ~/Library/Audio/Plug-Ins/Components/${plugin}.component
+cp -R build/${plugin}/${plugin}_artefacts/Release/AU/${plugin}.component ~/Library/Audio/Plug-Ins/Components
 manu=$(cut -f 6 -d ' ' <<< "$(grep 'PLUGIN_MANUFACTURER_CODE' ChowCentaur/CMakeLists.txt)")
 code=$(cut -f 6 -d ' ' <<< "$(grep 'PLUGIN_CODE' ChowCentaur/CMakeLists.txt)")
 
@@ -59,4 +63,11 @@ VERSION=$(cut -f 2 -d '=' <<< "$(grep 'CMAKE_PROJECT_VERSION:STATIC' build/CMake
     cd bin
     rm -f "ChowCentaur-Mac-${VERSION}.zip"
     zip -r "ChowCentaur-Mac-${VERSION}.zip" Mac
+)
+
+# create installer
+echo "Creating installer..."
+(
+    cd Installers/mac
+    bash build_mac_installer.sh
 )
