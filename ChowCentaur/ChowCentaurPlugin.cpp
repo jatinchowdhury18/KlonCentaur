@@ -159,7 +159,7 @@ void ChowCentaur::setStateInformation (const void* data, int sizeInBytes)
 {
 #if JUCE_IOS
     std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
-     
+
     if (xmlState.get() != nullptr)
         if (xmlState->hasTagName (vts.state.getType()))
             vts.replaceState (juce::ValueTree::fromXml (*xmlState));

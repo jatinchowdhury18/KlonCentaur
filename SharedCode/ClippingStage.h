@@ -5,7 +5,6 @@
 
 namespace GainStageSpace
 {
-
 /** WDF Diode pair using 3rd-order Wright Omega function approximation to save cycles */
 class CheapDiodePair : public chowdsp::WDF::WDFNode
 {
@@ -14,15 +13,15 @@ public:
      * @param Is: reverse saturation current
      * @param Vt: thermal voltage
      */
-    CheapDiodePair (double Is, double Vt) :
-        chowdsp::WDF::WDFNode ("CheapDiodePair"),
-        Is (Is),
-        Vt (Vt)
-    {}
+    CheapDiodePair (double Is, double Vt) : chowdsp::WDF::WDFNode ("CheapDiodePair"),
+                                            Is (Is),
+                                            Vt (Vt)
+    {
+    }
 
     virtual ~CheapDiodePair() {}
 
-    inline void calcImpedance() override{}
+    inline void calcImpedance() override {}
 
     /** Accepts an incident wave into a WDF diode pair. */
     inline void incident (double x) noexcept override
@@ -78,13 +77,13 @@ private:
     chowdsp::WDF::ResistiveVoltageSource Vin;
     std::unique_ptr<chowdsp::WDF::Capacitor> C9;
     chowdsp::WDF::Resistor R13 { 1000.0 };
-    
+
 #if JUCE_IOS
     CheapDiodePair D23 { 15e-6, 0.02585 };
 #else
     chowdsp::WDF::DiodePair D23 { 15e-6, 0.02585 };
 #endif
-    
+
     std::unique_ptr<chowdsp::WDF::Capacitor> C10;
     chowdsp::WDF::ResistiveVoltageSource Vbias { 47000.0 };
 

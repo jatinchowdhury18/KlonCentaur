@@ -31,7 +31,7 @@ void GainStageProc::processBlock (AudioBuffer<float>& buffer)
         auto* x = buffer.getWritePointer (ch);
         auto* x1 = ff1Buff.getWritePointer (ch);
         auto* x2 = ff2Buff.getWritePointer (ch);
-        
+
         // side chain buffers
         FloatVectorOperations::copy (x2, x, numSamples);
 
@@ -47,7 +47,7 @@ void GainStageProc::processBlock (AudioBuffer<float>& buffer)
         amp[ch].processBlock (x, numSamples);
         FloatVectorOperations::clip (x, x, -4.5f, 4.5f, numSamples);
     }
-    
+
     dsp::AudioBlock<float> block (buffer);
     dsp::AudioBlock<float> osBlock (buffer);
 
@@ -57,12 +57,12 @@ void GainStageProc::processBlock (AudioBuffer<float>& buffer)
     for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
     {
         auto* x = osBlock.getChannelPointer (ch);
-        
+
         // clipping stage
         for (int n = 0; n < osNumSamples; ++n)
             x[n] = clip[ch].processSample (x[n]);
     }
-    
+
     // downsample
     os.processSamplesDown (block);
 
@@ -71,7 +71,7 @@ void GainStageProc::processBlock (AudioBuffer<float>& buffer)
         auto* x = buffer.getWritePointer (ch);
         auto* x1 = ff1Buff.getWritePointer (ch);
         auto* x2 = ff2Buff.getWritePointer (ch);
-        
+
         // Feed forward network 2
         ff2[ch].setGain (*gainParam);
         for (int n = 0; n < numSamples; ++n)
