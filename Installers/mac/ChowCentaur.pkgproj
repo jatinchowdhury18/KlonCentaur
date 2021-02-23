@@ -79,9 +79,9 @@
 															<key>GID</key>
 															<integer>0</integer>
 															<key>PATH</key>
-															<string>/Users/jachowdhury/Developer/dsp/Plugins/KlonCentaur/bin/Mac/ChowCentaur.component</string>
+															<string>../../bin/Mac/ChowCentaur.component</string>
 															<key>PATH_TYPE</key>
-															<integer>0</integer>
+															<integer>1</integer>
 															<key>PERMISSIONS</key>
 															<integer>493</integer>
 															<key>TYPE</key>
@@ -631,9 +631,9 @@
 															<key>GID</key>
 															<integer>0</integer>
 															<key>PATH</key>
-															<string>/Users/jachowdhury/Developer/dsp/Plugins/KlonCentaur/bin/Mac/ChowCentaur.vst3</string>
+															<string>../../bin/Mac/ChowCentaur.vst3</string>
 															<key>PATH_TYPE</key>
-															<integer>0</integer>
+															<integer>1</integer>
 															<key>PERMISSIONS</key>
 															<integer>493</integer>
 															<key>TYPE</key>
@@ -1201,9 +1201,9 @@
 															<key>GID</key>
 															<integer>0</integer>
 															<key>PATH</key>
-															<string>/Users/jachowdhury/Developer/dsp/Plugins/KlonCentaur/bin/Mac/ChowCentaur.vst</string>
+															<string>../../bin/Mac/ChowCentaur.vst</string>
 															<key>PATH_TYPE</key>
-															<integer>0</integer>
+															<integer>1</integer>
 															<key>PERMISSIONS</key>
 															<integer>493</integer>
 															<key>TYPE</key>
@@ -1974,9 +1974,9 @@
 									<key>GID</key>
 									<integer>80</integer>
 									<key>PATH</key>
-									<string>/Users/jachowdhury/Developer/dsp/Plugins/KlonCentaur/bin/Mac/ChowCentaur.app</string>
+									<string>../../bin/Mac/ChowCentaur.app</string>
 									<key>PATH_TYPE</key>
-									<integer>0</integer>
+									<integer>1</integer>
 									<key>PERMISSIONS</key>
 									<integer>493</integer>
 									<key>TYPE</key>
