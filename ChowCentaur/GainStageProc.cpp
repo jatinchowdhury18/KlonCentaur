@@ -12,28 +12,23 @@ void GainStageProc::reset (double sampleRate, int samplesPerBlock)
     const auto osFactor = (int) os.getOversamplingFactor();
     for (int ch = 0; ch < 2; ++ch)
     {
-        preAmp[ch].reset (sampleRate * osFactor);
-        amp[ch].reset ((float) sampleRate * osFactor);
+        preAmp[ch].reset (sampleRate);
+        amp[ch].reset ((float) sampleRate);
         clip[ch].reset (sampleRate * osFactor);
-        ff2[ch].reset (sampleRate * osFactor);
-        sumAmp[ch].reset ((float) sampleRate * osFactor);
+        ff2[ch].reset (sampleRate);
+        sumAmp[ch].reset ((float) sampleRate);
     }
 
-    ff1Buff.setSize (2, samplesPerBlock * osFactor);
-    ff2Buff.setSize (2, samplesPerBlock * osFactor);
+    ff1Buff.setSize (2, samplesPerBlock);
+    ff2Buff.setSize (2, samplesPerBlock);
 }
 
 void GainStageProc::processBlock (AudioBuffer<float>& buffer)
 {
-    dsp::AudioBlock<float> block (buffer);
-    dsp::AudioBlock<float> osBlock (buffer);
-
-    // upsample
-    osBlock = os.processSamplesUp (block);
-    const auto numSamples = (int) osBlock.getNumSamples();
+    const auto numSamples = buffer.getNumSamples();
     for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
     {
-        auto* x = osBlock.getChannelPointer (ch);
+        auto* x = buffer.getWritePointer (ch);
         auto* x1 = ff1Buff.getWritePointer (ch);
         auto* x2 = ff2Buff.getWritePointer (ch);
 
@@ -51,10 +46,31 @@ void GainStageProc::processBlock (AudioBuffer<float>& buffer)
         amp[ch].setGain (*gainParam);
         amp[ch].processBlock (x, numSamples);
         FloatVectorOperations::clip (x, x, -4.5f, 4.5f, numSamples);
+    }
+
+    dsp::AudioBlock<float> block (buffer);
+    dsp::AudioBlock<float> osBlock (buffer);
+
+    // upsample
+    osBlock = os.processSamplesUp (block);
+    const auto osNumSamples = (int) osBlock.getNumSamples();
+    for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
+    {
+        auto* x = osBlock.getChannelPointer (ch);
 
         // clipping stage
-        for (int n = 0; n < numSamples; ++n)
+        for (int n = 0; n < osNumSamples; ++n)
             x[n] = clip[ch].processSample (x[n]);
+    }
+
+    // downsample
+    os.processSamplesDown (block);
+
+    for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
+    {
+        auto* x = buffer.getWritePointer (ch);
+        auto* x1 = ff1Buff.getWritePointer (ch);
+        auto* x2 = ff2Buff.getWritePointer (ch);
 
         // Feed forward network 2
         ff2[ch].setGain (*gainParam);
@@ -67,7 +83,4 @@ void GainStageProc::processBlock (AudioBuffer<float>& buffer)
         sumAmp[ch].processBlock (x, numSamples);
         FloatVectorOperations::clip (x, x, -13.1f, 11.7f, numSamples);
     }
-
-    // downsample
-    os.processSamplesDown (block);
 }
