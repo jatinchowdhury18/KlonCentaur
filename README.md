@@ -17,19 +17,24 @@ pedal-style effect embedded on a Teensy microcontroller.
 This work began as part of a class project for
 [EE 292D](https://ee292d.github.io/) at Stanford University.
 
-### More Information:
-- This project was presented at the 2020 [Audio Developer Conference](https://youtu.be/FeS6wQJ6mYI).
-- A full technical paper summarizing this project is available on the
-[ArXiv](https://arxiv.org/abs/2009.02833).
-- A video demo is available on [YouTube](https://youtu.be/yo4JrceDQ2w).
+### Quick Links:
+- [Latest Release](https://chowdsp.com/products.html#centaur)
+- [Nightly Builds](https://chowdsp.com/nightly.html#centaur)
+- Presentation at the 2020 [Audio Developer Conference](https://youtu.be/FeS6wQJ6mYI)
+- Technical paper on the
+[ArXiv](https://arxiv.org/abs/2009.02833)
+- [Video Demo](https://youtu.be/yo4JrceDQ2w)
 
 ## Audio Plugin
 
 <img src="./Paper/Figures/Plugin.png" width=500>
 
-Plugin builds can be downloaded from the
-[releases page](https://github.com/jatinchowdhury18/KlonCentaur/releases).
-Linux users can find builds available on the
+The latest release can be downloaded from
+[our website](https://chowdsp.com/products.html#centaur).
+The latest builds (potentially unstable) can be
+found on our
+[Nightly Builds](https://chowdsp.com/nightly.html#centaur)
+page. Linux users can find builds available on the
 [Open Build Service](https://build.opensuse.org/package/show/home:kill_it:JUCE/ChowCentaur),
 courtesy of Konstantin Voinov.
 
