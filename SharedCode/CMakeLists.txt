@@ -24,6 +24,7 @@ target_compile_definitions(SharedCode PUBLIC
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
     JucePlugin_Manufacturer="chowdsp"
+    JucePlugin_ManufacturerWebsite="https://chowdsp.com"
     JucePlugin_VersionString="${CMAKE_PROJECT_VERSION}"
     JucePlugin_Name="${CMAKE_PROJECT_NAME}"
 )
