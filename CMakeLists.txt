@@ -17,7 +17,7 @@ include_directories(modules/chowdsp_utils)
 include_directories(modules/RTNeural)
 
 # juce_set_vst2_sdk_path(C:/SDKs/VST_SDK/VST2_SDK/)
-# include_directories(C:/SDKs/asiosdk2.3/common)
+# include_directories(ASIO_SDK)
 
 # build shared code as static lib
 add_subdirectory(SharedCode)
