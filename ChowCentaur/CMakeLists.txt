@@ -73,8 +73,6 @@ if(MACOS_RELEASE)
     message(STATUS "Setting MacOS release flags...")
     set_target_properties(ChowCentaur_Standalone PROPERTIES
         XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES)
-    set_target_properties(ChowCentaur_AUv3 PROPERTIES
-        XCODE_ATTRIBUTE_ENABLE_HARDENED_RUNTIME YES)
 endif()
 
 if(IOS)
