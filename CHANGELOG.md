@@ -7,6 +7,7 @@ this file.
 - Added support for iOS/AUv3 plugin format.
 - Added support for LV2 plugin format on Linux.
 - Added "Bypass" switch.
+- Improved performance in "Traditional" mode.
 - Updated "Neural" mode to use XSIMD backend.
 - Fixed pops/clicks occuring in "Neural" mode.
 - Created installer packages for Windows/Mac.
