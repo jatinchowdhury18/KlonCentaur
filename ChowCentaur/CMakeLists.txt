@@ -1,13 +1,25 @@
-juce_add_plugin(ChowCentaur
-    COMPANY_NAME chowdsp
-    PLUGIN_MANUFACTURER_CODE Chow
-    PLUGIN_CODE Ctr1
-    FORMATS AU VST3 Standalone LV2 AUv3 #VST
-    ProductName "ChowCentaur"
-    ICON_BIG res/logo.png
-    LV2_URI https://github.com/jatinchowdhury18/KlonCentaur
-    MICROPHONE_PERMISSION_ENABLED TRUE
-)
+if(IOS)
+    juce_add_plugin(ChowCentaur
+        COMPANY_NAME chowdsp
+        PLUGIN_MANUFACTURER_CODE Chow
+        PLUGIN_CODE Ctr1
+        FORMATS Standalone AUv3
+        ProductName "ChowCentaur"
+        ICON_BIG res/logo.png
+        MICROPHONE_PERMISSION_ENABLED TRUE
+    )
+else()
+    juce_add_plugin(ChowCentaur
+        COMPANY_NAME chowdsp
+        PLUGIN_MANUFACTURER_CODE Chow
+        PLUGIN_CODE Ctr1
+        FORMATS AU VST3 Standalone LV2 #VST
+        ProductName "ChowCentaur"
+        ICON_BIG res/logo.png
+        LV2_URI https://github.com/jatinchowdhury18/KlonCentaur
+        MICROPHONE_PERMISSION_ENABLED TRUE
+    )
+endif()
 
 add_dependencies(SharedCode ChowCentaur)
 
