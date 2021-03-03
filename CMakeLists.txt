@@ -4,7 +4,11 @@ set(CMAKE_CXX_STANDARD 17)
 project(ChowCentaur VERSION 1.2.10)
 
 # Using RTNeural with XSimd backend
-set(RTNEURAL_XSIMD ON CACHE BOOL "Use RTnNeural with XSimd backend" FORCE)
+if(APPLE)
+    set(RTNEURAL_ACCELERATE ON CACHE BOOL "Use RTNeural with Accelerate backend" FORCE)
+else()
+    set(RTNEURAL_XSIMD ON CACHE BOOL "Use RTNeural with XSimd backend" FORCE)
+endif()
 
 add_subdirectory(modules)
 if(UNIX AND NOT APPLE)
