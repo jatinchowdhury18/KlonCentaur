@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.12" CACHE STRING "Minimum OS X deployment target")
 set(CMAKE_CXX_STANDARD 17)
-project(ChowCentaur VERSION 1.2.10)
+project(ChowCentaur VERSION 1.3.0)
 
 # Using RTNeural with XSimd backend
 if(APPLE)

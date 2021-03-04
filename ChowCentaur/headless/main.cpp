@@ -11,6 +11,7 @@ void usage()
 int main (int argc, char** argv)
 {
     std::cout << "Running ChowCentaur version " << ProjectInfo::versionString << " in headless mode..." << std::endl;
+    ScopedJuceInitialiser_GUI scopedJuce;
 
     if (argc < 1)
     {
