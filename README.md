@@ -12,13 +12,14 @@ Centaur  guitar pedal. The model is constructed using
 a variety of circuit modelling techniques, including
 nodal analysis, wave digital filters, and recurrent
 neural networks. The model is implemented as an audio
-plugin  (Standalone/VST/AU/LV2), and as a guitar
-pedal-style effect embedded on a Teensy microcontroller.
+plugin  (Standalone/VST/AU/LV2) for desktop and iOS, and as
+a guitar pedal-style effect embedded on a Teensy microcontroller.
 This work began as part of a class project for
 [EE 292D](https://ee292d.github.io/) at Stanford University.
 
 ### Quick Links:
 - [Latest Release](https://chowdsp.com/products.html#centaur)
+- [ChowCentaur for iOS](https://apps.apple.com/us/app/chowcentaur/id1547671733)
 - [Nightly Builds](https://chowdsp.com/nightly.html#centaur)
 - Presentation at the 2020 [Audio Developer Conference](https://youtu.be/FeS6wQJ6mYI)
 - Technical paper on the
@@ -31,6 +32,8 @@ This work began as part of a class project for
 
 The latest release can be downloaded from
 [our website](https://chowdsp.com/products.html#centaur).
+ChowCentaur for iOS can be downloaded from the
+[app store](https://apps.apple.com/us/app/chowcentaur/id1547671733).
 The latest builds (potentially unstable) can be
 found on our
 [Nightly Builds](https://chowdsp.com/nightly.html#centaur)
