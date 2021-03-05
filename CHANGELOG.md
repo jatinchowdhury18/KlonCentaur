@@ -3,7 +3,7 @@ All notable changes to this project will be documented in
 this file.
 
 
-## [Unreleased]
+## [1.3.0] - 2021-03-05
 - Added support for iOS/AUv3 plugin format.
 - Added support for LV2 plugin format on Linux.
 - Added "Bypass" switch.
