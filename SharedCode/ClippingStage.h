@@ -5,43 +5,6 @@
 
 namespace GainStageSpace
 {
-/** WDF Diode pair using 3rd-order Wright Omega function approximation to save cycles */
-class CheapDiodePair : public chowdsp::WDF::WDFNode
-{
-public:
-    /** Creates a new WDF diode pair, with the given diode specifications.
-     * @param Is: reverse saturation current
-     * @param Vt: thermal voltage
-     */
-    CheapDiodePair (double Is, double Vt) : chowdsp::WDF::WDFNode ("CheapDiodePair"),
-                                            Is (Is),
-                                            Vt (Vt)
-    {
-    }
-
-    virtual ~CheapDiodePair() {}
-
-    inline void calcImpedance() override {}
-
-    /** Accepts an incident wave into a WDF diode pair. */
-    inline void incident (double x) noexcept override
-    {
-        a = x;
-    }
-
-    /** Propogates a reflected wave from a WDF diode pair. */
-    inline double reflected() noexcept override
-    {
-        // See eqn (18) from reference paper
-        double lambda = (double) chowdsp::WDF::signum (a);
-        b = a + 2 * lambda * (next->R * Is - Vt * chowdsp::Omega::omega3 (std::log (next->R * Is / Vt) + (lambda * a + next->R * Is) / Vt));
-        return b;
-    }
-
-private:
-    const double Is; // reverse saturation current
-    const double Vt; // thermal voltage
-};
 
 class ClippingWDF
 {
@@ -77,12 +40,7 @@ private:
     chowdsp::WDF::ResistiveVoltageSource Vin;
     std::unique_ptr<chowdsp::WDF::Capacitor> C9;
     chowdsp::WDF::Resistor R13 { 1000.0 };
-
-#if JUCE_IOS
-    CheapDiodePair D23 { 15e-6, 0.02585 };
-#else
     chowdsp::WDF::DiodePair D23 { 15e-6, 0.02585 };
-#endif
 
     std::unique_ptr<chowdsp::WDF::Capacitor> C10;
     chowdsp::WDF::ResistiveVoltageSource Vbias { 47000.0 };
