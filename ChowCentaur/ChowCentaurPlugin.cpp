@@ -169,6 +169,17 @@ void ChowCentaur::setStateInformation (const void* data, int sizeInBytes)
 #endif
 }
 
+void ChowCentaur::getStateInformation (MemoryBlock& data)
+{
+#if JUCE_IOS
+    auto state = vts.copyState();
+    std::unique_ptr<XmlElement> xml (state.createXml());
+    copyXmlToBinary (*xml, data);
+#else
+    magicState.getStateInformation (data);
+#endif
+}
+
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
