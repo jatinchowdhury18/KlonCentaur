@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in
 this file.
 
+## [1.3.2] - 2021-03-07
+- Fixed save/load bug in iOS.
+
+## [1.3.1] - 2021-03-07
+- Fixed iOS bug in Traditional mode.
 
 ## [1.3.0] - 2021-03-05
 - Added support for iOS/AUv3 plugin format.
