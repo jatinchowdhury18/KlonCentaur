@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in
 this file.
 
+## [1.3.4] - 2021-03-11
+- Fixed bug with weird harmonic distortion for very quiet signals.
+
 ## [1.3.2] - 2021-03-07
 - Fixed save/load bug in iOS.
 
