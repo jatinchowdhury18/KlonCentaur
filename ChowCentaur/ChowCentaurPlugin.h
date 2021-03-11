@@ -23,7 +23,7 @@ public:
     AudioProcessorEditor* createEditor() override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     void getStateInformation (MemoryBlock& data) override;
-    
+
 private:
     std::atomic<float>* trebleParam = nullptr;
     std::atomic<float>* levelParam = nullptr;

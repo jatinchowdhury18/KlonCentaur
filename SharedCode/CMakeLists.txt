@@ -33,6 +33,7 @@ target_link_libraries(SharedCode PRIVATE
     juce::juce_audio_utils
     chowdsp_utils
     RTNeural
+    toms917
 )
 
 # Need to build with -fPIC flag on Linux
