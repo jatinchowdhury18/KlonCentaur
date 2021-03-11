@@ -44,15 +44,18 @@
       <Slider lookAndFeel="MyLNF" parameter="gain" slider-type="rotary-horizontal-vertical"
               caption="Gain" background-color="00000000" caption-color="FF2B3335"
               caption-size="24" slider-text-background="00000000" slider-text-outline="FF2B3335"
-              slider-text="FF2B3335" slider-track="ff484856" slider-thumb="FF14BADD"/>
+              slider-text="FF2B3335" slider-track="ff484856" slider-thumb="FF14BADD"
+              slidertext-width="80" slidertext-height="20"/>
       <Slider lookAndFeel="MyLNF" parameter="treble" slider-type="rotary-horizontal-vertical"
               caption="Tone" background-color="00000000" caption-color="FF2B3335"
               caption-size="24" slider-text-background="00000000" slider-text-outline="FF2B3335"
-              slider-text="FF2B3335" slider-track="ff484856" slider-thumb="FF14BADD"/>
+              slider-text="FF2B3335" slider-track="ff484856" slider-thumb="FF14BADD"
+              slidertext-width="80" slidertext-height="20"/>
       <Slider lookAndFeel="MyLNF" parameter="level" slider-type="rotary-horizontal-vertical"
               caption="Level" background-color="00000000" caption-color="FF2B3335"
               caption-size="24" slider-text-background="00000000" slider-text-outline="FF2B3335"
-              slider-text="FF2B3335" slider-track="ff484856" slider-thumb="FF14BADD"/>
+              slider-text="FF2B3335" slider-track="ff484856" slider-thumb="FF14BADD"
+              slidertext-width="80" slidertext-height="20"/>
       <View margin="0" padding="0" background-color="00000000" flex-direction="column">
         <View background-color="00000000" flex-grow="0.2"/>
         <ComboBox parameter="neural" max-height="35" margin="0" padding="0" combo-background="00000000"
