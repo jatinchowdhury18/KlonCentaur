@@ -5,7 +5,6 @@
 
 namespace GainStageSpace
 {
-
 class DiodePair : public chowdsp::WDF::WDFNode
 {
 public:
@@ -13,17 +12,16 @@ public:
      * @param Is: reverse saturation current
      * @param Vt: thermal voltage
      */
-    DiodePair (double Is, double Vt) :
-        WDFNode ("DiodePair"),
-        Is (Is),
-        Vt (Vt)
+    DiodePair (double Is, double Vt) : WDFNode ("DiodePair"),
+                                       Is (Is),
+                                       Vt (Vt)
     {
         wrightOmegaLUT.initialise ([] (double x) { return std::real (wrightomega (x)); }, -1.0f, 1.0f, 1 << 18);
     }
 
     virtual ~DiodePair() {}
 
-    inline void calcImpedance() override{}
+    inline void calcImpedance() override {}
 
     /** Accepts an incident wave into a WDF diode pair. */
     inline void incident (double x) noexcept override
