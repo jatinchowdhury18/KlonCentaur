@@ -148,7 +148,7 @@ int wrightomega_ext ( complex <double> z, complex <double> &w,
 //
   if ( isnan ( x ) || isnan ( y ) )
   {
-    w = complex <double> ( ( 0.0 / 0.0 ), ( 0.0 / 0.0 ) );
+    w = complex <double> ( ( -NAN ), ( -NAN ) );
     e = complex <double> ( 0.0, 0.0 );
     r = complex <double> ( 0.0, 0.0 );
     return 0;
