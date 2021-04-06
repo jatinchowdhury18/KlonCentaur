@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in
 this file.
 
+## [1.3.6] - UNRELEASED
+- Added mono processing mode.
+
 ## [1.3.5] - 2021-03-11
 - Fixed bug with weird harmonic distortion for very quiet signals.
 - Fixed bug where slider text boxes were hidden.
