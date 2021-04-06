@@ -8,6 +8,7 @@ const String trebleTag = "treble";
 const String levelTag = "level";
 const String neuralTag = "neural";
 const String bypassTag = "bypass";
+const String monoTag = "mono";
 } // namespace
 
 ChowCentaur::ChowCentaur() : gainStageProc (vts),
@@ -17,6 +18,7 @@ ChowCentaur::ChowCentaur() : gainStageProc (vts),
     levelParam = vts.getRawParameterValue (levelTag);
     mlParam = vts.getRawParameterValue (neuralTag);
     bypassParam = vts.getRawParameterValue (bypassTag);
+    monoParam = vts.getRawParameterValue (monoTag);
 
     LookAndFeel::setDefaultLookAndFeel (&myLNF);
     scope = magicState.createAndAddObject<foleys::MagicOscilloscope> ("scope");
@@ -33,6 +35,7 @@ void ChowCentaur::addParameters (Parameters& params)
     params.push_back (std::make_unique<AudioParameterFloat> (levelTag, "Level", 0.0f, 1.0f, 0.5f));
     params.push_back (std::make_unique<AudioParameterChoice> (neuralTag, "Mode", StringArray { "Traditional", "Neural" }, 0));
     params.push_back (std::make_unique<AudioParameterBool> (bypassTag, "Bypass", false));
+    params.push_back (std::make_unique<AudioParameterBool> (monoTag, "Mono", false));
 }
 
 void ChowCentaur::prepareToPlay (double sampleRate, int samplesPerBlock)
@@ -52,6 +55,9 @@ void ChowCentaur::prepareToPlay (double sampleRate, int samplesPerBlock)
     useMLPrev = static_cast<bool> (*mlParam);
     fadeBuffer.setSize (getMainBusNumOutputChannels(), samplesPerBlock);
 
+    useMonoPrev = static_cast<bool> (*monoParam);
+    monoBuffer.setSize (1, samplesPerBlock);
+
     // set up DC blockers
     *dcBlocker.state = *dsp::IIR::Coefficients<float>::makeHighPass (sampleRate, 35.0f);
     dsp::ProcessSpec spec { sampleRate, static_cast<uint32> (samplesPerBlock), 2 };
@@ -64,23 +70,9 @@ void ChowCentaur::releaseResources()
 {
 }
 
-void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
+void ChowCentaur::processInternalBuffer (AudioBuffer<float>& buffer)
 {
-    ScopedNoDenormals noDenormals;
-
-    if (! bypass.processBlockIn (buffer, ! bypass.toBool (bypassParam)))
-    {
-        // DC Blocker
-        dsp::AudioBlock<float> block (buffer);
-        dsp::ProcessContextReplacing<float> context (block);
-        dcBlocker.process (context);
-
-        scope->pushSamples (buffer);
-
-        return;
-    }
-
-    auto numSamples = buffer.getNumSamples();
+    const auto numSamples = buffer.getNumSamples();
     for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
     {
         auto* x = buffer.getWritePointer (ch);
@@ -135,7 +127,70 @@ void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
         outProc[ch].setLevel (*levelParam);
         outProc[ch].processBlock (x, numSamples);
     }
+}
 
+void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
+{
+    ScopedNoDenormals noDenormals;
+
+    // bypass if needed
+    if (! bypass.processBlockIn (buffer, ! bypass.toBool (bypassParam)))
+    {
+        // DC Blocker
+        dsp::AudioBlock<float> block (buffer);
+        dsp::ProcessContextReplacing<float> context (block);
+        dcBlocker.process (context);
+
+        scope->pushSamples (buffer);
+
+        return;
+    }
+
+    // process mono or stereo buffer?
+    auto numSamples = buffer.getNumSamples();
+    auto useMono = static_cast<bool> (monoParam->load());
+
+    if (useMono != useMonoPrev)
+    {
+        gainStageProc.reset (getSampleRate(), getBlockSize());
+        gainStageMLProc.reset (getSampleRate(), getBlockSize());
+
+        for (int ch = 0; ch < 2; ++ch)
+        {
+            inProc[ch].reset ((float) getSampleRate());
+            tone[ch].reset ((float) getSampleRate());
+            outProc[ch].reset ((float) getSampleRate());
+        }
+
+        useMonoPrev = useMono;
+    }
+
+    if (useMono)
+    {
+        monoBuffer.setSize (1, buffer.getNumSamples(), false, false, true);
+        monoBuffer.clear();
+        monoBuffer.copyFrom (0, 0, buffer.getReadPointer (0), numSamples);
+
+        for (int ch = 1; ch < buffer.getNumChannels(); ++ch)
+            monoBuffer.addFrom (0, 0, buffer.getReadPointer (ch), numSamples);
+
+        monoBuffer.applyGain (1.0f / (float) buffer.getNumChannels());
+    }
+
+    auto& processBuffer = useMono ? monoBuffer : buffer;
+
+    // actual DSP processing
+    processInternalBuffer (processBuffer);
+
+    // go back from mono to stereo (if needed)
+    if (useMono)
+    {
+        auto processedData = processBuffer.getReadPointer (0);
+        for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
+            buffer.copyFrom (ch, 0, processedData, numSamples);
+    }
+
+    // bypass fade
     bypass.processBlockOut (buffer, ! bypass.toBool (bypassParam));
 
     // DC Blocker
