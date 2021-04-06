@@ -66,6 +66,11 @@
                     margin="0" padding="0" button-color="00000000" flex-grow="1.0"
                     button-on-color="FF2B3335" lookAndFeel="ButtonLNF" max-height="35"
                     margin="0" button-off-text="FF2B3335"/>
+        <View background-color="00000000" flex-grow="0.075"/>
+        <TextButton parameter="mono" text="Mono" background-color="00000000"
+                    margin="0" padding="0" button-color="00000000" flex-grow="1.0"
+                    button-on-color="FF2B3335" lookAndFeel="ButtonLNF" max-height="35"
+                    margin="0" button-off-text="FF2B3335"/>
         <View background-color="00000000" flex-grow="0.2"/>
       </View>
     </View>

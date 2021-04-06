@@ -19,6 +19,7 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
     void processAudioBlock (AudioBuffer<float>& buffer) override;
+    void processInternalBuffer (AudioBuffer<float>& buffer);
 
     AudioProcessorEditor* createEditor() override;
     void setStateInformation (const void* data, int sizeInBytes) override;
@@ -29,6 +30,7 @@ private:
     std::atomic<float>* levelParam = nullptr;
     std::atomic<float>* mlParam = nullptr;
     std::atomic<float>* bypassParam = nullptr;
+    std::atomic<float>* monoParam = nullptr;
 
     BypassProcessor bypass;
     InputBufferProcessor inProc[2];
@@ -37,6 +39,9 @@ private:
 
     GainStageProc gainStageProc;
     GainStageMLProc gainStageMLProc;
+
+    AudioBuffer<float> monoBuffer;
+    bool useMonoPrev;
 
     AudioBuffer<float> fadeBuffer;
     bool useMLPrev = false;
