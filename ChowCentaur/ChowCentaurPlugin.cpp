@@ -177,7 +177,6 @@ void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
         monoBuffer.applyGain (1.0f / (float) buffer.getNumChannels());
     }
 
-
     auto& processBuffer = useMono ? monoBuffer : buffer;
 
     // actual DSP processing
