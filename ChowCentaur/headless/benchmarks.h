@@ -49,17 +49,17 @@ int benchmarks (int argc, char* argv[])
     {
         std::cout << "Block size: " << blockSize << std::endl;
 
-        std::cout << "Processing non-ML plugin..." << std::endl;
-        createRandomAudioInput (audio, audioLength);
-        neuralParam->setValue (0.0f);
+         std::cout << "Processing non-ML plugin..." << std::endl;
+         createRandomAudioInput (audio, audioLength);
+         neuralParam->setValueNotifyingHost (0.0f);
 
-        plugin->prepareToPlay (pluginSampleRate, blockSize);
-        auto nonMlTime = timeAudioProcess (plugin.get(), audio, blockSize);
-        plugin->releaseResources();
+         plugin->prepareToPlay (pluginSampleRate, blockSize);
+         auto nonMlTime = timeAudioProcess (plugin.get(), audio, blockSize);
+         plugin->releaseResources();
 
         std::cout << "Processing ML plugin..." << std::endl;
         createRandomAudioInput (audio, audioLength);
-        neuralParam->setValue (1.0f);
+        neuralParam->setValueNotifyingHost (1.0f);
 
         plugin->prepareToPlay (pluginSampleRate, blockSize);
         auto mlTime = timeAudioProcess (plugin.get(), audio, blockSize);
@@ -67,9 +67,7 @@ int benchmarks (int argc, char* argv[])
 
         std::cout << "Results:" << std::endl;
         std::cout << "NonML: processes 1 second of audio in " << nonMlTime / audioLength << " seconds" << std::endl;
-        ;
         std::cout << "ML: processes 1 second of audio in " << mlTime / audioLength << " seconds" << std::endl;
-        ;
     }
 
     return 0;
