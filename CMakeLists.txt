@@ -6,8 +6,10 @@ project(ChowCentaur VERSION 1.3.6)
 # Using RTNeural with XSimd backend
 if(APPLE)
     set(RTNEURAL_ACCELERATE ON CACHE BOOL "Use RTNeural with Accelerate backend" FORCE)
+    add_definitions(-DUSE_ACCELERATE=1)
 else()
     set(RTNEURAL_XSIMD ON CACHE BOOL "Use RTNeural with XSimd backend" FORCE)
+    add_definitions(-DUSE_XSIMD=1)
 endif()
 
 add_subdirectory(modules)

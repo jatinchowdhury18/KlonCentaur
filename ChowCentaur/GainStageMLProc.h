@@ -18,16 +18,21 @@ private:
         numModels = 5,
     };
 
-    using ModelPtr = std::unique_ptr<RTNeural::Model<float>>;
-    void loadModel (ModelPtr model[2], const char* data, int size);
-    void processModel (AudioBuffer<float>& buffer, ModelPtr model[2]);
+    using ModelType = RTNeural::ModelT<float,
+        RTNeural::Dense<float>,
+        RTNeural::TanhActivation<float>,
+        RTNeural::GRULayer<float>,
+        RTNeural::Dense<float>>;
+
+    std::vector<std::vector<ModelType>> gainStageML;
+
+    void loadModel (std::vector<ModelType>& model, const char* data, int size);
+    void processModel (AudioBuffer<float>& buffer, std::vector<ModelType>& model);
 
     inline int getModelIdx() const noexcept
     {
         return jlimit (0, 4, int (numModels * *gainParam));
     }
-
-    ModelPtr gainStageML[numModels][2];
 
     AudioBuffer<float> fadeBuffer;
     std::atomic<float>* gainParam = nullptr;
