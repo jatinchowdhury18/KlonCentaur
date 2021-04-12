@@ -19,8 +19,6 @@ private:
     };
 
     using ModelType = RTNeural::ModelT<float,
-        RTNeural::Dense<float>,
-        RTNeural::TanhActivation<float>,
         RTNeural::GRULayer<float>,
         RTNeural::Dense<float>>;
 

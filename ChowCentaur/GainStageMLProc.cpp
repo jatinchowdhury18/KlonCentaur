@@ -7,7 +7,7 @@ GainStageMLProc::GainStageMLProc (AudioProcessorValueTreeState& vts)
         std::vector<ModelType> models;
         for (size_t ch = 0; ch < 2; ++ch)
         {
-            ModelType m ({ 1, 4, 4, 8, 1 }, {{1, 4}, {4}, {4, 8}, {8, 1}});
+            ModelType m ({ 1, 8, 1 }, {{1, 8}, {8, 1}});
             models.push_back (m);
         }
 
