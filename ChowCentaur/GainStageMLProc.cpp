@@ -7,7 +7,7 @@ GainStageMLProc::GainStageMLProc (AudioProcessorValueTreeState& vts)
         std::vector<ModelType> models;
         for (size_t ch = 0; ch < 2; ++ch)
         {
-            ModelType m ({ 1, 8, 1 }, {{1, 8}, {8, 1}});
+            ModelType m ({ 1, 8, 1 }, { { 1, 8 }, { 8, 1 } });
             models.push_back (m);
         }
 
@@ -28,8 +28,8 @@ void GainStageMLProc::loadModel (std::vector<ModelType>& model, const char* data
     MemoryInputStream jsonInputStream (data, size, false);
     auto jsonInput = nlohmann::json::parse (jsonInputStream.readEntireStreamAsString().toStdString());
 
-    model[0].parseJson(jsonInput);
-    model[1].parseJson(jsonInput);
+    model[0].parseJson (jsonInput);
+    model[1].parseJson (jsonInput);
 }
 
 void GainStageMLProc::reset (double sampleRate, int samplesPerBlock)

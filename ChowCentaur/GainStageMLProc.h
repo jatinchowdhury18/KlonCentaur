@@ -19,8 +19,8 @@ private:
     };
 
     using ModelType = RTNeural::ModelT<float,
-        RTNeural::GRULayer<float>,
-        RTNeural::Dense<float>>;
+                                       RTNeural::GRULayer<float>,
+                                       RTNeural::Dense<float>>;
 
     std::vector<std::vector<ModelType>> gainStageML;
 
