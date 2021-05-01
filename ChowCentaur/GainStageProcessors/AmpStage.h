@@ -19,7 +19,7 @@ public:
         r10bSmooth.setTargetValue (jlimit (2000.0f, 102000.0f, newR10b));
     }
 
-    void reset (float sampleRate)
+    void prepare (float sampleRate)
     {
         chowdsp::IIRFilter<2>::reset();
         fs = (float) sampleRate;

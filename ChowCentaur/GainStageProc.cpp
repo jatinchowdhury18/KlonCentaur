@@ -15,10 +15,10 @@ void GainStageProc::reset (double sampleRate, int samplesPerBlock)
     for (int ch = 0; ch < 2; ++ch)
     {
         preAmp[ch] = std::make_unique<PreAmpWDF> (sampleRate);
-        amp[ch].reset ((float) sampleRate);
+        amp[ch].prepare ((float) sampleRate);
         clip[ch] = std::make_unique<ClippingWDF> (sampleRate * osFactor);
         ff2[ch] = std::make_unique<FeedForward2WDF> (sampleRate);
-        sumAmp[ch].reset ((float) sampleRate);
+        sumAmp[ch].prepare ((float) sampleRate);
     }
 
     ff1Buff.setSize (2, samplesPerBlock);

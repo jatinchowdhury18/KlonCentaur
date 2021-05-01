@@ -1,6 +1,6 @@
 #include "OutputStageProcessor.h"
 
-void OutputStageProc::reset (float sampleRate)
+void OutputStageProc::prepare (float sampleRate)
 {
     chowdsp::IIRFilter<1>::reset();
     fs = (float) sampleRate;

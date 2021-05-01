@@ -16,7 +16,7 @@ public:
         levelSmooth.setTargetValue (jlimit (0.00001f, 1.0f, level));
     }
 
-    void reset (float sampleRate);
+    void prepare (float sampleRate);
     void calcCoefs (float curLevel);
     void processBlock (float* block, const int numSamples) noexcept override;
 

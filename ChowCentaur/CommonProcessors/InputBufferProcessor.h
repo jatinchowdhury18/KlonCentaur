@@ -8,7 +8,7 @@ class InputBufferProcessor : chowdsp::IIRFilter<1>
 public:
     InputBufferProcessor() {}
 
-    void reset (float sampleRate);
+    void prepare (float sampleRate);
     void calcCoefs();
     void processBlock (float* buffer, const int numSamples) noexcept override;
 
