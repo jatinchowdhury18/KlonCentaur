@@ -3,11 +3,10 @@
 
 using namespace GainStageSpace;
 
-FeedForward2WDF::FeedForward2WDF (double sampleRate) :
-    C4 (68e-9, sampleRate),
-    C6 (390e-9, sampleRate),
-    C11 (2.2e-9, sampleRate),
-    C12 (27e-9, sampleRate)
+FeedForward2WDF::FeedForward2WDF (double sampleRate) : C4 (68e-9, sampleRate),
+                                                       C6 (390e-9, sampleRate),
+                                                       C11 (2.2e-9, sampleRate),
+                                                       C12 (27e-9, sampleRate)
 {
     reset();
 }
