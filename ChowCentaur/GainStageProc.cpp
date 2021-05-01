@@ -2,13 +2,12 @@
 
 using namespace GainStageSpace;
 
-GainStageProc::GainStageProc (AudioProcessorValueTreeState& vts, double sampleRate) :
-    preAmpL (sampleRate),
-    preAmpR (sampleRate),
-    clipL (sampleRate * os.getOversamplingFactor()),
-    clipR (sampleRate * os.getOversamplingFactor()),
-    ff2L (sampleRate),
-    ff2R (sampleRate)
+GainStageProc::GainStageProc (AudioProcessorValueTreeState& vts, double sampleRate) : preAmpL (sampleRate),
+                                                                                      preAmpR (sampleRate),
+                                                                                      clipL (sampleRate * os.getOversamplingFactor()),
+                                                                                      clipR (sampleRate * os.getOversamplingFactor()),
+                                                                                      ff2L (sampleRate),
+                                                                                      ff2R (sampleRate)
 {
     gainParam = vts.getRawParameterValue ("gain");
 }
