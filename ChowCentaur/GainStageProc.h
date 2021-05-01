@@ -19,10 +19,10 @@ public:
 private:
     std::atomic<float>* gainParam = nullptr;
 
-    GainStageSpace::PreAmpWDF preAmp[2];
+    std::unique_ptr<GainStageSpace::PreAmpWDF> preAmp[2];
     GainStageSpace::AmpStage amp[2];
-    GainStageSpace::ClippingWDF clip[2];
-    GainStageSpace::FeedForward2WDF ff2[2];
+    std::unique_ptr<GainStageSpace::ClippingWDF> clip[2];
+    std::unique_ptr<GainStageSpace::FeedForward2WDF> ff2[2];
     GainStageSpace::SummingAmp sumAmp[2];
 
     AudioBuffer<float> ff1Buff;
