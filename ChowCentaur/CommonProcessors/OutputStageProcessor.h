@@ -1,7 +1,7 @@
 #ifndef OUTPOUTSTAGEPROCESSOR_H_INCLUDED
 #define OUTPOUTSTAGEPROCESSOR_H_INCLUDED
 
-#include "SharedJuceHeader.h"
+#include <pch.h>
 
 class OutputStageProc : public chowdsp::IIRFilter<1>
 {
@@ -16,7 +16,7 @@ public:
         levelSmooth.setTargetValue (jlimit (0.00001f, 1.0f, level));
     }
 
-    void reset (float sampleRate);
+    void prepare (float sampleRate);
     void calcCoefs (float curLevel);
     void processBlock (float* block, const int numSamples) noexcept override;
 

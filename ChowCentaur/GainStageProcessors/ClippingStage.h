@@ -1,7 +1,7 @@
 #ifndef CLIPPINGSTAGE_H_INCLUDED
 #define CLIPPINGSTAGE_H_INCLUDED
 
-#include "SharedJuceHeader.h"
+#include <pch.h>
 
 namespace GainStageSpace
 {

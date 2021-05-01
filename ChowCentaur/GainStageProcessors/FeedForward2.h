@@ -1,7 +1,7 @@
 #ifndef FEEDFORWARD2_H_INCLUDED
 #define FEEDFORWARD2_H_INCLUDED
 
-#include "SharedJuceHeader.h"
+#include <pch.h>
 
 namespace GainStageSpace
 {
