@@ -51,6 +51,7 @@ target_sources(ChowCentaur PRIVATE
     GainStageProcessors/PreAmpStage.cpp
     GainStageProcessors/AmpStage.h
     GainStageProcessors/ClippingStage.h
+    GainStageProcessors/ClippingStage.cpp
     GainStageProcessors/FeedForward2.h
     GainStageProcessors/FeedForward2.cpp
     GainStageProcessors/SummingAmp.h
