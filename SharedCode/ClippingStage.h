@@ -61,47 +61,57 @@ private:
 class ClippingWDF
 {
 public:
-    ClippingWDF() {}
-
-    void reset (double sampleRate)
+    ClippingWDF (double sampleRate) :
+        C9 (1.0e-6, sampleRate),
+        C10 (1.0e-6, sampleRate)
     {
-        C9 = std::make_unique<chowdsp::WDF::Capacitor> (1.0e-6, sampleRate);
-        C10 = std::make_unique<chowdsp::WDF::Capacitor> (1.0e-6, sampleRate);
-        Vbias.setVoltage (0.0f);
+        reset();
+    }
 
-        I1 = std::make_unique<chowdsp::WDF::PolarityInverter> (&Vin);
-        S1 = std::make_unique<chowdsp::WDF::WDFSeries> (I1.get(), C9.get());
-        S2 = std::make_unique<chowdsp::WDF::WDFSeries> (S1.get(), &R13);
-        S3 = std::make_unique<chowdsp::WDF::WDFSeries> (C10.get(), &Vbias);
-        P1 = std::make_unique<chowdsp::WDF::WDFParallel> (S2.get(), S3.get());
-        D23.connectToNode (P1.get());
+    void reset()
+    {
+        Vbias.setVoltage (0.0f);
+        D23.connectToNode (&P1);
     }
 
     inline float processSample (float x)
     {
         Vin.setVoltage ((double) x);
 
-        D23.incident (P1->reflected());
-        P1->incident (D23.reflected());
-        auto y = C10->current();
+        D23.incident (P1.reflected());
+        P1.incident (D23.reflected());
+        auto y = C10.current();
 
         return (float) y;
     }
 
 private:
-    chowdsp::WDF::ResistiveVoltageSource Vin;
-    std::unique_ptr<chowdsp::WDF::Capacitor> C9;
-    chowdsp::WDF::Resistor R13 { 1000.0 };
+    using Capacitor = chowdsp::WDF::Capacitor;
+    using Resistor = chowdsp::WDF::Resistor;
+    using ResVs = chowdsp::WDF::ResistiveVoltageSource;
+
+    ResVs Vin;
+    Capacitor C9;
+    Resistor R13 { 1000.0 };
     DiodePair D23 { 15e-6, 0.02585 };
 
-    std::unique_ptr<chowdsp::WDF::Capacitor> C10;
-    chowdsp::WDF::ResistiveVoltageSource Vbias { 47000.0 };
+    Capacitor C10;
+    ResVs Vbias { 47000.0 };
 
-    std::unique_ptr<chowdsp::WDF::PolarityInverter> I1;
-    std::unique_ptr<chowdsp::WDF::WDFSeries> S1;
-    std::unique_ptr<chowdsp::WDF::WDFSeries> S2;
-    std::unique_ptr<chowdsp::WDF::WDFSeries> S3;
-    std::unique_ptr<chowdsp::WDF::WDFParallel> P1;
+    using I1Type = chowdsp::WDF::PolarityInverterT<ResVs>;
+    I1Type I1 { Vin };
+
+    using S1Type = chowdsp::WDF::WDFSeriesT<I1Type, Capacitor>;
+    S1Type S1 { I1, C9 };
+
+    using S2Type = chowdsp::WDF::WDFSeriesT<S1Type, Resistor>;
+    S2Type S2 { S1, R13 };
+
+    using S3Type = chowdsp::WDF::WDFSeriesT<Capacitor, ResVs>;
+    S3Type S3 { C10, Vbias };
+
+    using P1Type = chowdsp::WDF::WDFParallelT<S2Type, S3Type>;
+    P1Type P1 { S2, S3 };
 };
 
 } // namespace GainStageSpace
