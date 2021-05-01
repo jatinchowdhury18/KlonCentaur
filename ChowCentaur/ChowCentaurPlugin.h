@@ -36,7 +36,7 @@ private:
     ToneFilterProcessor tone[2];
     OutputStageProc outProc[2];
 
-    GainStageProc gainStageProc;
+    std::unique_ptr<GainStageProc> gainStageProc;
     GainStageMLProc gainStageMLProc;
 
     AudioBuffer<float> monoBuffer;

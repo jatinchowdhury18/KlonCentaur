@@ -11,8 +11,7 @@ const String bypassTag = "bypass";
 const String monoTag = "mono";
 } // namespace
 
-ChowCentaur::ChowCentaur() : gainStageProc (vts),
-                             gainStageMLProc (vts)
+ChowCentaur::ChowCentaur() : gainStageMLProc (vts)
 {
     trebleParam = vts.getRawParameterValue (trebleTag);
     levelParam = vts.getRawParameterValue (levelTag);
@@ -40,7 +39,8 @@ void ChowCentaur::addParameters (Parameters& params)
 
 void ChowCentaur::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    gainStageProc.reset (sampleRate, samplesPerBlock);
+    gainStageProc = std::make_unique<GainStageProc> (vts, sampleRate);
+    gainStageProc->reset (sampleRate, samplesPerBlock);
     gainStageMLProc.reset (sampleRate, samplesPerBlock);
 
     for (int ch = 0; ch < 2; ++ch)
@@ -89,7 +89,7 @@ void ChowCentaur::processInternalBuffer (AudioBuffer<float>& buffer)
         if (useML) // use rnn
             gainStageMLProc.processBlock (buffer);
         else // use circuit model
-            gainStageProc.processBlock (buffer);
+            gainStageProc->processBlock (buffer);
     }
     else
     {
@@ -98,11 +98,11 @@ void ChowCentaur::processInternalBuffer (AudioBuffer<float>& buffer)
         if (useML) // use rnn
         {
             gainStageMLProc.processBlock (buffer);
-            gainStageProc.processBlock (fadeBuffer);
+            gainStageProc->processBlock (fadeBuffer);
         }
         else // use circuit model
         {
-            gainStageProc.processBlock (buffer);
+            gainStageProc->processBlock (buffer);
             gainStageMLProc.processBlock (fadeBuffer);
         }
 
@@ -152,7 +152,7 @@ void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
 
     if (useMono != useMonoPrev)
     {
-        gainStageProc.reset (getSampleRate(), getBlockSize());
+        gainStageProc->reset (getSampleRate(), getBlockSize());
         gainStageMLProc.reset (getSampleRate(), getBlockSize());
 
         for (int ch = 0; ch < 2; ++ch)
@@ -207,7 +207,12 @@ AudioProcessorEditor* ChowCentaur::createEditor()
     builder->registerLookAndFeel ("ComboBoxLNF", std::make_unique<ComboBoxLNF>());
     builder->registerLookAndFeel ("ButtonLNF", std::make_unique<ButtonLNF>());
 
-    return new foleys::MagicPluginEditor (magicState, BinaryData::gui_xml, BinaryData::gui_xmlSize, std::move (builder));
+    auto editor = new foleys::MagicPluginEditor (magicState, BinaryData::gui_xml, BinaryData::gui_xmlSize, std::move (builder));
+
+    // we need to set resize limits for StandalonePluginHolder
+    editor->setResizeLimits (10, 10, 1000, 1000);
+
+    return editor;
 }
 
 void ChowCentaur::setStateInformation (const void* data, int sizeInBytes)
