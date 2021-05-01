@@ -1,7 +1,7 @@
 #ifndef INPUTBUFFERPROCESSOR_H_INCLUDED
 #define INPUTBUFFERPROCESSOR_H_INCLUDED
 
-#include <JuceHeader.h>
+#include <pch.h>
 
 class InputBufferProcessor : chowdsp::IIRFilter<1>
 {

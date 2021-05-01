@@ -1,7 +1,7 @@
 #ifndef INPUTBUFFERWDF_H_INCLUDED
 #define INPUTBUFFERWDF_H_INCLUDED
 
-#include <JuceHeader.h>
+#include <pch.h>
 
 // This class is not used in favor of the
 // IIR implementation in InputBufferProcessor.h

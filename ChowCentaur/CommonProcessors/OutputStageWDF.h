@@ -1,7 +1,7 @@
 #ifndef OUTPUTSTAGEWDF_H_INCLUDED
 #define OUTPUTSTAGEWDF_H_INCLUDED
 
-#include <JuceHeader.h>
+#include <pch.h>
 
 // This class is not used in favor of the
 // IIR implementation in OutputBufferProcessor.h

@@ -1,29 +1,36 @@
+# set plugin formats to build
 if(IOS)
-    juce_add_plugin(ChowCentaur
-        COMPANY_NAME chowdsp
-        PLUGIN_MANUFACTURER_CODE Chow
-        PLUGIN_CODE Ctr1
-        FORMATS Standalone AUv3
-        ProductName "ChowCentaur"
-        ICON_BIG res/logo.png
-        MICROPHONE_PERMISSION_ENABLED TRUE
-    )
+    set(JUCE_FORMATS Standalone AUv3)
 else()
-    juce_add_plugin(ChowCentaur
-        COMPANY_NAME chowdsp
-        PLUGIN_MANUFACTURER_CODE Chow
-        PLUGIN_CODE Ctr1
-        FORMATS AU VST3 Standalone LV2 #VST
-        ProductName "ChowCentaur"
-        ICON_BIG res/logo.png
-        LV2_URI https://github.com/jatinchowdhury18/KlonCentaur
-        MICROPHONE_PERMISSION_ENABLED TRUE
-    )
+    set(JUCE_FORMATS AU VST3 Standalone)
 endif()
+
+# Build LV2 only on Linux
+if(UNIX AND NOT APPLE)
+    message(STATUS "Building LV2 plugin format")
+    list(APPEND JUCE_FORMATS LV2)
+endif()
+
+# Build VST2 is SDK set
+if(TARGET juce_vst2_sdk)
+    message(STATUS "Building VST2 plugin format")
+    list(APPEND JUCE_FORMATS VST)
+endif()
+
+juce_add_plugin(ChowCentaur
+    COMPANY_NAME chowdsp
+    PLUGIN_MANUFACTURER_CODE Chow
+    PLUGIN_CODE Ctr1
+    FORMATS ${JUCE_FORMATS}
+    ProductName "ChowCentaur"
+    ICON_BIG res/logo.png
+    LV2_URI https://github.com/jatinchowdhury18/KlonCentaur
+    MICROPHONE_PERMISSION_ENABLED TRUE
+)
 
 juce_generate_juce_header(ChowCentaur)
 include_directories(../modules/RTNeural)
-# include_directories(../modules/toms917)
+include_directories(./)
 
 target_sources(ChowCentaur PRIVATE
     ChowCentaurPlugin.h
@@ -58,6 +65,8 @@ juce_add_binary_data(BinaryData SOURCES
     ../GainStageTraining/models/centaur_100.json
 )
 
+target_precompile_headers(ChowCentaur PRIVATE pch.h)
+
 # Need to build BinaryData with -fPIC flag on Linux
 set_target_properties(BinaryData PROPERTIES
     POSITION_INDEPENDENT_CODE TRUE)
@@ -74,13 +83,8 @@ target_compile_definitions(ChowCentaur PUBLIC
 )
 
 target_link_libraries(ChowCentaur PRIVATE
-    # juce::juce_audio_utils
-    # juce::juce_audio_plugin_client
-    # foleys_gui_magic
-    # chowdsp_utils
     juce_plugin_modules
     BinaryData
-    # SharedCode
 )
 
 # we need these flags for notarization on MacOS

@@ -1,7 +1,7 @@
 #ifndef OUTPOUTSTAGEPROCESSOR_H_INCLUDED
 #define OUTPOUTSTAGEPROCESSOR_H_INCLUDED
 
-#include <JuceHeader.h>
+#include <pch.h>
 
 class OutputStageProc : public chowdsp::IIRFilter<1>
 {

@@ -1,7 +1,7 @@
 #ifndef PREAMPSTAGE_H_INCLUDED
 #define PREAMPSTAGE_H_INCLUDED
 
-#include <JuceHeader.h>
+#include <pch.h>
 
 namespace GainStageSpace
 {
