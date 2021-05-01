@@ -1,5 +1,6 @@
 juce_add_console_app(Centaur_Headless
     PRODUCT_NAME "chow_centaur"
+    COMPANY_NAME chowdsp
 )
 
 juce_generate_juce_header(Centaur_Headless)
@@ -13,24 +14,15 @@ target_sources(Centaur_Headless PRIVATE
     main.cpp
 )
 
-target_compile_definitions(Centaur_Headless PUBLIC
-    JUCE_DISPLAY_SPLASH_SCREEN=0
-    JUCE_REPORT_APP_USAGE=0
-    JUCE_WEB_BROWSER=0
-    JUCE_USE_CURL=0
-    JUCE_VST3_CAN_REPLACE_VST2=0
-    JucePlugin_Manufacturer="chowdsp"
-    JucePlugin_VersionString="${CMAKE_PROJECT_VERSION}"
-    JucePlugin_Name="${CMAKE_PROJECT_NAME}"
-)
+target_precompile_headers(Centaur_Headless PRIVATE ../pch.h)
+target_include_directories(Centaur_Headless PRIVATE ../)
+target_include_directories(Centaur_Headless PRIVATE ../../modules/JUCE/modules)
+target_include_directories(Centaur_Headless PRIVATE ../../modules)
+target_include_directories(Centaur_Headless PRIVATE ../../modules/RTNeural/modules/xsimd/include)
 
-target_include_directories(Centaur_Headless PUBLIC modules)
-target_include_directories(Centaur_Headless PUBLIC ../)
-
-target_link_libraries(Centaur_Headless PRIVATE
+target_link_libraries(Centaur_Headless PUBLIC
     BinaryData
-    juce::juce_audio_utils
-    foleys_gui_magic
-    chowdsp_utils
     ChowCentaur
 )
+
+set_target_properties(Centaur_Headless PROPERTIES CXX_VISIBILITY_PRESET hidden)
