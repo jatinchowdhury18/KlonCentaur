@@ -17,9 +17,5 @@ add_subdirectory(modules)
 # juce_set_vst2_sdk_path(C:/SDKs/VST_SDK/VST2_SDK/)
 # include_directories(ASIO_SDK)
 
-# build shared code as static lib
-# add_subdirectory(SharedCode)
-# include_directories(SharedCode)
-
 # build main plugin
 add_subdirectory(ChowCentaur)

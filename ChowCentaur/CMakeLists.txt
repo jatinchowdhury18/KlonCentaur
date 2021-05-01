@@ -21,8 +21,6 @@ else()
     )
 endif()
 
-# add_dependencies(SharedCode ChowCentaur)
-
 juce_generate_juce_header(ChowCentaur)
 include_directories(../modules/RTNeural)
 # include_directories(../modules/toms917)
@@ -35,19 +33,20 @@ target_sources(ChowCentaur PRIVATE
     GainStageMLProc.h
     GainStageMLProc.cpp
 
-    SharedCode/InputBufferProcessor.h
-    SharedCode/InputBufferProcessor.cpp
-    SharedCode/PreAmpStage.h
-    SharedCode/PreAmpStage.cpp
-    SharedCode/AmpStage.h
-    SharedCode/ClippingStage.h
-    SharedCode/FeedForward2.h
-    SharedCode/FeedForward2.cpp
-    SharedCode/SummingAmp.h
-    SharedCode/ToneFilterProcessor.h
-    SharedCode/ToneFilterProcessor.cpp
-    SharedCode/OutputStageProcessor.h
-    SharedCode/OutputStageProcessor.cpp
+    CommonProcessors/InputBufferProcessor.h
+    CommonProcessors/InputBufferProcessor.cpp
+    CommonProcessors/OutputStageProcessor.h
+    CommonProcessors/OutputStageProcessor.cpp
+    CommonProcessors/ToneFilterProcessor.h
+    CommonProcessors/ToneFilterProcessor.cpp
+
+    GainStageProcessors/PreAmpStage.h
+    GainStageProcessors/PreAmpStage.cpp
+    GainStageProcessors/AmpStage.h
+    GainStageProcessors/ClippingStage.h
+    GainStageProcessors/FeedForward2.h
+    GainStageProcessors/FeedForward2.cpp
+    GainStageProcessors/SummingAmp.h
 )
 
 juce_add_binary_data(BinaryData SOURCES

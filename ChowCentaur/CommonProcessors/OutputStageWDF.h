@@ -3,6 +3,9 @@
 
 #include <JuceHeader.h>
 
+// This class is not used in favor of the
+// IIR implementation in OutputBufferProcessor.h
+// This code is kept here for reference
 class OutputStageWDF
 {
 public:
