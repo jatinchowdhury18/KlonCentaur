@@ -98,7 +98,7 @@ endif()
 if(IOS)
     message(STATUS "Setting iOS-specific properties...")
 
-    foreach(target IN ITEMS BinaryData toms917 RTNeural SharedCode ChowCentaur ChowCentaur_Standalone ChowCentaur_AUv3)
+    foreach(target IN ITEMS BinaryData toms917 RTNeural juce_plugin_modules ChowCentaur ChowCentaur_Standalone ChowCentaur_AUv3)
         set_target_properties(${target}
             PROPERTIES
                 RUNTIME_OUTPUT_DIRECTORY "./"
