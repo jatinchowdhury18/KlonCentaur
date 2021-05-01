@@ -2,8 +2,9 @@
 All notable changes to this project will be documented in
 this file.
 
-## [1.3.6] - UNRELEASED
+## [1.4.0] - UNRELEASED
 - Added mono processing mode.
+- Improved performance in "Traditional" mode
 
 ## [1.3.5] - 2021-03-11
 - Fixed bug with weird harmonic distortion for very quiet signals.

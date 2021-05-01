@@ -12,14 +12,8 @@ public:
      * @param Is: reverse saturation current
      * @param Vt: thermal voltage
      */
-    DiodePair (double Is, double Vt) : WDFNode ("DiodePair"),
-                                       Is (Is),
-                                       Vt (Vt)
-    {
-        wrightOmegaLUT.initialise ([] (double x) { return std::real (wrightomega (x)); }, -1.0f, 1.0f, 1 << 18);
-    }
-
-    virtual ~DiodePair() {}
+    DiodePair (double Is, double Vt);
+    virtual ~DiodePair() = default;
 
     inline void calcImpedance() override {}
 
@@ -55,23 +49,16 @@ private:
     const double Is; // reverse saturation current
     const double Vt; // thermal voltage
 
-    dsp::LookupTableTransform<double> wrightOmegaLUT;
+    static dsp::LookupTableTransform<double> wrightOmegaLUT;
+    static bool lutIsInitialised;
 };
 
 class ClippingWDF
 {
 public:
-    ClippingWDF (double sampleRate) : C9 (1.0e-6, sampleRate),
-                                      C10 (1.0e-6, sampleRate)
-    {
-        reset();
-    }
+    ClippingWDF (double sampleRate);
 
-    void reset()
-    {
-        Vbias.setVoltage (0.0f);
-        D23.connectToNode (&P1);
-    }
+    void reset();
 
     inline float processSample (float x)
     {
