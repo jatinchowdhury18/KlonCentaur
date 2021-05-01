@@ -13,28 +13,9 @@ else()
 endif()
 
 add_subdirectory(modules)
-if(UNIX AND NOT APPLE)
-    include_directories(modules/distrho-juce/modules)
-else()
-    include_directories(modules/JUCE/modules)
-endif()
-include_directories(modules/foleys_gui_magic)
-include_directories(modules/chowdsp_utils)
-include_directories(modules/RTNeural)
 
 # juce_set_vst2_sdk_path(C:/SDKs/VST_SDK/VST2_SDK/)
 # include_directories(ASIO_SDK)
 
-# build shared code as static lib
-add_subdirectory(SharedCode)
-include_directories(SharedCode)
-
 # build main plugin
 add_subdirectory(ChowCentaur)
-
-# build sub-circuits
-option(BUILD_SUBCIRCUITS "Builds ChowCentaur subcircuits" OFF)
-if(BUILD_SUBCIRCUITS)
-    message("Building SubCircuits...")
-    add_subdirectory(SubCircuits)
-endif()

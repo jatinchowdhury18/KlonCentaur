@@ -1,8 +1,11 @@
 #ifndef INPUTBUFFERWDF_H_INCLUDED
 #define INPUTBUFFERWDF_H_INCLUDED
 
-#include "SharedJuceHeader.h"
+#include <pch.h>
 
+// This class is not used in favor of the
+// IIR implementation in InputBufferProcessor.h
+// This code is kept here for reference
 class InputBufferWDF
 {
 public:

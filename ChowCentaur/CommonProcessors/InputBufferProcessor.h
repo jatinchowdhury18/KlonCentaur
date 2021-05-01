@@ -1,14 +1,14 @@
 #ifndef INPUTBUFFERPROCESSOR_H_INCLUDED
 #define INPUTBUFFERPROCESSOR_H_INCLUDED
 
-#include "SharedJuceHeader.h"
+#include <pch.h>
 
 class InputBufferProcessor : chowdsp::IIRFilter<1>
 {
 public:
     InputBufferProcessor() {}
 
-    void reset (float sampleRate);
+    void prepare (float sampleRate);
     void calcCoefs();
     void processBlock (float* buffer, const int numSamples) noexcept override;
 

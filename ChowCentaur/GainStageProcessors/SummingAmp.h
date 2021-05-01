@@ -1,7 +1,7 @@
 #ifndef SUMMINGAMP_H_INCLUDED
 #define SUMMINGAMP_H_INCLUDED
 
-#include "SharedJuceHeader.h"
+#include <pch.h>
 
 namespace GainStageSpace
 {
@@ -10,7 +10,7 @@ class SummingAmp : public chowdsp::IIRFilter<1>
 public:
     SummingAmp() {}
 
-    void reset (float sampleRate)
+    void prepare (float sampleRate)
     {
         chowdsp::IIRFilter<1>::reset();
         fs = (float) sampleRate;

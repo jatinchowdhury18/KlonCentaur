@@ -1,8 +1,7 @@
 #ifndef GAINSTAGEMLPROC_H_INCLUDED
 #define GAINSTAGEMLPROC_H_INCLUDED
 
-#include "JuceHeader.h"
-#include <RTNeural/RTNeural.h>
+#include <pch.h>
 
 class GainStageMLProc
 {

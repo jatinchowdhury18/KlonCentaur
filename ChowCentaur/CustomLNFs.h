@@ -1,6 +1,6 @@
 #pragma once
 
-#include <JuceHeader.h>
+#include <pch.h>
 
 /** Custom LookAndFeel for ComboBoxes */
 class ComboBoxLNF : public chowdsp::ChowLNF

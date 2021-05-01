@@ -1,6 +1,6 @@
 #pragma once
 
-#include <JuceHeader.h>
+#include <pch.h>
 
 /** Utility class for *smoothly* bypassing a processor */
 class BypassProcessor

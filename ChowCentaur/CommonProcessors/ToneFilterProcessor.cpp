@@ -1,6 +1,6 @@
 #include "ToneFilterProcessor.h"
 
-void ToneFilterProcessor::reset (float sampleRate)
+void ToneFilterProcessor::prepare (float sampleRate)
 {
     chowdsp::IIRFilter<1>::reset();
     fs = (float) sampleRate;

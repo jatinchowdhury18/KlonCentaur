@@ -45,9 +45,9 @@ void ChowCentaur::prepareToPlay (double sampleRate, int samplesPerBlock)
 
     for (int ch = 0; ch < 2; ++ch)
     {
-        inProc[ch].reset ((float) sampleRate);
-        tone[ch].reset ((float) sampleRate);
-        outProc[ch].reset ((float) sampleRate);
+        inProc[ch].prepare ((float) sampleRate);
+        tone[ch].prepare ((float) sampleRate);
+        outProc[ch].prepare ((float) sampleRate);
     }
 
     scope->prepareToPlay (sampleRate, samplesPerBlock);
@@ -157,9 +157,9 @@ void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
 
         for (int ch = 0; ch < 2; ++ch)
         {
-            inProc[ch].reset ((float) getSampleRate());
-            tone[ch].reset ((float) getSampleRate());
-            outProc[ch].reset ((float) getSampleRate());
+            inProc[ch].prepare ((float) getSampleRate());
+            tone[ch].prepare ((float) getSampleRate());
+            outProc[ch].prepare ((float) getSampleRate());
         }
 
         useMonoPrev = useMono;

@@ -1,6 +1,6 @@
 #include "InputBufferProcessor.h"
 
-void InputBufferProcessor::reset (float sampleRate)
+void InputBufferProcessor::prepare (float sampleRate)
 {
     chowdsp::IIRFilter<1>::reset();
     fs = sampleRate;

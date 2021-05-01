@@ -1,5 +1,4 @@
 #include "ChowCentaurPlugin.h"
-#include <JuceHeader.h>
 
 /**
   * Process audio through the plugin so the screenshots have

@@ -20,7 +20,6 @@ rm -Rf bin/*Win32*
 
 # set up VST and ASIO paths
 sed -i -e "s~# juce_set_vst2_sdk_path.*~juce_set_vst2_sdk_path(C:/SDKs/VST_SDK/VST2_SDK/)~" CMakeLists.txt
-sed -i -e 's/#.*VST/VST/' ChowCentaur/CMakeLists.txt
 
 # cmake new builds
 build64 &
