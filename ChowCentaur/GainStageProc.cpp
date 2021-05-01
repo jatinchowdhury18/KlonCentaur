@@ -16,7 +16,7 @@ void GainStageProc::reset (double sampleRate, int samplesPerBlock)
     {
         preAmp[ch] = std::make_unique<PreAmpWDF> (sampleRate);
         amp[ch].reset ((float) sampleRate);
-        clip[ch].reset (sampleRate * osFactor);
+        clip[ch] = std::make_unique<ClippingWDF> (sampleRate * osFactor);
         ff2[ch].reset (sampleRate);
         sumAmp[ch].reset ((float) sampleRate);
     }
@@ -62,7 +62,7 @@ void GainStageProc::processBlock (AudioBuffer<float>& buffer)
 
         // clipping stage
         for (int n = 0; n < osNumSamples; ++n)
-            x[n] = clip[ch].processSample (x[n]);
+            x[n] = clip[ch]->processSample (x[n]);
     }
 
     // downsample
