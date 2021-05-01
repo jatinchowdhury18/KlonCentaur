@@ -1,5 +1,7 @@
 #include "GainStageProc.h"
 
+using namespace GainStageSpace;
+
 GainStageProc::GainStageProc (AudioProcessorValueTreeState& vts)
 {
     gainParam = vts.getRawParameterValue ("gain");
@@ -12,7 +14,7 @@ void GainStageProc::reset (double sampleRate, int samplesPerBlock)
     const auto osFactor = (int) os.getOversamplingFactor();
     for (int ch = 0; ch < 2; ++ch)
     {
-        preAmp[ch].reset (sampleRate);
+        preAmp[ch] = std::make_unique<PreAmpWDF> (sampleRate);
         amp[ch].reset ((float) sampleRate);
         clip[ch].reset (sampleRate * osFactor);
         ff2[ch].reset (sampleRate);
@@ -36,11 +38,11 @@ void GainStageProc::processBlock (AudioBuffer<float>& buffer)
         FloatVectorOperations::copy (x2, x, numSamples);
 
         // Gain stage
-        preAmp[ch].setGain (*gainParam);
+        preAmp[ch]->setGain (*gainParam);
         for (int n = 0; n < numSamples; ++n)
         {
-            x[n] = preAmp[ch].processSample (x[n]);
-            x1[n] = preAmp[ch].getFF1();
+            x[n] = preAmp[ch]->processSample (x[n]);
+            x1[n] = preAmp[ch]->getFF1();
         }
 
         amp[ch].setGain (*gainParam);
