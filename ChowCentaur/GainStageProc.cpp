@@ -17,7 +17,7 @@ void GainStageProc::reset (double sampleRate, int samplesPerBlock)
         preAmp[ch] = std::make_unique<PreAmpWDF> (sampleRate);
         amp[ch].reset ((float) sampleRate);
         clip[ch] = std::make_unique<ClippingWDF> (sampleRate * osFactor);
-        ff2[ch].reset (sampleRate);
+        ff2[ch] = std::make_unique<FeedForward2WDF> (sampleRate);
         sumAmp[ch].reset ((float) sampleRate);
     }
 
@@ -75,9 +75,9 @@ void GainStageProc::processBlock (AudioBuffer<float>& buffer)
         auto* x2 = ff2Buff.getWritePointer (ch);
 
         // Feed forward network 2
-        ff2[ch].setGain (*gainParam);
+        ff2[ch]->setGain (*gainParam);
         for (int n = 0; n < numSamples; ++n)
-            x2[n] = ff2[ch].processSample (x2[n]);
+            x2[n] = ff2[ch]->processSample (x2[n]);
 
         // summing amp
         FloatVectorOperations::add (x, x1, numSamples);
