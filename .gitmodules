@@ -1,15 +1,9 @@
 [submodule "modules/foleys_gui_magic"]
 	path = modules/foleys_gui_magic
 	url = https://github.com/jatinchowdhury18/foleys_gui_magic.git
-[submodule "modules/JUCE"]
-	path = modules/JUCE
-	url = https://github.com/juce-framework/JUCE.git
 [submodule "modules/chowdsp_utils"]
 	path = modules/chowdsp_utils
 	url = https://github.com/Chowdhury-DSP/chowdsp_utils
 [submodule "modules/RTNeural"]
 	path = modules/RTNeural
 	url = https://github.com/jatinchowdhury18/RTNeural
-[submodule "distrho-juce"]
-	path = modules/distrho-juce
-	url = https://github.com/Chowdhury-DSP/DISTRHO-JUCE
