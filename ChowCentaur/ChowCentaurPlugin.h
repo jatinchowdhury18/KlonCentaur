@@ -1,9 +1,9 @@
 #pragma once
 
-#include "InputBufferProcessor.h"
-#include "OutputStageProcessor.h"
-#include "ToneFilterProcessor.h"
-#include <JuceHeader.h>
+#include "SharedCode/InputBufferProcessor.h"
+#include "SharedCode/OutputStageProcessor.h"
+#include "SharedCode/ToneFilterProcessor.h"
+// #include <JuceHeader.h>
 
 #include "BypassProcessor.h"
 #include "GainStageMLProc.h"

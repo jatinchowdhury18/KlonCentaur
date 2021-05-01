@@ -21,9 +21,11 @@ else()
     )
 endif()
 
-add_dependencies(SharedCode ChowCentaur)
+# add_dependencies(SharedCode ChowCentaur)
 
 juce_generate_juce_header(ChowCentaur)
+include_directories(../modules/RTNeural)
+# include_directories(../modules/toms917)
 
 target_sources(ChowCentaur PRIVATE
     ChowCentaurPlugin.h
@@ -32,6 +34,20 @@ target_sources(ChowCentaur PRIVATE
     GainStageProc.cpp
     GainStageMLProc.h
     GainStageMLProc.cpp
+
+    SharedCode/InputBufferProcessor.h
+    SharedCode/InputBufferProcessor.cpp
+    SharedCode/PreAmpStage.h
+    SharedCode/PreAmpStage.cpp
+    SharedCode/AmpStage.h
+    SharedCode/ClippingStage.h
+    SharedCode/FeedForward2.h
+    SharedCode/FeedForward2.cpp
+    SharedCode/SummingAmp.h
+    SharedCode/ToneFilterProcessor.h
+    SharedCode/ToneFilterProcessor.cpp
+    SharedCode/OutputStageProcessor.h
+    SharedCode/OutputStageProcessor.cpp
 )
 
 juce_add_binary_data(BinaryData SOURCES
@@ -59,12 +75,13 @@ target_compile_definitions(ChowCentaur PUBLIC
 )
 
 target_link_libraries(ChowCentaur PRIVATE
-    juce::juce_audio_utils
-    juce::juce_audio_plugin_client
-    foleys_gui_magic
-    chowdsp_utils
+    # juce::juce_audio_utils
+    # juce::juce_audio_plugin_client
+    # foleys_gui_magic
+    # chowdsp_utils
+    juce_plugin_modules
     BinaryData
-    SharedCode
+    # SharedCode
 )
 
 # we need these flags for notarization on MacOS

@@ -1,7 +1,7 @@
 #ifndef SUMMINGAMP_H_INCLUDED
 #define SUMMINGAMP_H_INCLUDED
 
-#include "SharedJuceHeader.h"
+#include <JuceHeader.h>
 
 namespace GainStageSpace
 {

@@ -1,7 +1,7 @@
 #ifndef AMPSTAGE_H_INCLUDED
 #define AMPSTAGE_H_INCLUDED
 
-#include "SharedJuceHeader.h"
+#include <JuceHeader.h>
 
 namespace GainStageSpace
 {

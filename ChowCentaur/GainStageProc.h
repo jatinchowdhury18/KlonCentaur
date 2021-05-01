@@ -1,12 +1,13 @@
 #ifndef GAINSTAGEPROC_H_INCLUDED
 #define GAINSTAGEPROC_H_INCLUDED
 
-#include "AmpStage.h"
-#include "ClippingStage.h"
-#include "FeedForward2.h"
-#include "JuceHeader.h"
-#include "PreAmpStage.h"
-#include "SummingAmp.h"
+#include "SHaredCode/AmpStage.h"
+#include "SHaredCode/ClippingStage.h"
+#include "SHaredCode/FeedForward2.h"
+#include "SHaredCode/PreAmpStage.h"
+#include "SHaredCode/SummingAmp.h"
+
+// #include "JuceHeader.h"
 
 class GainStageProc
 {

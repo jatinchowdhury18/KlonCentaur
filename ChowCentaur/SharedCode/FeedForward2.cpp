@@ -1,5 +1,5 @@
 #include "FeedForward2.h"
-#include "SharedJuceHeader.h"
+#include <JuceHeader.h>
 
 using namespace GainStageSpace;
 

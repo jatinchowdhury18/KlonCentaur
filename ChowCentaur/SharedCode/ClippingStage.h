@@ -1,7 +1,8 @@
 #ifndef CLIPPINGSTAGE_H_INCLUDED
 #define CLIPPINGSTAGE_H_INCLUDED
 
-#include "SharedJuceHeader.h"
+#include <JuceHeader.h>
+#include <toms917/toms917.hpp>
 
 namespace GainStageSpace
 {

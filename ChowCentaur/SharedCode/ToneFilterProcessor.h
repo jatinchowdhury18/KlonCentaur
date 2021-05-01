@@ -1,7 +1,7 @@
 #ifndef TONEFILTERPROCESSOR_H_INCLUDED
 #define TONEFILTERPROCESSOR_H_INCLUDED
 
-#include "SharedJuceHeader.h"
+#include <JuceHeader.h>
 
 class ToneFilterProcessor : public chowdsp::IIRFilter<1>
 {
