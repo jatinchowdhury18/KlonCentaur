@@ -35,18 +35,14 @@ include_directories(./)
 target_sources(ChowCentaur PRIVATE
     ChowCentaurPlugin.h
     ChowCentaurPlugin.cpp
-    GainStageProc.h
-    GainStageProc.cpp
-    GainStageMLProc.h
-    GainStageMLProc.cpp
-
+    
     CommonProcessors/InputBufferProcessor.h
     CommonProcessors/InputBufferProcessor.cpp
     CommonProcessors/OutputStageProcessor.h
     CommonProcessors/OutputStageProcessor.cpp
     CommonProcessors/ToneFilterProcessor.h
     CommonProcessors/ToneFilterProcessor.cpp
-
+    
     GainStageProcessors/PreAmpStage.h
     GainStageProcessors/PreAmpStage.cpp
     GainStageProcessors/AmpStage.h
@@ -54,7 +50,12 @@ target_sources(ChowCentaur PRIVATE
     GainStageProcessors/ClippingStage.cpp
     GainStageProcessors/FeedForward2.h
     GainStageProcessors/FeedForward2.cpp
+    GainStageProcessors/GainStageProc.h
+    GainStageProcessors/GainStageProc.cpp
     GainStageProcessors/SummingAmp.h
+
+    GainStageML/GainStageMLProc.h
+    GainStageML/GainStageMLProc.cpp
 )
 
 juce_add_binary_data(BinaryData SOURCES
