@@ -1,12 +1,12 @@
 #pragma once
 
+#include "CommonProcessors/BypassProcessor.h"
 #include "CommonProcessors/InputBufferProcessor.h"
 #include "CommonProcessors/OutputStageProcessor.h"
 #include "CommonProcessors/ToneFilterProcessor.h"
 
-#include "BypassProcessor.h"
-#include "GainStageMLProc.h"
-#include "GainStageProc.h"
+#include "GainStageML/GainStageMLProc.h"
+#include "GainStageProcessors/GainStageProc.h"
 
 class ChowCentaur : public chowdsp::PluginBase<ChowCentaur>
 {
