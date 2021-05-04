@@ -16,7 +16,6 @@ void GainStageProc::reset (double sampleRate, int samplesPerBlock)
 {
     os.initProcessing (samplesPerBlock);
 
-    const auto osFactor = os.getOversamplingFactor();
     for (int ch = 0; ch < 2; ++ch)
     {
         amp[ch].prepare ((float) sampleRate);

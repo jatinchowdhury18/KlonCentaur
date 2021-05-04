@@ -10,7 +10,7 @@ if [ "$1" == "help" ]; then
   exit
 fi
 
-if [ "$1" == "build" ]; then
+if [ "$1" == "build" ] || [ "$1" == "configure" ]; then
 echo "Running CMake configuration..."
 
 # clean up old builds
@@ -23,9 +23,11 @@ cmake -Bbuild-ios -GXcode -DCMAKE_SYSTEM_NAME=iOS \
     -DCMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY="1,2" \
     -DCMAKE_XCODE_ATTRIBUTE_ENABLE_BITCODE="NO"
 
+if [ "$1" == "build" ]; then
 xcodebuild -project build-ios/ChowCentaur.xcodeproj \
   -scheme ChowCentaur_Standalone archive -configuration Release \
   -sdk iphoneos -jobs 12 -archivePath ChowCentaur.xcarchive | xcpretty
+fi
 fi
 
 if [ "$1" == "version" ]; then
