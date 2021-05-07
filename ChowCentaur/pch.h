@@ -9,5 +9,5 @@
 
 // other external code
 #include <RTNeural/RTNeural.h>
-#include <toms917/toms917.hpp>
 #include <RTNeural/modules/xsimd/include/xsimd/xsimd.hpp>
+#include <toms917/toms917.hpp>

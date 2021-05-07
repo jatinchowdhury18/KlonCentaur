@@ -2,8 +2,6 @@
 
 GainStageMLProc::GainStageMLProc (AudioProcessorValueTreeState& vts)
 {
-
-
     loadModel (gainStageML[0], BinaryData::centaur_0_json, BinaryData::centaur_0_jsonSize);
     loadModel (gainStageML[1], BinaryData::centaur_25_json, BinaryData::centaur_25_jsonSize);
     loadModel (gainStageML[2], BinaryData::centaur_50_json, BinaryData::centaur_50_jsonSize);

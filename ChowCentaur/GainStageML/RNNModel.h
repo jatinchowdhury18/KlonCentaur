@@ -39,7 +39,7 @@ public:
 
     static inline void sigmoid (v_type& x) noexcept
     {
-        x.value = (v_simd_type) (1.0f / (1.0f + xsimd::exp (- (x_type (x.value)))));
+        x.value = (v_simd_type) (1.0f / (1.0f + xsimd::exp (-(x_type (x.value)))));
     }
 
     inline void forward (float input)
@@ -143,7 +143,7 @@ public:
     inline float forward (float x) noexcept
     {
 #if USE_OLD_MODEL
-        float input alignas(16)[] { x };
+        float input alignas (16)[] { x };
         return model.forward (input);
 #else
         gru.forward (x);
