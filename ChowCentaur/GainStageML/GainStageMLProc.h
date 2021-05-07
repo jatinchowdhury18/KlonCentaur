@@ -1,7 +1,7 @@
 #ifndef GAINSTAGEMLPROC_H_INCLUDED
 #define GAINSTAGEMLPROC_H_INCLUDED
 
-#include <pch.h>
+#include "RNNModel.h"
 
 class GainStageMLProc
 {
@@ -17,18 +17,15 @@ private:
         numModels = 5,
     };
 
-    using ModelType = RTNeural::ModelT<float,
-                                       RTNeural::GRULayer<float>,
-                                       RTNeural::Dense<float>>;
+    using ModelPair = std::array<RNNModel, 2>;
+    std::array<ModelPair, numModels> gainStageML;
 
-    std::vector<std::vector<ModelType>> gainStageML;
-
-    void loadModel (std::vector<ModelType>& model, const char* data, int size);
-    void processModel (AudioBuffer<float>& buffer, std::vector<ModelType>& model);
+    static void loadModel (ModelPair& model, const char* data, int size);
+    void processModel (AudioBuffer<float>& buffer, ModelPair& model);
 
     inline int getModelIdx() const noexcept
     {
-        return jlimit (0, 4, int (numModels * *gainParam));
+        return jlimit (0, numModels - 1, int ((float) numModels * *gainParam));
     }
 
     AudioBuffer<float> fadeBuffer;

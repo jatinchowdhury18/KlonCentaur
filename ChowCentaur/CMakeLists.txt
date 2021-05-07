@@ -56,6 +56,8 @@ target_sources(ChowCentaur PRIVATE
 
     GainStageML/GainStageMLProc.h
     GainStageML/GainStageMLProc.cpp
+    GainStageML/RNNModel.h
+    GainStageML/RNNModel.cpp
 )
 
 juce_add_binary_data(BinaryData SOURCES
