@@ -27,9 +27,9 @@ void Gru18::setRecurrentWeights (const std::vector<std::vector<float>>& w)
     {
         for (size_t j = 0; j < out_size; ++j)
         {
-            Uz[i][j / v_size].set (j % v_size, w[i][j]);
-            Ur[i][j / v_size].set (j % v_size, w[i][j + out_size]);
-            Uh[i][j / v_size].set (j % v_size, w[i][j + 2 * out_size]);
+            Uz[j][i / v_size].set (i % v_size, w[i][j]);
+            Ur[j][i / v_size].set (i % v_size, w[i][j + out_size]);
+            Uh[j][i / v_size].set (i % v_size, w[i][j + 2 * out_size]);
         }
     }
 }
@@ -62,7 +62,7 @@ void Dense81::setBias (std::vector<float>& b)
 
 void RNNModel::loadModel (const nlohmann::json& modelJ)
 {
-#if USE_RTNEURAL
+#if USE_OLD_MODEL
     model.parseJson (modelJ);
 #else
     using namespace RNNSpace;
@@ -141,7 +141,7 @@ void RNNModel::loadModel (const nlohmann::json& modelJ)
 
 void RNNModel::reset()
 {
-#if USE_RTNEURAL
+#if USE_OLD_MODEL
     model.reset();
 #else
     gru.reset();

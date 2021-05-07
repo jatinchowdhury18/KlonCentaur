@@ -2,14 +2,15 @@
 
 #include <pch.h>
 
-#define USE_RTNEURAL 0
+// useful for debugging and performance comparisons
+#define USE_OLD_MODEL 0
 
 namespace RNNSpace
 {
 using v_type = dsp::SIMDRegister<float>;
 using v_simd_type = v_type::vSIMDType;
 constexpr auto v_size = v_type::SIMDNumElements;
-static_assert (v_size == 4, "SIMD float size is required to be 2.");
+static_assert (v_size == 4, "SIMD float size is required to be 4.");
 using x_type = xsimd::batch<float, v_size>;
 
 class Gru18
@@ -60,11 +61,9 @@ public:
         sigmoid (rt[1]);
 
         // compute h_hat
-        mul8 (ct, Uh, ht);
-        rt[0] = rt[0] * (ct[0] + bh1[0]);
-        rt[1] = rt[1] * (ct[1] + bh1[1]);
-        ht[0] = rt[0] + bh0[0] + (Wh[0] * x);
-        ht[1] = rt[1] + bh0[1] + (Wh[1] * x);
+        mul8 (outs, Uh, ct);
+        ht[0] = rt[0] * (ct[0] + bh1[0]) + bh0[0] + (Wh[0] * x);
+        ht[1] = rt[1] * (ct[1] + bh1[1]) + bh0[1] + (Wh[1] * x);
         ht[0].value = (v_simd_type) xsimd::tanh ((x_type) ht[0].value);
         ht[1].value = (v_simd_type) xsimd::tanh ((x_type) ht[1].value);
 
@@ -135,7 +134,7 @@ class RNNModel
 {
 public:
     RNNModel()
-#if USE_RTNEURAL
+#if USE_OLD_MODEL
         : model ({ 1, 8, 1 }, { { 1, 8 }, { 8, 1 } })
 #endif
     {
@@ -143,7 +142,7 @@ public:
 
     inline float forward (float x) noexcept
     {
-#if USE_RTNEURAL
+#if USE_OLD_MODEL
         float input alignas(16)[] { x };
         return model.forward (input);
 #else
@@ -156,7 +155,7 @@ public:
     void loadModel (const nlohmann::json& modelJ);
 
 private:
-#if USE_RTNEURAL
+#if USE_OLD_MODEL
     using ModelType = RTNeural::ModelT<float,
                                        RTNeural::GRULayer<float>,
                                        RTNeural::Dense<float>>;
