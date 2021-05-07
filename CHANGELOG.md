@@ -4,7 +4,7 @@ this file.
 
 ## [1.4.0] - UNRELEASED
 - Added mono processing mode.
-- Improved performance in "Traditional" mode
+- Improved performance in both "Traditional" and "Neural" modes.
 
 ## [1.3.5] - 2021-03-11
 - Fixed bug with weird harmonic distortion for very quiet signals.
