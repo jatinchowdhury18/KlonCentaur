@@ -69,6 +69,7 @@ int benchmarks (int argc, char* argv[])
         std::cout << "Results:" << std::endl;
         std::cout << "NonML: processes 1 second of audio in " << nonMlTime / audioLength << " seconds" << std::endl;
         std::cout << "ML: processes 1 second of audio in " << mlTime / audioLength << " seconds" << std::endl;
+        std::cout << "Ratio: " << mlTime / nonMlTime << std::endl;
     }
 
     return 0;
@@ -79,7 +80,7 @@ void createRandomAudioInput (AudioBuffer<float>& buffer, double lengthSeconds)
     const int numSamples = int (lengthSeconds * pluginSampleRate);
     buffer.setSize (numChannels, numSamples);
 
-    Random rand;
+    Random rand (0x1234);
     for (int ch = 0; ch < numChannels; ++ch)
     {
         auto* x = buffer.getWritePointer (ch);
