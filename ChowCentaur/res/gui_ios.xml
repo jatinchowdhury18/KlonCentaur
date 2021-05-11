@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<magic>
+  <Styles>
+    <Style name="default">
+      <Nodes/>
+      <Classes>
+        <plot-view border="2" background-color="black" border-color="silver" display="contents"/>
+        <nomargin margin="0" padding="0" border="0"/>
+        <group margin="5" padding="5" border="2" flex-direction="column"/>
+      </Classes>
+      <Types>
+        <Slider border="0" slider-textbox="textbox-below"/>
+        <ToggleButton border="0" max-height="50" caption-size="0" text="Active"/>
+        <TextButton border="0" max-height="50" caption-size="0"/>
+        <ComboBox border="0" max-height="50" caption-size="0"/>
+        <Plot border="0" margin="0" padding="0" background-color="00000000"
+              radius="0"/>
+        <XYDragComponent border="0" margin="0" padding="0" background-color="00000000"
+                         radius="0"/>
+      </Types>
+      <Palettes>
+        <default/>
+      </Palettes>
+    </Style>
+  </Styles>
+  <View id="root" background-color="FFFDAA520" resizable="1" resize-corner="1"
+        flex-direction="column" width="500" height="270">
+    <View background-color="00000000" border="0" padding="0" margin="0"
+          flex-grow="0.45">
+      <View margin="0" padding="0" background-color="00000000">
+        <View flex-direction="column" background-color="00000000" padding="0"
+              margin="0">
+          <TitleComp title="ChowCentaur" font="36" background-color="00000000" flex-grow="1.5"
+                     padding="0"/>
+          <InfoComp background-color="00000000" text2="FFFFFFFF" text1="FF2B3335"
+                    padding="0" margin=""/>
+        </View>
+        <Plot source="scope" background-color="FF000000" padding="" margin=""
+              flex-grow="1.18" plot-fill-color="00000000" plot-color="FF14CBF2"/>
+      </View>
+    </View>
+    <View margin="0" padding="0" background-color="00000000">
+      <Slider lookAndFeel="MyLNF" parameter="gain" slider-type="rotary-horizontal-vertical"
+              caption="Gain" background-color="00000000" caption-color="FF2B3335"
+              caption-size="24" slider-text-background="00000000" slider-text-outline="FF2B3335"
+              slider-text="FF2B3335" slider-track="ff484856" slider-thumb="FF14BADD"
+              slidertext-width="80" slidertext-height="20"/>
+      <Slider lookAndFeel="MyLNF" parameter="treble" slider-type="rotary-horizontal-vertical"
+              caption="Tone" background-color="00000000" caption-color="FF2B3335"
+              caption-size="24" slider-text-background="00000000" slider-text-outline="FF2B3335"
+              slider-text="FF2B3335" slider-track="ff484856" slider-thumb="FF14BADD"
+              slidertext-width="80" slidertext-height="20"/>
+      <Slider lookAndFeel="MyLNF" parameter="level" slider-type="rotary-horizontal-vertical"
+              caption="Level" background-color="00000000" caption-color="FF2B3335"
+              caption-size="24" slider-text-background="00000000" slider-text-outline="FF2B3335"
+              slider-text="FF2B3335" slider-track="ff484856" slider-thumb="FF14BADD"
+              slidertext-width="80" slidertext-height="20"/>
+      <View margin="0" padding="0" background-color="00000000" flex-direction="column">
+        <View background-color="00000000" flex-grow="0.4"/>
+        <ComboBox parameter="neural" max-height="35" margin="0" padding="0" combo-background="00000000"
+                  background-color="00000000" combo-outline="FF2B3335" combo-text="FF2B3335"
+                  combo-arrow="FF2B3335" combo-menu-background="ff484856" lookAndFeel="ComboBoxLNF"/>
+        <View background-color="00000000" flex-grow="0.2"/>
+        <TextButton parameter="bypass" text="Bypass" background-color="00000000"
+                    margin="0" padding="0" button-color="00000000" flex-grow="1.0"
+                    button-on-color="FF2B3335" lookAndFeel="ButtonLNF" max-height="35"
+                    margin="0" button-off-text="FF2B3335"/>
+        <View background-color="00000000" flex-grow="0.2"/>
+        <TextButton parameter="mono" text="Mono" background-color="00000000"
+                    margin="0" padding="0" button-color="00000000" flex-grow="1.0"
+                    button-on-color="FF2B3335" lookAndFeel="ButtonLNF" max-height="35"
+                    margin="0" button-off-text="FF2B3335"/>
+        <View background-color="00000000" flex-grow="0.2"/>
+        <TipJar max-height="35" margin="0" padding="0" combo-background="00000000"
+                background-color="00000000" combo-outline="FF2B3335" combo-text="FF2B3335"
+                combo-arrow="FF2B3335" combo-menu-background="ff484856" lookAndFeel="ComboBoxLNF"/>
+        <View background-color="00000000" flex-grow="0.2"/>
+      </View>
+    </View>
+  </View>
+</magic>
