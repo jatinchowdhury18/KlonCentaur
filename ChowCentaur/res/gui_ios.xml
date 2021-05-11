@@ -72,7 +72,9 @@
                     button-on-color="FF2B3335" lookAndFeel="ButtonLNF" max-height="35"
                     margin="0" button-off-text="FF2B3335"/>
         <View background-color="00000000" flex-grow="0.2"/>
-        <TipJar margin="0" padding="0" background-color="00000000" lookAndFeel="ComboBoxLNF"/>
+        <TipJar max-height="35" margin="0" padding="0" combo-background="00000000"
+                background-color="00000000" combo-outline="FF2B3335" combo-text="FF2B3335"
+                combo-arrow="FF2B3335" combo-menu-background="ff484856" lookAndFeel="ComboBoxLNF"/>
         <View background-color="00000000" flex-grow="0.2"/>
       </View>
     </View>

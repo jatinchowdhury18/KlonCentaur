@@ -26,6 +26,7 @@ juce_add_plugin(ChowCentaur
     ICON_BIG res/logo.png
     LV2_URI https://github.com/jatinchowdhury18/KlonCentaur
     MICROPHONE_PERMISSION_ENABLED TRUE
+    NEEDS_STORE_KIT TRUE
 )
 
 juce_generate_juce_header(ChowCentaur)
@@ -58,9 +59,13 @@ target_sources(ChowCentaur PRIVATE
     GainStageML/GainStageMLProc.cpp
     GainStageML/RNNModel.h
     GainStageML/RNNModel.cpp
-
-    gui/TipJar.cpp
 )
+
+if(IOS)
+    target_sources(ChowCentaur PRIVATE
+        gui/TipJar.cpp
+    )
+endif()
 
 juce_add_binary_data(BinaryData SOURCES
     res/gui.xml

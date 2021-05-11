@@ -1,6 +1,9 @@
 #include "ChowCentaurPlugin.h"
 #include "gui/CustomLNFs.h"
+
+#if JUCE_IOS
 #include "gui/TipJar.h"
+#endif
 
 namespace
 {
@@ -216,7 +219,7 @@ AudioProcessorEditor* ChowCentaur::createEditor()
 #endif
 
     // we need to set resize limits for StandalonePluginHolder
-    editor->setResizeLimits (10, 10, 1000, 1000);
+    editor->setResizeLimits (10, 10, 2000, 2000);
 
     return editor;
 }

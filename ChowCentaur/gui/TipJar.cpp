@@ -3,10 +3,10 @@
 namespace
 {
 const std::vector<std::pair<String, String>> productInfos = {
-    { "Small Tip ($2)", "chowtape_small_tip_123" },
-    { "Medium Tip ($5)", "chowtape_medium_tip_456" },
-    { "Large Tip ($10)", "chowtape_large_tip_789" },
-    { "Huge Tip ($25)", "chowtape_huge_tip_808" },
+    { "Small Tip ($2)", "chowcentaur_small_tip_123" },
+    { "Medium Tip ($5)", "chowcentaur_medium_tip_456" },
+    { "Large Tip ($10)", "chowcentaur_large_tip_789" },
+    { "Huge Tip ($25)", "chowcentaur_huge_tip_808" },
 };
 }
 
@@ -18,9 +18,13 @@ TipJar::TipJar()
         jassertfalse;
         return;
     }
-
+    
     setText ("Tip Jar");
     setColour (backgroundColourId, Colours::transparentBlack);
+    setColour (outlineColourId, Colour (0xFF2B3335));
+    setColour (textColourId, Colour (0xFF2B3335));
+    setColour (arrowColourId, Colour (0xFF2B3335));
+    setColour (PopupMenu::backgroundColourId, Colour (0xFF484856));
     setJustificationType (Justification::centred);
 
     StringArray purchaseIDs;
