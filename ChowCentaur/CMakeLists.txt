@@ -58,10 +58,13 @@ target_sources(ChowCentaur PRIVATE
     GainStageML/GainStageMLProc.cpp
     GainStageML/RNNModel.h
     GainStageML/RNNModel.cpp
+
+    gui/TipJar.cpp
 )
 
 juce_add_binary_data(BinaryData SOURCES
     res/gui.xml
+    res/gui_ios.xml
     ../GainStageTraining/models/centaur_0.json
     ../GainStageTraining/models/centaur_25.json
     ../GainStageTraining/models/centaur_50.json
@@ -112,11 +115,13 @@ if(IOS)
 
     set_target_properties(ChowCentaur_Standalone PROPERTIES
             XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)"
-            XCODE_ATTRIBUTE_SKIP_INSTALL "NO")
+            XCODE_ATTRIBUTE_SKIP_INSTALL "NO"
+            XCODE_ATTRIBUTE_ENABLE_IN_APP_PURCHASE "YES")
 
     set_target_properties(ChowCentaur_AUv3 PROPERTIES
             XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)/ChowCentaur.app/PlugIns"
-            XCODE_ATTRIBUTE_SKIP_INSTALL "NO")
+            XCODE_ATTRIBUTE_SKIP_INSTALL "NO"
+            XCODE_ATTRIBUTE_ENABLE_IN_APP_PURCHASE "YES")
 endif()
 
 # build headless
