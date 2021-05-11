@@ -18,7 +18,7 @@ TipJar::TipJar()
         jassertfalse;
         return;
     }
-    
+
     setText ("Tip Jar");
     setColour (backgroundColourId, Colours::transparentBlack);
     setColour (outlineColourId, Colour (0xFF2B3335));
