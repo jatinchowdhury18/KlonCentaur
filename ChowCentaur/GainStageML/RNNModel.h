@@ -3,7 +3,7 @@
 #include <pch.h>
 
 // useful for debugging and performance comparisons
-#define USE_OLD_MODEL 0
+#define USE_NEW_MODEL 1
 
 namespace RNNSpace
 {
@@ -133,16 +133,11 @@ private:
 class RNNModel
 {
 public:
-    RNNModel()
-#if USE_OLD_MODEL
-        : model ({ 1, 8, 1 }, { { 1, 8 }, { 8, 1 } })
-#endif
-    {
-    }
+    RNNModel() = default;
 
     inline float forward (float x) noexcept
     {
-#if USE_OLD_MODEL
+#if USE_NEW_MODEL
         float input alignas (16)[] { x };
         return model.forward (input);
 #else
@@ -155,10 +150,10 @@ public:
     void loadModel (const nlohmann::json& modelJ);
 
 private:
-#if USE_OLD_MODEL
-    using ModelType = RTNeural::ModelT<float,
-                                       RTNeural::GRULayer<float>,
-                                       RTNeural::Dense<float>>;
+#if USE_NEW_MODEL
+    using ModelType = RTNeural::ModelT<float, 1, 1,
+                                       RTNeural::GRULayerT<float, 1, 8>,
+                                       RTNeural::DenseT<float, 8, 1>>;
     ModelType model;
 #else
     RNNSpace::Gru18 gru;

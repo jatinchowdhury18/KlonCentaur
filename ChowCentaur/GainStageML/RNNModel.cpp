@@ -62,7 +62,7 @@ void Dense81::setBias (std::vector<float>& b)
 
 void RNNModel::loadModel (const nlohmann::json& modelJ)
 {
-#if USE_OLD_MODEL
+#if USE_NEW_MODEL
     model.parseJson (modelJ);
 #else
     using namespace RNNSpace;
@@ -141,7 +141,7 @@ void RNNModel::loadModel (const nlohmann::json& modelJ)
 
 void RNNModel::reset()
 {
-#if USE_OLD_MODEL
+#if USE_NEW_MODEL
     model.reset();
 #else
     gru.reset();
