@@ -151,9 +151,7 @@ public:
 
 private:
 #if USE_NEW_MODEL
-    using ModelType = RTNeural::ModelT<float, 1, 1,
-                                       RTNeural::GRULayerT<float, 1, 8>,
-                                       RTNeural::DenseT<float, 8, 1>>;
+    using ModelType = RTNeural::ModelT<float, 1, 1, RTNeural::GRULayerT<float, 1, 8>, RTNeural::DenseT<float, 8, 1>>;
     ModelType model;
 #else
     RNNSpace::Gru18 gru;
