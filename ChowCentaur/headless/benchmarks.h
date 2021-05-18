@@ -69,7 +69,7 @@ int benchmarks (int argc, char* argv[])
         std::cout << "Results:" << std::endl;
         std::cout << "NonML: processes 1 second of audio in " << nonMlTime / audioLength << " seconds" << std::endl;
         std::cout << "ML: processes 1 second of audio in " << mlTime / audioLength << " seconds" << std::endl;
-        std::cout << "Ratio: " << mlTime / nonMlTime << std::endl;
+        std::cout << "Ratio: " << nonMlTime / mlTime << std::endl;
     }
 
     return 0;
