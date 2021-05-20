@@ -27,6 +27,9 @@ juce_add_plugin(ChowCentaur
     LV2_URI https://github.com/jatinchowdhury18/KlonCentaur
     MICROPHONE_PERMISSION_ENABLED TRUE
     NEEDS_STORE_KIT TRUE
+    REQUIRES_FULL_SCREEN TRUE
+    IPHONE_SCREEN_ORIENTATIONS UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
+    IPAD_SCREEN_ORIENTATIONS UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
 )
 
 juce_generate_juce_header(ChowCentaur)
