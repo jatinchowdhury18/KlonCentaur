@@ -23,6 +23,7 @@ target_include_directories(Centaur_Headless PRIVATE ../../modules/RTNeural/modul
 target_link_libraries(Centaur_Headless PUBLIC
     BinaryData
     ChowCentaur
+    warning_flags
 )
 
 set_target_properties(Centaur_Headless PROPERTIES CXX_VISIBILITY_PRESET hidden)
