@@ -7,7 +7,7 @@ rm -Rf build/
 rm -Rf bin/*Mac*
 
 # set up build VST
-VST_PATH=~/Developer/VST2_SDK/
+VST_PATH=~/Developer/Plugin_SDKs/VST2_SDK/
 sed -i '' "s~# juce_set_vst2_sdk_path.*~juce_set_vst2_sdk_path(${VST_PATH})~" CMakeLists.txt
 
 # cmake new builds
