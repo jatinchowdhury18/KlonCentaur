@@ -3,12 +3,12 @@
 set -e
 
 build64(){
-    cmake -Bbuild -G"Visual Studio 15 2017 Win64"
+    cmake -Bbuild -G"Visual Studio 16 2019" -A x64 -DASIOSDK_DIR="C:\\SDKs\\ASIO_SDK"
     cmake --build build --config Release -j4
 }
 
 build32(){
-    cmake -Bbuild32 -G"Visual Studio 15 2017"
+    cmake -Bbuild32 -G"Visual Studio 16 2019" -A Win32 -DASIOSDK_DIR="C:\\SDKs\\ASIO_SDK"
     cmake --build build32 --config Release -j4
 }
 
@@ -18,7 +18,7 @@ rm -Rf build32/
 rm -Rf bin/*Win64*
 rm -Rf bin/*Win32*
 
-# set up VST and ASIO paths
+# set up VST SDK path
 sed -i -e "s~# juce_set_vst2_sdk_path.*~juce_set_vst2_sdk_path(C:/SDKs/VST_SDK/VST2_SDK/)~" CMakeLists.txt
 
 # cmake new builds
