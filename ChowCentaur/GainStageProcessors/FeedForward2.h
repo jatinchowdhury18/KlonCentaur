@@ -5,7 +5,6 @@
 
 namespace GainStageSpace
 {
-
 using namespace chowdsp::WDFT;
 
 class FeedForward2WDF
@@ -31,7 +30,6 @@ private:
     using Capacitor = CapacitorT<double>;
     using Resistor = ResistorT<double>;
     using ResVs = ResistiveVoltageSourceT<double>;
-
 
     Resistor R5 { 5100.0 };
     Resistor R8 { 1500.0 };

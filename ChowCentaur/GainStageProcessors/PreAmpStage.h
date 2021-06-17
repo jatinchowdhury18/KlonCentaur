@@ -5,7 +5,6 @@
 
 namespace GainStageSpace
 {
-
 using namespace chowdsp::WDFT;
 
 class PreAmpWDF
@@ -44,7 +43,6 @@ private:
     Resistor R6 { 10000.0 };
     Resistor R7 { 1500.0 };
 
-    
     ResVs Vbias2 { 15000.0 };
     ResVs Vbias;
 

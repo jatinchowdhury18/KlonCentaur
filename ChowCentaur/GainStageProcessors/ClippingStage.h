@@ -5,7 +5,6 @@
 
 namespace GainStageSpace
 {
-
 using namespace chowdsp::WDFT;
 
 class ClippingWDF
@@ -34,7 +33,6 @@ private:
     ResVs Vin;
     Capacitor C9;
     Resistor R13 { 1000.0 };
-    
 
     Capacitor C10;
     ResVs Vbias { 47000.0 };
@@ -42,7 +40,7 @@ private:
     PolarityInverterT<double, ResVs> I1 { Vin };
     WDFSeriesT<double, decltype (I1), Capacitor> S1 { I1, C9 };
     WDFSeriesT<double, decltype (S1), Resistor> S2 { S1, R13 };
-    
+
     WDFSeriesT<double, Capacitor, ResVs> S3 { C10, Vbias };
     WDFParallelT<double, decltype (S2), decltype (S3)> P1 { S2, S3 };
 

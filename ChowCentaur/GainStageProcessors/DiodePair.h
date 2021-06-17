@@ -5,7 +5,6 @@
 
 namespace GainStageSpace
 {
-
 using namespace chowdsp::WDFT;
 
 /** WDF Diode Pair based on chowdsp::WDFT::DiodePair,
