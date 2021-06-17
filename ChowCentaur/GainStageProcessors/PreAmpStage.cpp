@@ -18,6 +18,4 @@ void PreAmpWDF::reset()
 {
     Vbias.setVoltage (0.0f); // (4.5);
     Vbias2.setVoltage (0.0f); // (4.5);
-
-    Vin.connectToNode (&I1);
 }
