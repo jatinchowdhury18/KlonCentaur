@@ -13,7 +13,6 @@ FeedForward2WDF::FeedForward2WDF (double sampleRate) : C4 (68e-9, sampleRate),
 void FeedForward2WDF::reset()
 {
     Vbias.setVoltage (0.0);
-    Vin.connectToNode (&I1);
 }
 
 void FeedForward2WDF::setGain (float gain)

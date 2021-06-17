@@ -1,57 +1,11 @@
 #ifndef CLIPPINGSTAGE_H_INCLUDED
 #define CLIPPINGSTAGE_H_INCLUDED
 
-#include <pch.h>
+#include "DiodePair.h"
 
 namespace GainStageSpace
 {
-class DiodePair : public chowdsp::WDF::WDFNode
-{
-public:
-    /** Creates a new WDF diode pair, with the given diode specifications.
-     * @param Is: reverse saturation current
-     * @param Vt: thermal voltage
-     */
-    DiodePair (double Is, double Vt);
-    virtual ~DiodePair() = default;
-
-    inline void calcImpedance() override {}
-
-    /** Accepts an incident wave into a WDF diode pair. */
-    inline void incident (double x) noexcept override
-    {
-        a = x;
-    }
-
-    /** Propogates a reflected wave from a WDF diode pair. */
-    inline double reflected() noexcept override
-    {
-        // See eqn (18) from reference paper
-        double lambda = (double) chowdsp::WDF::signum (a);
-        double wrightIn = std::log (next->R * Is / Vt) + (lambda * a + next->R * Is) / Vt;
-
-        // Stefano D'Angelo's Wright Omega function is good at most values,
-        // but has errors near zero, which cause audible distortion on very
-        // quiet signal. So for quiet signals we use an LUT.
-        if (std::abs (wrightIn) > 0.5)
-        {
-            b = a + 2 * lambda * (next->R * Is - Vt * chowdsp::Omega::omega4 (wrightIn));
-        }
-        else
-        {
-            b = a + 2 * lambda * (next->R * Is - Vt * wrightOmegaLUT.processSampleUnchecked (wrightIn));
-        }
-
-        return b;
-    }
-
-private:
-    const double Is; // reverse saturation current
-    const double Vt; // thermal voltage
-
-    static dsp::LookupTableTransform<double> wrightOmegaLUT;
-    static bool lutIsInitialised;
-};
+using namespace chowdsp::WDFT;
 
 class ClippingWDF
 {
@@ -66,38 +20,31 @@ public:
 
         D23.incident (P1.reflected());
         P1.incident (D23.reflected());
-        auto y = C10.current();
+        auto y = current<double> (C10);
 
         return (float) y;
     }
 
 private:
-    using Capacitor = chowdsp::WDF::Capacitor;
-    using Resistor = chowdsp::WDF::Resistor;
-    using ResVs = chowdsp::WDF::ResistiveVoltageSource;
+    using Capacitor = CapacitorT<double>;
+    using Resistor = ResistorT<double>;
+    using ResVs = ResistiveVoltageSourceT<double>;
 
     ResVs Vin;
     Capacitor C9;
     Resistor R13 { 1000.0 };
-    DiodePair D23 { 15e-6, 0.02585 };
 
     Capacitor C10;
     ResVs Vbias { 47000.0 };
 
-    using I1Type = chowdsp::WDF::PolarityInverterT<ResVs>;
-    I1Type I1 { Vin };
+    PolarityInverterT<double, ResVs> I1 { Vin };
+    WDFSeriesT<double, decltype (I1), Capacitor> S1 { I1, C9 };
+    WDFSeriesT<double, decltype (S1), Resistor> S2 { S1, R13 };
 
-    using S1Type = chowdsp::WDF::WDFSeriesT<I1Type, Capacitor>;
-    S1Type S1 { I1, C9 };
+    WDFSeriesT<double, Capacitor, ResVs> S3 { C10, Vbias };
+    WDFParallelT<double, decltype (S2), decltype (S3)> P1 { S2, S3 };
 
-    using S2Type = chowdsp::WDF::WDFSeriesT<S1Type, Resistor>;
-    S2Type S2 { S1, R13 };
-
-    using S3Type = chowdsp::WDF::WDFSeriesT<Capacitor, ResVs>;
-    S3Type S3 { C10, Vbias };
-
-    using P1Type = chowdsp::WDF::WDFParallelT<S2Type, S3Type>;
-    P1Type P1 { S2, S3 };
+    CustomDiodePairT<double, decltype (P1)> D23 { 15e-6, 0.02585, P1 };
 };
 
 } // namespace GainStageSpace
