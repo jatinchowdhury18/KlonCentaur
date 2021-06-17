@@ -5,6 +5,9 @@
 
 namespace GainStageSpace
 {
+
+using namespace chowdsp::WDFT;
+
 class PreAmpWDF
 {
 public:
@@ -15,7 +18,7 @@ public:
 
     inline float getFF1() noexcept
     {
-        return (float) Vbias2.current();
+        return (float) current<double> (Vbias2);
     }
 
     inline float processSample (float x)
@@ -23,17 +26,16 @@ public:
         Vin.setVoltage ((double) x);
 
         Vin.incident (I1.reflected());
-        auto y = Vbias.voltage() + R6.voltage();
+        auto y = voltage<double> (Vbias) + voltage<double> (R6);
         I1.incident (Vin.reflected());
 
         return (float) y;
     }
 
 private:
-    using Capacitor = chowdsp::WDF::Capacitor;
-    using Resistor = chowdsp::WDF::Resistor;
-    using IdealVs = chowdsp::WDF::IdealVoltageSource;
-    using ResVs = chowdsp::WDF::ResistiveVoltageSource;
+    using Capacitor = CapacitorT<double>;
+    using Resistor = ResistorT<double>;
+    using ResVs = ResistiveVoltageSourceT<double>;
 
     Capacitor C3;
     Capacitor C5;
@@ -42,30 +44,21 @@ private:
     Resistor R6 { 10000.0 };
     Resistor R7 { 1500.0 };
 
-    IdealVs Vin;
+    
     ResVs Vbias2 { 15000.0 };
     ResVs Vbias;
 
-    using P1Type = chowdsp::WDF::WDFParallelT<Capacitor, Resistor>;
-    P1Type P1 { C5, R6 };
+    WDFParallelT<double, Capacitor, Resistor> P1 { C5, R6 };
+    WDFSeriesT<double, decltype (P1), ResVs> S1 { P1, Vbias };
 
-    using S1Type = chowdsp::WDF::WDFSeriesT<P1Type, ResVs>;
-    S1Type S1 { P1, Vbias };
+    WDFParallelT<double, ResVs, Capacitor> P2 { Vbias2, C16 };
+    WDFSeriesT<double, decltype (P2), Resistor> S2 { P2, R7 };
+    WDFParallelT<double, decltype (S1), decltype (S2)> P3 { S1, S2 };
 
-    using P2Type = chowdsp::WDF::WDFParallelT<ResVs, Capacitor>;
-    P2Type P2 { Vbias2, C16 };
+    WDFSeriesT<double, decltype (P3), Capacitor> S3 { P3, C3 };
+    PolarityInverterT<double, decltype (S3)> I1 { S3 };
 
-    using S2Type = chowdsp::WDF::WDFSeriesT<P2Type, Resistor>;
-    S2Type S2 { P2, R7 };
-
-    using P3Type = chowdsp::WDF::WDFParallelT<S1Type, S2Type>;
-    P3Type P3 { S1, S2 };
-
-    using S3Type = chowdsp::WDF::WDFSeriesT<P3Type, Capacitor>;
-    S3Type S3 { P3, C3 };
-
-    using I1Type = chowdsp::WDF::PolarityInverterT<S3Type>;
-    I1Type I1 { S3 };
+    IdealVoltageSourceT<double, decltype (I1)> Vin { I1 };
 };
 } // namespace GainStageSpace
 
