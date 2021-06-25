@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in
 this file.
 
+## UNRELEASED:
+- Improved performance in Traditional mode.
+
 ## [1.4.0] - 2021-05-25
 - Added mono processing mode.
 - Improved performance in both "Traditional" and "Neural" modes.
