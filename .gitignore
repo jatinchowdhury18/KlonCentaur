@@ -1,6 +1,6 @@
 # Build artifacts
 build*/
-bin/*[!.zip]
+bin/
 JuceLibraryCode/
 *.exe
 *_Packaged
