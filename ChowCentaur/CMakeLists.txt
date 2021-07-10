@@ -5,13 +5,13 @@ else()
     set(JUCE_FORMATS AU VST3 Standalone)
 endif()
 
-# Build LV2 only on Linux
-if(UNIX AND NOT APPLE)
+# LV2: build by default on Linux, or on other platforms if `BUILD_LV2_TARGET` is set
+if((UNIX AND NOT APPLE) OR BUILD_LV2_TARGET)
     message(STATUS "Building LV2 plugin format")
     list(APPEND JUCE_FORMATS LV2)
 endif()
 
-# Build VST2 is SDK set
+# Build VST2 if SDK is set
 if(TARGET juce_vst2_sdk)
     message(STATUS "Building VST2 plugin format")
     list(APPEND JUCE_FORMATS VST)
