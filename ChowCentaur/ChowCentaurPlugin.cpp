@@ -17,6 +17,8 @@ const String monoTag = "mono";
 
 ChowCentaur::ChowCentaur() : gainStageMLProc (vts)
 {
+    std::cout << "Constructing ChowCentaur instance..." << std::endl;
+
     trebleParam = vts.getRawParameterValue (trebleTag);
     levelParam = vts.getRawParameterValue (levelTag);
     mlParam = vts.getRawParameterValue (neuralTag);
@@ -25,6 +27,8 @@ ChowCentaur::ChowCentaur() : gainStageMLProc (vts)
 
     LookAndFeel::setDefaultLookAndFeel (&myLNF);
     scope = magicState.createAndAddObject<foleys::MagicOscilloscope> ("scope");
+
+    std::cout << "Finished constructing ChowCentaur instance..." << std::endl;
 }
 
 ChowCentaur::~ChowCentaur()
@@ -207,6 +211,8 @@ void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
 
 AudioProcessorEditor* ChowCentaur::createEditor()
 {
+    std::cout << "Constructing ChowCentaur editor..." << std::endl;
+
     auto builder = chowdsp::createGUIBuilder (magicState);
     builder->registerLookAndFeel ("ComboBoxLNF", std::make_unique<ComboBoxLNF>());
     builder->registerLookAndFeel ("ButtonLNF", std::make_unique<ButtonLNF>());
@@ -220,6 +226,8 @@ AudioProcessorEditor* ChowCentaur::createEditor()
 
     // we need to set resize limits for StandalonePluginHolder
     editor->setResizeLimits (10, 10, 2000, 2000);
+
+    std::cout << "Finished constructing ChowCentaur editor..." << std::endl;
 
     return editor;
 }
@@ -252,5 +260,6 @@ void ChowCentaur::getStateInformation (MemoryBlock& data)
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
+    std::cout << "Creating plugin filter for ChowCentaur..." << std::endl;
     return new ChowCentaur();
 }
