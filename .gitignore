@@ -34,3 +34,4 @@ __pycache__/
 # Mac extras
 .DS_Store
 *.pem
+*.deb
